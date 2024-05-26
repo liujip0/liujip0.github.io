@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies and build React app
+      run: |
+        cd morpheme
+        npm install
+        npm run build
+
+    - name: Deploy React app to gh-pages branch
+      run: |
+        cd morpheme
+        npm run deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+
+    - name: Install Jekyll and Bundler
+      run: gem install jekyll bundler
+
+    - name: Build Jekyll site
+      run: jekyll build
+
+    - name: Deploy Jekyll site to gh-pages branch
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        mkdir -p _site/morpheme
+        cp -r morpheme/build/* _site/morpheme
+        cd _site
+        git init
+        git add .
+        git commit -m "Deploy Jekyll site"
+        git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" main:gh-pages
