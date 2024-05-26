@@ -109,7 +109,9 @@ function SubmenuButton({action, position, screen, windowsDispatch, children}) {
                 position: position,
                 screen: screen
             } : {
-                type: 'swap'
+                type: 'swap',
+                position: position,
+                screen: screen
             }
         )}}>
             {children}
