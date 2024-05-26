@@ -1,1 +1,41 @@
-.DS_*
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Build directories
+dist/
+build/
+
+# React specific
+morpheme/node_modules/
+morpheme/build/
+morpheme/dist/
+morpheme/.env
+morpheme/.next/
+morpheme/out/
+
+# Jekyll specific
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Sass Cache
+.sass-cache/
+
+# Bundler dependencies
+.bundle/
+vendor/
+
+# Jekyll configuration files (optional)
+*.lock
