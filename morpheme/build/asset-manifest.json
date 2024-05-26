@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/morpheme/static/css/main.ad08e59e.css",
+    "main.js": "/morpheme/static/js/main.9ec4207b.js",
+    "static/js/453.ed3810f9.chunk.js": "/morpheme/static/js/453.ed3810f9.chunk.js",
+    "service-worker.js": "/morpheme/service-worker.js",
+    "index.html": "/morpheme/index.html",
+    "main.ad08e59e.css.map": "/morpheme/static/css/main.ad08e59e.css.map",
+    "main.9ec4207b.js.map": "/morpheme/static/js/main.9ec4207b.js.map",
+    "453.ed3810f9.chunk.js.map": "/morpheme/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ad08e59e.css",
+    "static/js/main.9ec4207b.js"
+  ]
+}
