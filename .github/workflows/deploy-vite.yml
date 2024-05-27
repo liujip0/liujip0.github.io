@@ -30,10 +30,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Change directory
+        run: cd morpheme
       - name: Set up Node
-        uses: |
-          cd morpheme
-          actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
