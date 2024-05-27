@@ -1,6 +1,6 @@
-import React, { act, useReducer } from 'react';
-import Home from './Home';
-import ScreensMenus from './ScreensMenus';
+import React, { useReducer } from 'react';
+import HomeScreen from './HomeScreen.js';
+import ScreensMenus from './ScreensMenus.js';
 
 export default function ScreensLayout() {
     const [windows, windowsDispatch] = useReducer(windowsReducer, ['0-home', '0-home', '0-home', '0-home']);
@@ -14,7 +14,7 @@ export default function ScreensLayout() {
                 gridColumnStart: 'a0',
                 gridColumnEnd: (windows[0] === windows[1] ? 'a1' : 'a0')
             }}>
-                {windows[0].split('-')[1] === 'home' && <Home></Home>}
+                {windows[0].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
             </Screen>
 
             {windows[0] !== windows[1] && <Screen position={{
@@ -23,7 +23,7 @@ export default function ScreensLayout() {
                 gridColumnStart: 'a1',
                 gridColumnEnd: 'a1'
             }}>
-                {windows[1].split('-')[1] === 'home' && <Home></Home>}
+                {windows[1].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
             </Screen>}
 
             {windows[0] !== windows[2] && <Screen position={{
@@ -32,7 +32,7 @@ export default function ScreensLayout() {
                 gridColumnStart: 'a2',
                 gridColumnEnd: (windows[2] === windows[3] ? 'a3' : 'a2')
             }}>
-                {windows[2].split('-')[1] === 'home' && <Home></Home>}
+                {windows[2].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
             </Screen>}
 
             {windows[1] !== windows[3] && windows[2] !== windows[3] && <Screen position={{
@@ -41,7 +41,7 @@ export default function ScreensLayout() {
                 gridColumnStart: 'a3',
                 gridColumnEnd: 'a3'
             }}>
-                {windows[3].split('-')[1] === 'home' && <Home></Home>}
+                {windows[3].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
             </Screen>}
         </>
     );
