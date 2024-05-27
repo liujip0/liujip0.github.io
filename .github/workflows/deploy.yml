@@ -40,6 +40,8 @@ jobs:
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
 
     - name: Install Jekyll and Bundler
       run: gem install jekyll bundler
