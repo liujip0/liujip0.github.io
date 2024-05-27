@@ -28,6 +28,11 @@ jobs:
         npm install
         npm run build
 
+    - name: Configure Git
+      run: |
+        git config --global user.name "liujip0"
+        git config --global user.email "liujip2020@gmail.com"
+
     - name: Deploy React app to gh-pages branch
       run: |
         cd morpheme
