@@ -57,7 +57,9 @@ export default function HomeScreen() {
         This is some important bolded text! It grabs your attention.
       </strong>
 
-      <em>This text is italicized for a more subtle emphasis.</em>
+      <em>
+        This text is italicized for a more subtle emphasis.
+      </em>
 
       <p>
         Here&apos;s a link that goes somewhere (replace the # with a real URL!).
@@ -136,7 +138,9 @@ export default function HomeScreen() {
         This is some important bolded text! It grabs your attention.
       </strong>
 
-      <em>This text is italicized for a more subtle emphasis.</em>
+      <em>
+        This text is italicized for a more subtle emphasis.
+      </em>
 
       <p>
         Here&apos;s a link that goes somewhere (replace the # with a real URL!).
