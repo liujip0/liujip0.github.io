@@ -24,7 +24,7 @@ export default function App() {
           gridArea: 'b'
       }}>
           <Widget>
-              A a B b C c
+              A a B b C c BA Ba ba
           </Widget>
           <Widget>
               <input type="text" />
