@@ -44,6 +44,8 @@ jobs:
         working-directory: ./morpheme
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: List build files
+        run: ls -la ./morpheme/dist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
