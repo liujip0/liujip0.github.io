@@ -55,5 +55,5 @@ jobs:
         id: deployment
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ./build
+          folder: ./morpheme/build
           target-folder: ./morpheme
