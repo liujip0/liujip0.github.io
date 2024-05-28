@@ -1,60 +1,54 @@
 import { useReducer } from 'react';
 import HomeScreen from './HomeScreen';
 import ScreensMenus from './ScreensMenus';
+import StartScreen from './StartScreen';
 
 export default function ScreensLayout() {
-    const [windows, windowsDispatch] = useReducer(windowsReducer, ['0-home', '0-home', '0-home', '0-home']);
+    const [windows, windowsDispatch] = useReducer(windowsReducer, ['0-start', '0-start', '0-start', '0-start']);
     return (
         <>
             <ScreensMenus windowsDispatch={windowsDispatch}></ScreensMenus>
 
-            <Screen position={{
+            <Screen windows={windows} position={0} location={{
                 gridRowStart: 'a0',
                 gridRowEnd: (windows[0] === windows[2] ? 'a2' : 'a0'),
                 gridColumnStart: 'a0',
                 gridColumnEnd: (windows[0] === windows[1] ? 'a1' : 'a0')
-            }}>
-                {windows[0].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
-            </Screen>
+            }}></Screen>
 
-            {windows[0] !== windows[1] && <Screen position={{
+            {windows[0] !== windows[1] && <Screen windows={windows} position={1} location={{
                 gridRowStart: 'a1',
                 gridRowEnd: (windows[1] === windows[3] ? 'a3' : 'a1'),
                 gridColumnStart: 'a1',
                 gridColumnEnd: 'a1'
-            }}>
-                {windows[1].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
-            </Screen>}
+            }}></Screen>}
 
-            {windows[0] !== windows[2] && <Screen position={{
+            {windows[0] !== windows[2] && <Screen windows={windows} position={2} location={{
                 gridRowStart: 'a2',
                 gridRowEnd: 'a2',
                 gridColumnStart: 'a2',
                 gridColumnEnd: (windows[2] === windows[3] ? 'a3' : 'a2')
-            }}>
-                {windows[2].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
-            </Screen>}
+            }}></Screen>}
 
-            {windows[1] !== windows[3] && windows[2] !== windows[3] && <Screen position={{
+            {windows[1] !== windows[3] && windows[2] !== windows[3] && <Screen windows={windows} position={3} location={{
                 gridRowStart: 'a3',
                 gridRowEnd: 'a3',
                 gridColumnStart: 'a3',
                 gridColumnEnd: 'a3'
-            }}>
-                {windows[3].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
-            </Screen>}
+            }}></Screen>}
         </>
     );
 }
 
-function Screen({position, children}) {
+function Screen({location, position, windows}) {
   return (
     <div style={{
-      ...position,
+      ...location,
       padding: '0.5em',
       overflow: 'scroll'
     }}>
-      {children}
+      {windows[position].split('-')[1] === 'start' && <StartScreen></StartScreen>}
+      {windows[position].split('-')[1] === 'home' && <HomeScreen></HomeScreen>}
     </div>
   );
 }

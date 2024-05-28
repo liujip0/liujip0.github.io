@@ -10,15 +10,12 @@ export default function TopBar() {
             <div style={{
                 fontSize: '1.5em',
                 margin: '0.4em 0.5em 0.4em 0.5em'
-            }}>Title</div>
+            }}>Morpheme</div>
 
             <div style={{
                 display: 'flex'
             }}>
-                <MenuItem>Phonology</MenuItem>
-                <MenuItem>Grammar</MenuItem>
-                <MenuItem>Lexicon</MenuItem>
-                <MenuItem>Tools</MenuItem>
+                <MenuItem>File</MenuItem>
                 <MenuItem>Settings</MenuItem>
             </div>
         </div>

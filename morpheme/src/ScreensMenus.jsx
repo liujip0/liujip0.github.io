@@ -97,23 +97,29 @@ function MenuButtons({position, submenuDispatch, windowsDispatch}) {
     );
 }
 
-function SubmenuButton({action, position, screen, windowsDispatch, children}) {
+function SubmenuButton({action, position, screen, windowsDispatch, submenuDispatch, children}) {
     return (
         <button style={{
             border: 'none',
             backgroundColor: 'transparent',
             padding: '0.3em'
-        }} onClick={() => {windowsDispatch(
-            action === 'add' ? {
-                type: 'add',
+        }} onClick={() => {
+            windowsDispatch(
+                action === 'add' ? {
+                    type: 'add',
+                    position: position,
+                    screen: screen
+                } : {
+                    type: 'swap',
+                    position: position,
+                    screen: screen
+                }
+            );
+            submenuDispatch({
                 position: position,
-                screen: screen
-            } : {
-                type: 'swap',
-                position: position,
-                screen: screen
-            }
-        )}}>
+                menu: ''
+            });
+        }}>
             {children}
         </button>
     );
@@ -126,12 +132,12 @@ function Submenu({menu, position, windowsDispatch, submenuDispatch}) {
             flexDirection: 'column',
             backgroundColor: 'lightgray'
         }}>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'home'}>Home</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'phonology'}>Phonology</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'grammar'}>Grammar</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'lexicon'}>Lexicon</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'tools'}>Tools</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} screen={'settings'}>Settings</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'home'}>Home</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'phonology'}>Phonology</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'grammar'}>Grammar</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'lexicon'}>Lexicon</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'tools'}>Tools</SubmenuButton>
+            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'settings'}>Settings</SubmenuButton>
             <button style={{
 
             }} onClick={() => {submenuDispatch({
