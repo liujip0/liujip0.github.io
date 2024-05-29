@@ -2,7 +2,9 @@ import { getFile, writeFile, createFile } from "./Common";
 
 export default function StartScreen({
     conlangDispatch,
-    setConlangFileHandle
+    setConlangFileHandle,
+    windowsDispatch,
+    setSaved
 }) {
     return (
         <>
@@ -10,7 +12,7 @@ export default function StartScreen({
 
             <h2>Open Existing Conlang</h2>
             <button onClick={() => {
-                const [fileData, fileHandle] = getFile({
+                getFile({
                     types: [{
                         description: 'JSON Files',
                         accept: {
@@ -20,12 +22,20 @@ export default function StartScreen({
                     multiple: false,
                     excludeAcceptAllOption: true,
                     id: 'morpheme-picker'
+                }).then((value) => {
+                    console.log(value.fileHandle);
+                    console.log(value.contents);
+                    setConlangFileHandle(value.fileHandle);
+                    conlangDispatch({
+                        type: 'replaceAll',
+                        newValue: JSON.parse(value.contents)
+                    });
+                    windowsDispatch({
+                        type: 'swapAll',
+                        newValue: ['0-home', '0-home', '0-home', '0-home']
+                    });
+                    setSaved(true);
                 });
-                setConlangFileHandle(fileHandle);
-                conlangDispatch({
-                    type: 'replaceAll',
-                    newValue: JSON.parse(fileData.text())
-                })
             }}>Choose File</button>
 
             <h2>Create New Conlang</h2>
@@ -65,17 +75,13 @@ export default function StartScreen({
                             newValue: newConlang
                         });
                     }
+                    windowsDispatch({
+                        type: 'swapAll',
+                        newValue: ['0-home', '0-home', '0-home', '0-home']
+                    });
+                    setSaved(true);
                 });
             }}>Submit</button>
-
-            <h2>Edit Conlang [TESTING ONLY]</h2>
-            <button onClick={() => {
-                conlangDispatch({
-                    type: 'replace',
-                    key: 'a',
-                    newValue: 'b'
-                });
-            }}>Test</button>
         </>
     );
 }

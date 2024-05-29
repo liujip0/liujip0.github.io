@@ -4,6 +4,7 @@ import StartScreen from './StartScreen';
 
 export default function ScreensLayout({
   conlangDispatch,
+  setSaved,
   windows, windowsDispatch,
   conlangFileHandle, setConlangFileHandle
 }) {
@@ -12,10 +13,11 @@ export default function ScreensLayout({
             <ScreensMenus windowsDispatch={windowsDispatch}></ScreensMenus>
 
             <Screen
-              windows={windows}
+              windows={windows} windowsDispatch={windowsDispatch}
               position={0}
               conlangDispatch={conlangDispatch}
               conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+              setSaved={setSaved}
               location={{
                 gridRowStart: 'a0',
                 gridRowEnd: (windows[0] === windows[2] ? 'a2' : 'a0'),
@@ -26,10 +28,11 @@ export default function ScreensLayout({
 
             {windows[0] !== windows[1] &&
               <Screen
-                windows={windows}
+                windows={windows} windowsDispatch={windowsDispatch}
                 position={1}
                 conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setSaved={setSaved}
                 location={{
                   gridRowStart: 'a1',
                   gridRowEnd: (windows[1] === windows[3] ? 'a3' : 'a1'),
@@ -41,10 +44,11 @@ export default function ScreensLayout({
 
             {windows[0] !== windows[2] &&
               <Screen
-                windows={windows}
+                windows={windows} windowsDispatch={windowsDispatch}
                 position={2}
                 conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setSaved={setSaved}
                 location={{
                   gridRowStart: 'a2',
                   gridRowEnd: 'a2',
@@ -56,10 +60,11 @@ export default function ScreensLayout({
 
             {windows[1] !== windows[3] && windows[2] !== windows[3] &&
               <Screen
-                windows={windows}
+                windows={windows} windowsDispatch={windowsDispatch}
                 position={3}
                 conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setSaved={setSaved}
                 location={{
                   gridRowStart: 'a3',
                   gridRowEnd: 'a3',
@@ -74,9 +79,10 @@ export default function ScreensLayout({
 function Screen({
   location,
   position,
-  windows,
+  windows, windowsDispatch,
   conlangDispatch,
-  conlangFileHandle, setConlangFileHandle
+  conlangFileHandle, setConlangFileHandle,
+  setSaved
 }) {
   return (
     <div style={{
@@ -89,6 +95,8 @@ function Screen({
         <StartScreen
           conlangDispatch={conlangDispatch}
           conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+          windowsDispatch={windowsDispatch}
+          setSaved={setSaved}
         ></StartScreen>
       }
       {windows[position].split('-')[1] === 'home' &&

@@ -47,6 +47,7 @@ export default function App() {
                     setSaved(false);
                     conlangDispatch(action);
                 }}
+                setSaved={setSaved}
                 windows={windows} windowsDispatch={windowsDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
             ></ScreensLayout>

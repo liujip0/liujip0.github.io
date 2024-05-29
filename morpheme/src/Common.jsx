@@ -1,7 +1,11 @@
 export async function getFile(options) {
     const [fileHandle] = await window.showOpenFilePicker(options);
     const fileData = await fileHandle.getFile();
-    return [fileData, fileHandle];
+    const contents = await fileData.text();
+    return {
+        contents: contents,
+        fileHandle: fileHandle
+    };
 }
 
 export async function writeFile(fileHandle, contents) {
