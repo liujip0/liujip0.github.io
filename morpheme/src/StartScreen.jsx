@@ -1,12 +1,13 @@
-import { getFile, writeFile, createFile } from "./Common";
+import { getFile, writeFile } from "./Common";
 
 export default function StartScreen({
-    conlang, conlangDispatch,
+    conlangDispatch,
     conlangFileHandle, setConlangFileHandle
 }) {
     return (
         <>
             <h1>Welcome to Morpheme</h1>
+
             <h2>Open Existing Conlang</h2>
             <button onClick={() => {
                 const [fileData, fileHandle] = getFile({
@@ -26,18 +27,27 @@ export default function StartScreen({
                     newValue: JSON.parse(fileData.text())
                 })
             }}>Choose File</button>
+
             <h2>Create New Conlang</h2>
             <label>
                 Conlang name:&nbsp;
-                <input type="text" id="conlangname" />
+                <input
+                    type="text"
+                    id="conlangname"
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            document.getElementById("createnewconlang").click();
+                        }
+                    }}
+                />
             </label>
             &nbsp;
-            <button onClick={() => {
+            <button id="createnewconlang" onClick={() => {
                 const name = document.getElementById("conlangname").value
                 const newConlang = {
                     name: name
                 };
-                setConlangFileHandle(createFile({
+                const fileHandle = createFile({
                     types: [{
                         description: 'JSON Files',
                         accept: {'application/json': ['.json']}
@@ -45,14 +55,32 @@ export default function StartScreen({
                     id: 'morpheme-picker',
                     startIn: 'downloads',
                     suggestedName: name
-                }));
-                writeFile(conlangFileHandle, JSON.stringify(newConlang));
-                conlangDispatch({
-                    type: 'replaceAll',
-                    newValue: newConlang
+                });
+                fileHandle.then((value) => {
+                    console.log(value);
+                    setConlangFileHandle(value);
+                    console.log(conlangFileHandle);
+                    writeFile(conlangFileHandle, JSON.stringify(newConlang));
+                    conlangDispatch({
+                        type: 'replaceAll',
+                        newValue: newConlang
+                    });
                 });
             }}>Submit</button>
-            <label>{conlang.name}</label>
+
+            <h2>Edit Conlang [TESTING ONLY]</h2>
+            <button onClick={() => {
+                conlangDispatch({
+                    type: 'replace',
+                    key: 'a',
+                    newValue: 'b'
+                });
+            }}>Test</button>
         </>
     );
+}
+
+async function createFile(options) {
+    const fileHandle = await window.showSaveFilePicker(options);
+    return fileHandle;
 }

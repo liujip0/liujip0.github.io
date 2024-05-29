@@ -132,12 +132,48 @@ function Submenu({menu, position, windowsDispatch, submenuDispatch}) {
             flexDirection: 'column',
             backgroundColor: 'lightgray'
         }}>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'home'}>Home</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'phonology'}>Phonology</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'grammar'}>Grammar</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'lexicon'}>Lexicon</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'tools'}>Tools</SubmenuButton>
-            <SubmenuButton action={menu} position={position} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} screen={'settings'}>Settings</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'start'}
+            >Start</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'home'}
+            >Home</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'phonology'}
+            >Phonology</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'grammar'}
+            >Grammar</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'lexicon'}
+            >Lexicon</SubmenuButton>
+            <SubmenuButton
+                action={menu}
+                position={position}
+                windowsDispatch={windowsDispatch}
+                submenuDispatch={submenuDispatch}
+                screen={'settings'}
+            >Settings</SubmenuButton>
             <button style={{
 
             }} onClick={() => {submenuDispatch({

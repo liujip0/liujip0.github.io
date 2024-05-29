@@ -1,11 +1,12 @@
-import { useReducer, useState } from 'react';
 import HomeScreen from './HomeScreen';
 import ScreensMenus from './ScreensMenus';
 import StartScreen from './StartScreen';
 
-export default function ScreensLayout({conlang, conlangDispatch}) {
-    const [windows, windowsDispatch] = useReducer(windowsReducer, ['0-start', '0-start', '0-start', '0-start']);
-    const [conlangFileHandle, setConlangFileHandle] = useState(null);
+export default function ScreensLayout({
+  conlangDispatch,
+  windows, windowsDispatch,
+  conlangFileHandle, setConlangFileHandle
+}) {
     return (
         <>
             <ScreensMenus windowsDispatch={windowsDispatch}></ScreensMenus>
@@ -13,7 +14,7 @@ export default function ScreensLayout({conlang, conlangDispatch}) {
             <Screen
               windows={windows}
               position={0}
-              conlang={conlang} conlangDispatch={conlangDispatch}
+              conlangDispatch={conlangDispatch}
               conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
               location={{
                 gridRowStart: 'a0',
@@ -27,7 +28,7 @@ export default function ScreensLayout({conlang, conlangDispatch}) {
               <Screen
                 windows={windows}
                 position={1}
-                conlang={conlang} conlangDispatch={conlangDispatch}
+                conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 location={{
                   gridRowStart: 'a1',
@@ -42,7 +43,7 @@ export default function ScreensLayout({conlang, conlangDispatch}) {
               <Screen
                 windows={windows}
                 position={2}
-                conlang={conlang} conlangDispatch={conlangDispatch}
+                conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 location={{
                   gridRowStart: 'a2',
@@ -57,7 +58,7 @@ export default function ScreensLayout({conlang, conlangDispatch}) {
               <Screen
                 windows={windows}
                 position={3}
-                conlang={conlang} conlangDispatch={conlangDispatch}
+                conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 location={{
                   gridRowStart: 'a3',
@@ -74,7 +75,7 @@ function Screen({
   location,
   position,
   windows,
-  conlang, conlangDispatch,
+  conlangDispatch,
   conlangFileHandle, setConlangFileHandle
 }) {
   return (
@@ -86,7 +87,7 @@ function Screen({
     }}>
       {windows[position].split('-')[1] === 'start' &&
         <StartScreen
-          conlang={conlang} conlangDispatch={conlangDispatch}
+          conlangDispatch={conlangDispatch}
           conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
         ></StartScreen>
       }
@@ -95,158 +96,4 @@ function Screen({
       }
     </div>
   );
-}
-
-function windowsReducer(windows, action) {
-  const time = new Date().getMilliseconds();
-  switch (action.type) {
-    case 'add': {
-      switch (action.position) {
-        case 0: {
-          if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-            return windows.with(0, time + '-' + action.screen).with(2, time + '-' + action.screen);
-          } else if (windows[2] === windows[0] || windows[1] === windows[0]) {
-            return windows.with(0, time + '-' + action.screen);
-          } else {
-            return windows;
-          }
-        }
-        case 1: {
-          if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-            return windows.with(1, time + '-' + action.screen).with(3, time + '-' + action.screen);
-          } else if (windows[0] === windows[1] || windows[3] === windows[1]) {
-            return windows.with(1, time + '-' + action.screen);
-          } else {
-            return windows;
-          }
-        }
-        case 2: {
-          if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-            return windows.with(2, time + '-' + action.screen).with(3, time + '-' + action.screen);
-          } else if (windows[0] === windows[2] || windows[3] === windows[2]) {
-            return windows.with(2, time + '-' + action.screen);
-          } else {
-            return windows;
-          }
-        }
-        case 3: {
-          if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-            return windows.with(1, time + '-' + action.screen).with(3, time + '-' + action.screen);
-          } else if (windows[1] === windows[3] || windows[2] === windows[3]) {
-            return windows.with(3, time + '-' + action.screen);
-          } else {
-            return windows;
-          }
-        }
-        default: {
-          throw Error('Unknown position for `add`: ' + action.position);
-        }
-      }
-    }
-    case 'remove': {
-      if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-        return ['0-home', '0-home', '0-home', '0-home']
-      } else {
-        switch (action.position) {
-          case 0: {
-            if (windows[0] === windows[2]) {
-              return windows.with(0, windows[1]).with(2, windows[3])
-            } else if (windows[0] === windows[1]) {
-              return windows.with(0, windows[2]).with(1, windows[3])
-            } else if (windows[2] === windows[3]) {
-              return windows.with(0, windows[1])
-            } else {
-              return windows.with(0, windows[2])
-            }
-          }
-          case 1: {
-            if (windows[1] === windows[3]) {
-              return windows.with(1, windows[0]).with(3, windows[2])
-            } else if (windows[1] === windows[0]) {
-              return windows.with(1, windows[3]).with(2, windows[0])
-            } else if (windows[2] === windows[3]) {
-              return windows.with(1, windows[0])
-            } else {
-              return windows.with(1, windows[3])
-            }
-          }
-          case 2: {
-            if (windows[2] === windows[0]) {
-              return windows.with(0, windows[1]).with(2, windows[3])
-            } else if (windows[2] === windows[3]) {
-              return windows.with(2, windows[0]).with(3, windows[1])
-            } else if (windows[0] === windows[1]) {
-              return windows.with(2, windows[3])
-            } else {
-              return windows.with(2, windows[0])
-            }
-          }
-          case 3: {
-            if (windows[3] === windows[1]) {
-              return windows.with(1, windows[0]).with(3, windows[2])
-            } else if (windows[3] === windows[2]) {
-              return windows.with(3, windows[1]).with(2, windows[0])
-            } else if (windows[0] === windows[1]) {
-              return windows.with(3, windows[2])
-            } else {
-              return windows.with(3, windows[1])
-            }
-          }
-          default: {
-            throw Error('Unknown position for `remove`: ' + action.position);
-          }
-        }
-      }
-    }
-    case 'swap': {
-      if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
-        return Array(4).fill(time + '-' + action.screen);
-      } else {
-        switch (action.position) {
-          case 0: {
-            if (windows[0] === windows[1]) {
-              return windows.with(0, time + '-' + action.screen).with(1, time + '-' + action.screen);
-            } else if (windows[0] === windows[2]) {
-              return windows.with(0, time + '-' + action.screen).with(2, time + '-' + action.screen);
-            } else {
-              return windows.with(0, time + '-' + action.screen);
-            }
-          }
-          case 1: {
-            if (windows[1] === windows[0]) {
-              return windows.with(1, time + '-' + action.screen).with(0, time + '-' + action.screen);
-            } else if (windows[1] === windows[3]) {
-              return windows.with(1, time + '-' + action.screen).with(3, time + '-' + action.screen);
-            } else {
-              return windows.with(1, time + '-' + action.screen);
-            }
-          }
-          case 2: {
-            if (windows[2] === windows[3]) {
-              return windows.with(2, time + '-' + action.screen).with(3, time + '-' + action.screen);
-            } else if (windows[2] === windows[0]) {
-              return windows.with(2, time + '-' + action.screen).with(0, time + '-' + action.screen);
-            } else {
-              return windows.with(2, time + '-' + action.screen);
-            }
-          }
-          case 3: {
-            if (windows[3] === windows[2]) {
-              return windows.with(3, time + '-' + action.screen).with(2, time + '-' + action.screen);
-            } else if (windows[3] === windows[1]) {
-              return windows.with(3, time + '-' + action.screen).with(1, time + '-' + action.screen);
-            } else {
-              return windows.with(3, time + '-' + action.screen);
-            }
-          }
-          default: {
-            throw Error('Unknown position for `remove`' + action.position);
-          }
-        }
-      }
-    }
-    default: {
-      throw Error('Unknown action in `windowsReducer`: ' + action.type);
-    }
-  }
 }
