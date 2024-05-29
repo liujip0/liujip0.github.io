@@ -54,7 +54,7 @@ export default function StartScreen({
                     }],
                     id: 'morpheme-picker',
                     startIn: 'downloads',
-                    suggestedName: name
+                    suggestedName: name + '.json'
                 }).then((value) => {
                     console.log(value);
                     setConlangFileHandle(value);
