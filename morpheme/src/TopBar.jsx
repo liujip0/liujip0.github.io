@@ -1,4 +1,4 @@
-export default function TopBar() {
+export default function TopBar({conlang}) {
     return (
         <div style={{
             fontSize: '1.5em',
@@ -15,7 +15,8 @@ export default function TopBar() {
             <div style={{
                 display: 'flex'
             }}>
-                <MenuItem>File</MenuItem>
+                <MenuItem>Currently Editing {conlang.name}</MenuItem>
+                <MenuItem>Save</MenuItem>
                 <MenuItem>Settings</MenuItem>
             </div>
         </div>
