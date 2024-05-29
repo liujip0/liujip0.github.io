@@ -56,7 +56,7 @@ export default function StartScreen({
                     startIn: 'downloads',
                     suggestedName: name + '.json'
                 }).then((value) => {
-                    console.log(value);
+                    console.log('createnewconlang' + value);
                     setConlangFileHandle(value);
                     if (value) {
                         writeFile(value, JSON.stringify(newConlang));

@@ -5,7 +5,8 @@ export async function getFile(options) {
 }
 
 export async function writeFile(fileHandle, contents) {
-    const writeable = await fileHandle.createWriteable();
+    console.log(fileHandle);
+    const writeable = await fileHandle.createWritable();
     await writeable.write(contents);
     await writeable.close();
 }
