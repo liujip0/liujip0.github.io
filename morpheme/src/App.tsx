@@ -3,8 +3,12 @@ import './App.css';
 import TopBar from './TopBar';
 import Widget from './Widget';
 import ScreensLayout from './ScreensLayout';
-import { Conlang, Screen, ScreenPosition } from './Interfaces';
+import { Conlang, screenStr, screenPosition } from './Types';
 
+export type setSavedFunc = (value: boolean) => void;
+export type setConlangFileHandleFunc = (value: FileSystemFileHandle | null) => void;
+export type windowsArr = Array<string>;
+export type conlangFileHandleType = FileSystemFileHandle | null;
 export default function App() {
     const [conlang, conlangDispatch] = useReducer(conlangReducer, {
       name: 'none',
@@ -23,7 +27,7 @@ export default function App() {
     });
     const [saved, setSaved] = useState(true);
     const [windows, windowsDispatch] = useReducer(windowsReducer, ['0-start', '0-start', '0-start', '0-start']);
-    const [conlangFileHandle, setConlangFileHandle] = useState(null);
+    const [conlangFileHandle, setConlangFileHandle] = useState<conlangFileHandleType>(null);
     return (
         <div style={{
             position: 'relative',
@@ -70,16 +74,18 @@ export default function App() {
     );
 }
 
+type conlangReducerAction = {
+  type: 'replaceAll';
+  newValue: Conlang;
+} | {
+  type: 'replace';
+  key: keyof Conlang;
+  newValue: Partial<Conlang>;
+};
+export type conlangReducerFunc = (action: conlangReducerAction) => void;
 function conlangReducer(
   conlang: Conlang,
-  action: {
-    type: 'replaceAll';
-    newValue: Conlang;
-  } | {
-    type: 'replace';
-    key: keyof Conlang;
-    newValue: Partial<Conlang>;
-  }
+  action: conlangReducerAction
 ): Conlang {
     switch (action.type) {
         case 'replaceAll': {
@@ -97,20 +103,22 @@ function conlangReducer(
     }
 }
 
+type windowsReducerAction = {
+  type: 'add' | 'swap',
+  position: screenPosition,
+  screen: screenStr
+} | {
+  type: 'remove',
+  position: screenPosition
+} | {
+  type: 'swapAll',
+  newValue: windowsArr
+};
+export type windowsReducerFunc = (action: windowsReducerAction) => void;
 function windowsReducer(
-  windows: Array<string>,
-  action: {
-    type: 'add' | 'swap',
-    position: ScreenPosition,
-    screen: Screen
-  } | {
-    type: 'remove',
-    position: ScreenPosition
-  } | {
-    type: 'swapAll',
-    newValue: Array<string>
-  }
-): Array<string> {
+  windows: windowsArr,
+  action: windowsReducerAction
+): windowsArr {
   const time = new Date().getMilliseconds();
   switch (action.type) {
     case 'add': {

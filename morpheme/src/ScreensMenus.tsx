@@ -1,8 +1,16 @@
-import PropTypes from "prop-types";
-import { useReducer } from "react";
+import { act, useReducer } from "react";
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
+import { screenPosition, screenStr } from "./Types";
+import { windowsReducerFunc } from "./App";
 
-export default function ScreensMenus({windowsDispatch}) {
+type ScreensMenusProps = {
+    windowsDispatch: windowsReducerFunc;
+}
+type menuStr = 'add' | 'swap' | '';
+type submenusArr = Array<menuStr>;
+export default function ScreensMenus({
+    windowsDispatch
+}: ScreensMenusProps) {
     const [submenus, submenuDispatch] = useReducer(submenusReducer, ['', '', '', ''])
     return (
         <>
@@ -41,11 +49,15 @@ export default function ScreensMenus({windowsDispatch}) {
         </>
     );
 }
-ScreensMenus.propTypes = {
-    windowsDispatch: PropTypes.func.isRequired
-}
 
-function MenuButtonCont({position, children}) {
+type MenuButtonContProps = {
+    position: Record<string, string>;
+    children: React.ReactNode;
+}
+function MenuButtonCont({
+    position,
+    children
+}: MenuButtonContProps) {
     return (
         <div style={{
             ...position,
@@ -60,7 +72,14 @@ function MenuButtonCont({position, children}) {
     );
 }
 
-function MenuButton({onClick, children}) {
+type MenuButtonProps = {
+    onClick: () => void;
+    children: React.ReactNode;
+}
+function MenuButton({
+    onClick,
+    children
+}: MenuButtonProps) {
     return (
         <button onClick={onClick} style={{
             backgroundColor: 'transparent',
@@ -73,7 +92,16 @@ function MenuButton({onClick, children}) {
     );
 }
 
-function MenuButtons({position, submenuDispatch, windowsDispatch}) {
+type MenuButtonsProps = {
+    position: screenPosition;
+    submenuDispatch: submenusReducerFunc;
+    windowsDispatch: windowsReducerFunc;
+}
+function MenuButtons({
+    position,
+    submenuDispatch,
+    windowsDispatch
+}: MenuButtonsProps) {
     return (
         <div style={{
             display: 'flex',
@@ -101,7 +129,22 @@ function MenuButtons({position, submenuDispatch, windowsDispatch}) {
     );
 }
 
-function SubmenuButton({action, position, screen, windowsDispatch, submenuDispatch, children}) {
+type SubmenuButtonProps = {
+    action: menuStr;
+    position: screenPosition;
+    screen: screenStr;
+    windowsDispatch: windowsReducerFunc;
+    submenuDispatch: submenusReducerFunc;
+    children: React.ReactNode;
+};
+function SubmenuButton({
+    action,
+    position,
+    screen,
+    windowsDispatch,
+    submenuDispatch,
+    children
+}: SubmenuButtonProps) {
     return (
         <button style={{
             border: 'none',
@@ -129,7 +172,18 @@ function SubmenuButton({action, position, screen, windowsDispatch, submenuDispat
     );
 }
 
-function Submenu({menu, position, windowsDispatch, submenuDispatch}) {
+type SubmenuProps = {
+    menu: menuStr;
+    position: screenPosition;
+    windowsDispatch: windowsReducerFunc;
+    submenuDispatch: submenusReducerFunc;
+}
+function Submenu({
+    menu,
+    position,
+    windowsDispatch,
+    submenuDispatch
+}: SubmenuProps) {
     return (
         <div style={{
             display: menu ? 'flex' : 'none',
@@ -188,6 +242,16 @@ function Submenu({menu, position, windowsDispatch, submenuDispatch}) {
     );
 }
 
-function submenusReducer(submenus, action) {
-    return submenus.with(action.position, action.menu)
+type submenusReducerAction = {
+    position: screenPosition;
+    menu: menuStr;
+}
+type submenusReducerFunc = (action: submenusReducerAction) => void;
+function submenusReducer(
+    submenus: submenusArr,
+    action: submenusReducerAction
+): submenusArr {
+    const newSubmenus = [...submenus];
+    newSubmenus[action.position] = action.menu;
+    return newSubmenus;
 }

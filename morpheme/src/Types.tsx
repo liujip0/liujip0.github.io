@@ -14,6 +14,5 @@ export interface Conlang {
     };
 }
 
-export type ScreenPosition = 0 | 1 | 2 | 3
-
-export type Screen = 'start' | 'home' | 'phonology' | 'grammar' | 'lexicon' | 'settings';
+export type screenPosition = 0 | 1 | 2 | 3
+export type screenStr = 'start' | 'home' | 'phonology' | 'grammar' | 'lexicon' | 'settings';

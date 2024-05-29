@@ -1,16 +1,25 @@
-import PropTypes from 'prop-types';
+import { conlangFileHandleType, conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsArr, windowsReducerFunc } from './App';
 import HomeScreen from './HomeScreen';
 import ScreensMenus from './ScreensMenus';
 import SettingsScreen from './SettingsScreen';
 import StartScreen from './StartScreen';
-import { Conlang } from './Interfaces';
+import { Conlang, screenPosition } from './Types';
 
+type ScreensLayoutProps = {
+    conlang: Conlang;
+    conlangDispatch: conlangReducerFunc;
+    setSaved: setSavedFunc;
+    windows: windowsArr;
+    windowsDispatch: windowsReducerFunc;
+    conlangFileHandle: FileSystemFileHandle | null,
+    setConlangFileHandle: setConlangFileHandleFunc;
+}
 export default function ScreensLayout({
-  conlang: Conlang, conlangDispatch,
+  conlang, conlangDispatch,
   setSaved,
   windows, windowsDispatch,
   conlangFileHandle, setConlangFileHandle
-}) {
+}: ScreensLayoutProps) {
     return (
         <>
             <ScreensMenus windowsDispatch={windowsDispatch}></ScreensMenus>
@@ -79,6 +88,17 @@ export default function ScreensLayout({
     );
 }
 
+type ScreenProps = {
+    location: Record<string, string>;
+    position: screenPosition;
+    windows: windowsArr;
+    windowsDispatch: windowsReducerFunc;
+    conlang: Conlang;
+    conlangDispatch: conlangReducerFunc;
+    conlangFileHandle: conlangFileHandleType;
+    setConlangFileHandle: setConlangFileHandleFunc;
+    setSaved: setSavedFunc;
+};
 function Screen({
   location,
   position,
@@ -86,7 +106,7 @@ function Screen({
   conlang, conlangDispatch,
   conlangFileHandle, setConlangFileHandle,
   setSaved
-}) {
+}: ScreenProps) {
   return (
     <div style={{
       ...location,
@@ -113,17 +133,4 @@ function Screen({
       }
     </div>
   );
-}
-Screen.propTypes = {
-  location: PropTypes.object.isRequired,
-  position: PropTypes.number.isRequired,
-  windows: PropTypes.arrayOf(PropTypes.string).isRequired,
-  windowsDispatch: PropTypes.func.isRequired,
-  conlang: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  conlangDispatch: PropTypes.func.isRequired,
-  conlangFileHandle: PropTypes.any.isRequired,
-  setConlangFileHandle: PropTypes.func.isRequired,
-  setSaved: PropTypes.func.isRequired
 }
