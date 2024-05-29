@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import HomeScreen from './HomeScreen';
 import ScreensMenus from './ScreensMenus';
+import SettingsScreen from './SettingsScreen';
 import StartScreen from './StartScreen';
 
 export default function ScreensLayout({
-  conlangDispatch,
+  conlang, conlangDispatch,
   setSaved,
   windows, windowsDispatch,
   conlangFileHandle, setConlangFileHandle
@@ -15,7 +17,7 @@ export default function ScreensLayout({
             <Screen
               windows={windows} windowsDispatch={windowsDispatch}
               position={0}
-              conlangDispatch={conlangDispatch}
+              conlang={conlang} conlangDispatch={conlangDispatch}
               conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
               setSaved={setSaved}
               location={{
@@ -30,7 +32,7 @@ export default function ScreensLayout({
               <Screen
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={1}
-                conlangDispatch={conlangDispatch}
+                conlang={conlang} conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
@@ -46,7 +48,7 @@ export default function ScreensLayout({
               <Screen
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={2}
-                conlangDispatch={conlangDispatch}
+                conlang={conlang} conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
@@ -62,7 +64,7 @@ export default function ScreensLayout({
               <Screen
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={3}
-                conlangDispatch={conlangDispatch}
+                conlang={conlang} conlangDispatch={conlangDispatch}
                 conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
@@ -75,12 +77,23 @@ export default function ScreensLayout({
         </>
     );
 }
+ScreensLayout.propTypes = {
+  conlang: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
+  conlangDispatch: PropTypes.func.isRequired,
+  setSaved: PropTypes.func.isRequired,
+  windows: PropTypes.arrayOf(PropTypes.string).isRequired,
+  windowsDispatch: PropTypes.func.isRequired,
+  conlangFileHandle: PropTypes.any.isRequired,
+  setConlangFileHandle: PropTypes.func.isRequired
+}
 
 function Screen({
   location,
   position,
   windows, windowsDispatch,
-  conlangDispatch,
+  conlang, conlangDispatch,
   conlangFileHandle, setConlangFileHandle,
   setSaved
 }) {
@@ -102,6 +115,25 @@ function Screen({
       {windows[position].split('-')[1] === 'home' &&
         <HomeScreen></HomeScreen>
       }
+      {windows[position].split('-')[1] === 'settings' &&
+        <SettingsScreen
+          conlang={conlang}
+          conlangDispatch={conlangDispatch}
+        ></SettingsScreen>
+      }
     </div>
   );
+}
+Screen.propTypes = {
+  location: PropTypes.object.isRequired,
+  position: PropTypes.number.isRequired,
+  windows: PropTypes.arrayOf(PropTypes.string).isRequired,
+  windowsDispatch: PropTypes.func.isRequired,
+  conlang: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }),
+  conlangDispatch: PropTypes.func.isRequired,
+  conlangFileHandle: PropTypes.any.isRequired,
+  setConlangFileHandle: PropTypes.func.isRequired,
+  setSaved: PropTypes.func.isRequired
 }

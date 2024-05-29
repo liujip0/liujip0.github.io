@@ -43,7 +43,7 @@ export default function App() {
                 <Widget><span id="test"></span></Widget>
             </div>
             <ScreensLayout
-                conlangDispatch={(action) => {
+                conlang={conlang} conlangDispatch={(action) => {
                     setSaved(false);
                     conlangDispatch(action);
                 }}

@@ -38,12 +38,8 @@ export default function TopBar({
                 }}>
                     Save
                 </MenuItem>
-                <MenuItem onClick={() => {windowsDispatch({
-                    type: 'swapAll',
-                    newValue: ['0-settings', '0-settings', '0-settings', '0-settings']
-                })}}>
-                    Settings
-                </MenuItem>
+                <MenuItem>Import</MenuItem>
+                <MenuItem>Export</MenuItem>
             </div>
         </div>
     );

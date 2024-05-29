@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useReducer } from "react";
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
 
@@ -39,6 +40,9 @@ export default function ScreensMenus({windowsDispatch}) {
             </MenuButtonCont>
         </>
     );
+}
+ScreensMenus.propTypes = {
+    windowsDispatch: PropTypes.func.isRequired
 }
 
 function MenuButtonCont({position, children}) {
