@@ -1,3 +1,5 @@
+import { getFile, writeFile, createFile } from "./Common";
+
 export default function StartScreen({
     conlang, conlangDispatch,
     conlangFileHandle, setConlangFileHandle
@@ -53,21 +55,4 @@ export default function StartScreen({
             <label>{conlang.name}</label>
         </>
     );
-}
-
-async function getFile(options) {
-    const [fileHandle] = await window.showOpenFilePicker(options);
-    const fileData = await fileHandle.getFile();
-    return [fileData, fileHandle];
-}
-
-async function writeFile(fileHandle, contents) {
-    const writeable = await fileHandle.createWriteable();
-    await writeable.write(contents);
-    await writeable.close();
-}
-
-async function createFile(options) {
-    const fileHandle = await window.showSaveFilePicker(options);
-    return fileHandle;
 }
