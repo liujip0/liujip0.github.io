@@ -1,8 +1,8 @@
-import { getFile, writeFile } from "./Common";
+import { getFile, writeFile, createFile } from "./Common";
 
 export default function StartScreen({
     conlangDispatch,
-    conlangFileHandle, setConlangFileHandle
+    setConlangFileHandle
 }) {
     return (
         <>
@@ -47,7 +47,7 @@ export default function StartScreen({
                 const newConlang = {
                     name: name
                 };
-                const fileHandle = createFile({
+                createFile({
                     types: [{
                         description: 'JSON Files',
                         accept: {'application/json': ['.json']}
@@ -55,16 +55,16 @@ export default function StartScreen({
                     id: 'morpheme-picker',
                     startIn: 'downloads',
                     suggestedName: name
-                });
-                fileHandle.then((value) => {
+                }).then((value) => {
                     console.log(value);
                     setConlangFileHandle(value);
-                    console.log(conlangFileHandle);
-                    writeFile(conlangFileHandle, JSON.stringify(newConlang));
-                    conlangDispatch({
-                        type: 'replaceAll',
-                        newValue: newConlang
-                    });
+                    if (value) {
+                        writeFile(value, JSON.stringify(newConlang));
+                        conlangDispatch({
+                            type: 'replaceAll',
+                            newValue: newConlang
+                        });
+                    }
                 });
             }}>Submit</button>
 
@@ -78,9 +78,4 @@ export default function StartScreen({
             }}>Test</button>
         </>
     );
-}
-
-async function createFile(options) {
-    const fileHandle = await window.showSaveFilePicker(options);
-    return fileHandle;
 }
