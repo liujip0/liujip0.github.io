@@ -15,7 +15,8 @@ export default function App() {
       gridTemplateRows: '5em 3em 1fr 1em 1fr',
       gridTemplateColumns: '1fr 1em 1fr',
       gridTemplateAreas: `'a a a' 'b b b' 'a0 c a1' 'd d d' 'a2 e a3'`,
-      overflow: 'scroll'
+      overflow: 'scroll',
+      backgroundColor: 'lightgray'
   }}>
       <TopBar></TopBar>
       <div style={{
