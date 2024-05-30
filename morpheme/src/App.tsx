@@ -1,9 +1,10 @@
 import { useReducer, useState } from 'react';
 import './App.css';
 import TopBar from './TopBar';
-import Widget from './Widget';
+import Widgets from './Widgets';
 import ScreensLayout from './ScreensLayout';
 import { Conlang, screenStr, screenPosition } from './CommonTypes';
+import { deepUpdate } from './Common';
 
 export type setSavedFunc = (value: boolean) => void;
 export type setConlangFileHandleFunc = (value: FileSystemFileHandle | null) => void;
@@ -47,20 +48,10 @@ export default function App() {
                 saved={saved} setSaved={setSaved}
                 windowsDispatch={windowsDispatch}
                 conlangFileHandle={conlangFileHandle}
-            ></TopBar>
-            <div style={{
-                display: 'flex',
-                position: 'absolute',
-                gridArea: 'b'
-            }}>
-                <Widget>
-                    A a B b C c BA Ba ba
-                </Widget>
-                <Widget>
-                    <input type="text" />
-                </Widget>
-                <Widget><span id="test"></span></Widget>
-            </div>
+            />
+            <Widgets
+              conlang={conlang}
+            />
             <ScreensLayout
                 conlang={conlang} conlangDispatch={(action) => {
                     setSaved(false);
@@ -69,7 +60,7 @@ export default function App() {
                 setSaved={setSaved}
                 windows={windows} windowsDispatch={windowsDispatch}
                 setConlangFileHandle={setConlangFileHandle}
-            ></ScreensLayout>
+            />
         </div>
     );
 }
@@ -79,7 +70,8 @@ type conlangReducerAction = {
   newValue: Conlang;
 } | {
   type: 'replace';
-  newValue: Partial<Conlang>;
+  path: Array<string>;
+  newValue: unknown;
 };
 export type conlangReducerFunc = (action: conlangReducerAction) => void;
 function conlangReducer(
@@ -91,8 +83,7 @@ function conlangReducer(
             return action.newValue;
         }
         case 'replace': {
-            const newConlang = Object.assign(conlang, action.newValue);
-            return newConlang;
+            return deepUpdate(conlang, action.path, action.newValue);
         }
     }
 }

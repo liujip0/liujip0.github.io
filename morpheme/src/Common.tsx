@@ -26,3 +26,19 @@ export async function createFile(options: object) {
     const fileHandle = await window.showSaveFilePicker(options) as FileSystemFileHandle;
     return fileHandle;
 }
+
+type NestedObject = {[key: string]: unknown};
+export function deepUpdate<T>(
+    obj: T,
+    path: string[],
+    value: unknown
+): T {
+    if (path.length === 0) {
+        return value as T;
+    }
+    const [head, ...rest] = path;
+    return {
+        ...obj,
+        [head]: deepUpdate((obj as NestedObject)[head] as T || {}, rest, value),
+    };
+}

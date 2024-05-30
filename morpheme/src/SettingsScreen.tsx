@@ -22,12 +22,11 @@ export default function SettingsScreen({
                 onSave={(value) => {
                     conlangDispatch({
                         type: 'replace',
-                        newValue: {
-                            name: value
-                        }
+                        path: ['name'],
+                        newValue: value
                     })
                 }}
-            ></TextInput>
+            />
 
             <h2>Widgets</h2>
             <h3>Character Inserter</h3>
@@ -36,8 +35,7 @@ export default function SettingsScreen({
                 options={[
                     {
                         label: 'Yes',
-                        value: 'true',
-                        description: 'Show Character Inserter widget'
+                        value: 'true'
                     },
                     {
                         label: 'No',
@@ -45,7 +43,19 @@ export default function SettingsScreen({
                     }
                 ]}
                 onSave={(value) => {setTest(value)}}
-            ></RadioInput>
+            />
+            <TextInput
+                label="Characters"
+                description="Enter characters or character groups separated by commas."
+                defaultValue={conlang.widgets.charInsert.chars.join(',')}
+                onSave={(value) => {
+                    conlangDispatch({
+                        type: 'replace',
+                        path: ['widgets', 'charInsert', 'chars'],
+                        newValue: value.split(',')
+                    })
+                }}
+            />
             <div>{test}</div>
         </>
     );
@@ -67,7 +77,8 @@ function TextInput({
     const buttonRef = useRef<HTMLButtonElement>(null);
     return (
         <label style={{
-            fontSize: DimenRes.input.label
+            fontSize: DimenRes.input.label,
+            display: 'block'
         }}>
             {label}
             <div>
@@ -128,41 +139,51 @@ function RadioInput({
         Array.from({length: options.length}, () => createRef<HTMLInputElement>())
     );
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const [currentValue, setCurrentValue] = useState(defaultValue != null ? defaultValue : '');
+    const [currentValue, setCurrentValue] = useState(defaultValue ? defaultValue : '');
     return (
         <label style={{
-            fontSize: DimenRes.input.label
+            fontSize: DimenRes.input.label,
+            display: 'block'
         }}>
             {label}
             {options.map((x: radioInputOption, i: number) => {
-                return (<div>
-                    <input
-                        ref={inputRefs.current[i]}
-                        id={'radioinput-' + time + '-' + x.value}
-                        type="radio"
-                        checked={currentValue === x.value}
-                        onChange={() => setCurrentValue(x.value)}
-                    />
-                    <label style={{
-                        fontSize: DimenRes.input.input
-                    }} htmlFor={'radioinput-' + time + '-' + x.value}>
-                        {x.label}<br />
-                        {x.description &&
-                            <span style={{
-                                fontSize: DimenRes.input.description
-                            }}>{x.description}</span>
-                        }
-                    </label>
-                </div>);
+                return (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}>
+                        <input
+                            ref={inputRefs.current[i]}
+                            id={'radioinput-' + time + '-' + x.value}
+                            type="radio"
+                            checked={currentValue === x.value}
+                            onChange={() => setCurrentValue(x.value)}
+                        />
+                        <label
+                            style={{
+                                fontSize: DimenRes.input.input,
+                                marginLeft: '0.5em'
+                            }}
+                            htmlFor={'radioinput-' + time + '-' + x.value}
+                        >
+                            {x.label}<br />
+                            {x.description &&
+                                <span style={{
+                                    fontSize: DimenRes.input.description
+                                }}>{x.description}</span>
+                            }
+                        </label>
+                    </div>
+                );
             })}
-            &nbsp;
             <button
                 onClick={() => {
                     onSave(currentValue);
                 }}
                 ref={buttonRef}
                 style={{
-                    fontSize: DimenRes.input.button
+                    fontSize: DimenRes.input.button,
+                    marginTop: '0.3em'
                 }}
             >Save</button>
         </label>
