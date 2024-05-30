@@ -78,7 +78,9 @@ function TextInput({
     return (
         <label style={{
             fontSize: DimenRes.input.label,
-            display: 'block'
+            display: 'block',
+            marginBottom: DimenRes.input.spaceBetween,
+            fontWeight: 'bold'
         }}>
             {label}
             <div>
@@ -92,7 +94,8 @@ function TextInput({
                     }}
                     type="text"
                     style={{
-                        fontSize: DimenRes.input.input
+                        fontSize: DimenRes.input.input,
+                        fontFamily: 'monospace'
                     }}
                 />
                 &nbsp;
@@ -110,7 +113,8 @@ function TextInput({
             </div>
             {description &&
                 <div style={{
-                    fontSize: DimenRes.input.description
+                    fontSize: DimenRes.input.description,
+                    fontWeight: 'normal'
                 }}>{description}</div>
             }
         </label>
@@ -143,7 +147,9 @@ function RadioInput({
     return (
         <label style={{
             fontSize: DimenRes.input.label,
-            display: 'block'
+            display: 'block',
+            marginBottom: DimenRes.input.spaceBetween,
+            fontWeight: 'bold'
         }}>
             {label}
             {options.map((x: radioInputOption, i: number) => {
@@ -162,7 +168,8 @@ function RadioInput({
                         <label
                             style={{
                                 fontSize: DimenRes.input.input,
-                                marginLeft: '0.5em'
+                                marginLeft: '0.5em',
+                                fontWeight: 'normal'
                             }}
                             htmlFor={'radioinput-' + time + '-' + x.value}
                         >

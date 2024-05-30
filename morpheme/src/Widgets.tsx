@@ -16,7 +16,9 @@ export default function Widgets({
                 <Widget>
                     {conlang.widgets.charInsert.chars.map((char) => {
                         return (
-                            <button>{char}</button>
+                            <button style={{
+                                fontFamily: 'monospace'
+                            }}>{char}</button>
                         );
                     })}
                 </Widget>
