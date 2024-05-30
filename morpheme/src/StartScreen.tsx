@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsReducerFunc } from "./App";
-import { getFile, writeFile, createFile } from "./Common";
+import { getFile, writeFile, createFile } from "./CommonFuncs";
 
 type StartScreenProps = {
     conlangDispatch: conlangReducerFunc;

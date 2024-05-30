@@ -11,7 +11,6 @@ export default function SettingsScreen({
     conlang,
     conlangDispatch
 }: SettingsScreenProps) {
-    const [test, setTest] = useState('')
     return (
         <>
             <h1>Settings</h1>
@@ -42,7 +41,13 @@ export default function SettingsScreen({
                         value: 'false'
                     }
                 ]}
-                onSave={(value) => {setTest(value)}}
+                onSave={(value) => {
+                    conlangDispatch({
+                        type: 'replace',
+                        path: ['widgets', 'charInsert', 'enabled'],
+                        newValue: value === 'true'
+                    })
+                }}
             />
             <TextInput
                 label="Characters"
@@ -56,7 +61,6 @@ export default function SettingsScreen({
                     })
                 }}
             />
-            <div>{test}</div>
         </>
     );
 }

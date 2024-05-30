@@ -4,7 +4,7 @@ import TopBar from './TopBar';
 import Widgets from './Widgets';
 import ScreensLayout from './ScreensLayout';
 import { Conlang, screenStr, screenPosition } from './CommonTypes';
-import { deepUpdate } from './Common';
+import { deepUpdate } from './CommonFuncs';
 
 export type setSavedFunc = (value: boolean) => void;
 export type setConlangFileHandleFunc = (value: FileSystemFileHandle | null) => void;
