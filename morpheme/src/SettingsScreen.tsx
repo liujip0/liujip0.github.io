@@ -1,6 +1,7 @@
 import { createRef, useRef, useState } from "react";
 import { conlangReducerFunc } from "./App";
 import { Conlang } from "./CommonTypes";
+import { DimenRes } from "./Resources";
 
 type SettingsScreenProps = {
     conlang: Conlang;
@@ -15,7 +16,8 @@ export default function SettingsScreen({
         <>
             <h1>Settings</h1>
             <TextInput
-                label={'Conlang Name:'}
+                label="Conlang Name:"
+                description="This will not change the file name."
                 defaultValue={conlang.name}
                 onSave={(value) => {
                     conlangDispatch({
@@ -34,7 +36,8 @@ export default function SettingsScreen({
                 options={[
                     {
                         label: 'Yes',
-                        value: 'true'
+                        value: 'true',
+                        description: 'Show Character Inserter widget'
                     },
                     {
                         label: 'No',
@@ -50,38 +53,55 @@ export default function SettingsScreen({
 
 type TextInputProps = {
     label: string;
+    description?: string;
     defaultValue: string;
     onSave: (value: string) => void;
 };
 function TextInput({
     label,
+    description,
     defaultValue,
     onSave
 }: TextInputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     return (
-        <label>
-            {label}&nbsp;
-            <input
-                ref={inputRef}
-                defaultValue={defaultValue}
-                onKeyDown={(event) => {
-                    if (event.key === 'Enter' && buttonRef.current) {
-                        buttonRef.current.click();
-                    }
-                }}
-                type="text"
-            />
-            &nbsp;
-            <button
-                onClick={() => {
-                    if (inputRef.current) {
-                        onSave(inputRef.current.value);
-                    }
-                }}
-                ref={buttonRef}
-            >Save</button>
+        <label style={{
+            fontSize: DimenRes.input.label
+        }}>
+            {label}
+            <div>
+                <input
+                    ref={inputRef}
+                    defaultValue={defaultValue}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter' && buttonRef.current) {
+                            buttonRef.current.click();
+                        }
+                    }}
+                    type="text"
+                    style={{
+                        fontSize: DimenRes.input.input
+                    }}
+                />
+                &nbsp;
+                <button
+                    onClick={() => {
+                        if (inputRef.current) {
+                            onSave(inputRef.current.value);
+                        }
+                    }}
+                    ref={buttonRef}
+                    style={{
+                        fontSize: DimenRes.input.button
+                    }}
+                >Save</button>
+            </div>
+            {description &&
+                <div style={{
+                    fontSize: DimenRes.input.description
+                }}>{description}</div>
+            }
         </label>
     );
 }
@@ -89,6 +109,7 @@ function TextInput({
 type radioInputOption = {
     label: string;
     value: string;
+    description?: string;
 };
 type RadioInputProps = {
     label: string;
@@ -109,10 +130,12 @@ function RadioInput({
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [currentValue, setCurrentValue] = useState(defaultValue != null ? defaultValue : '');
     return (
-        <label>
+        <label style={{
+            fontSize: DimenRes.input.label
+        }}>
             {label}
             {options.map((x: radioInputOption, i: number) => {
-                return (<>
+                return (<div>
                     <input
                         ref={inputRefs.current[i]}
                         id={'radioinput-' + time + '-' + x.value}
@@ -120,8 +143,17 @@ function RadioInput({
                         checked={currentValue === x.value}
                         onChange={() => setCurrentValue(x.value)}
                     />
-                    <label htmlFor={'radioinput-' + time + '-' + x.value}>{x.label}</label>
-                </>);
+                    <label style={{
+                        fontSize: DimenRes.input.input
+                    }} htmlFor={'radioinput-' + time + '-' + x.value}>
+                        {x.label}<br />
+                        {x.description &&
+                            <span style={{
+                                fontSize: DimenRes.input.description
+                            }}>{x.description}</span>
+                        }
+                    </label>
+                </div>);
             })}
             &nbsp;
             <button
@@ -129,6 +161,9 @@ function RadioInput({
                     onSave(currentValue);
                 }}
                 ref={buttonRef}
+                style={{
+                    fontSize: DimenRes.input.button
+                }}
             >Save</button>
         </label>
     );
