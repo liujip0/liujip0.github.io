@@ -11,14 +11,13 @@ type ScreensLayoutProps = {
     setSaved: setSavedFunc;
     windows: windowsArr;
     windowsDispatch: windowsReducerFunc;
-    conlangFileHandle: FileSystemFileHandle | null,
     setConlangFileHandle: setConlangFileHandleFunc;
 }
 export default function ScreensLayout({
   conlang, conlangDispatch,
   setSaved,
   windows, windowsDispatch,
-  conlangFileHandle, setConlangFileHandle
+  setConlangFileHandle
 }: ScreensLayoutProps) {
     return (
         <>
@@ -28,7 +27,7 @@ export default function ScreensLayout({
               windows={windows} windowsDispatch={windowsDispatch}
               position={0}
               conlang={conlang} conlangDispatch={conlangDispatch}
-              conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+              setConlangFileHandle={setConlangFileHandle}
               setSaved={setSaved}
               location={{
                 gridRowStart: 'a0',
@@ -43,7 +42,7 @@ export default function ScreensLayout({
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={1}
                 conlang={conlang} conlangDispatch={conlangDispatch}
-                conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
                   gridRowStart: 'a1',
@@ -59,7 +58,7 @@ export default function ScreensLayout({
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={2}
                 conlang={conlang} conlangDispatch={conlangDispatch}
-                conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
                   gridRowStart: 'a2',
@@ -75,7 +74,7 @@ export default function ScreensLayout({
                 windows={windows} windowsDispatch={windowsDispatch}
                 position={3}
                 conlang={conlang} conlangDispatch={conlangDispatch}
-                conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setConlangFileHandle={setConlangFileHandle}
                 setSaved={setSaved}
                 location={{
                   gridRowStart: 'a3',
@@ -95,7 +94,6 @@ type ScreenProps = {
     windowsDispatch: windowsReducerFunc;
     conlang: Conlang;
     conlangDispatch: conlangReducerFunc;
-    conlangFileHandle: conlangFileHandleType;
     setConlangFileHandle: setConlangFileHandleFunc;
     setSaved: setSavedFunc;
 };
@@ -104,7 +102,7 @@ function Screen({
   position,
   windows, windowsDispatch,
   conlang, conlangDispatch,
-  conlangFileHandle, setConlangFileHandle,
+  setConlangFileHandle,
   setSaved
 }: ScreenProps) {
   return (
@@ -117,7 +115,7 @@ function Screen({
       {windows[position].split('-')[1] === 'start' &&
         <StartScreen
           conlangDispatch={conlangDispatch}
-          conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+          setConlangFileHandle={setConlangFileHandle}
           windowsDispatch={windowsDispatch}
           setSaved={setSaved}
         ></StartScreen>

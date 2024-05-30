@@ -68,7 +68,7 @@ export default function App() {
                 }}
                 setSaved={setSaved}
                 windows={windows} windowsDispatch={windowsDispatch}
-                conlangFileHandle={conlangFileHandle} setConlangFileHandle={setConlangFileHandle}
+                setConlangFileHandle={setConlangFileHandle}
             ></ScreensLayout>
         </div>
     );
@@ -79,7 +79,6 @@ type conlangReducerAction = {
   newValue: Conlang;
 } | {
   type: 'replace';
-  key: keyof Conlang;
   newValue: Partial<Conlang>;
 };
 export type conlangReducerFunc = (action: conlangReducerAction) => void;
@@ -92,12 +91,7 @@ function conlangReducer(
             return action.newValue;
         }
         case 'replace': {
-            const newConlang = {...conlang};
-            try {
-              (newConlang[action.key] as Partial<Conlang>) = action.newValue;
-            } catch (error) {
-              throw Error('Incorrect type for newValue in `conlangReducer`');
-            }
+            const newConlang = Object.assign(conlang, action.newValue);
             return newConlang;
         }
     }

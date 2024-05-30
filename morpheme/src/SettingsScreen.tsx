@@ -10,19 +10,39 @@ export default function SettingsScreen({
     conlang,
     conlangDispatch
 }: SettingsScreenProps) {
+    const [test, setTest] = useState('')
     return (
         <>
             <h1>Settings</h1>
-            <TextInput label={'Conlang Name:'} defaultValue={conlang.name} onSave={(value) => {
-                conlangDispatch({
-                    type: 'replace',
-                    key: 'name',
-                    newValue: value
-                })
-            }}></TextInput>
+            <TextInput
+                label={'Conlang Name:'}
+                defaultValue={conlang.name}
+                onSave={(value) => {
+                    conlangDispatch({
+                        type: 'replace',
+                        newValue: {
+                            name: value
+                        }
+                    })
+                }}
+            ></TextInput>
 
             <h2>Widgets</h2>
-
+            <h3>Character Inserter</h3>
+            <RadioInput
+                label="Enabled"
+                options={[
+                    {
+                        label: 'Yes',
+                        value: 'true'
+                    },
+                    {
+                        label: 'No',
+                        value: 'false'
+                    }
+                ]}
+                onSave={(value) => {setTest(value)}}
+            ></RadioInput>
         </>
     );
 }
@@ -81,30 +101,31 @@ function RadioInput({
     defaultValue,
     onSave
 }: RadioInputProps) {
+    const time = new Date().getTime();
     const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
         Array.from({length: options.length}, () => createRef<HTMLInputElement>())
     );
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const [currentValue, setCurrentValue] = useState<string | null>(null);
+    const [currentValue, setCurrentValue] = useState(defaultValue != null ? defaultValue : '');
     return (
         <label>
             {label}
-            {options.map((i: radioInputOption) => {
+            {options.map((x: radioInputOption, i: number) => {
                 return (<>
                     <input
-                        id={'radioinput-' + time + '-' + i.value}
+                        ref={inputRefs.current[i]}
+                        id={'radioinput-' + time + '-' + x.value}
                         type="radio"
-                        checked={defaultValue != null && defaultValue === i.value ? true : false}
+                        checked={currentValue === x.value}
+                        onChange={() => setCurrentValue(x.value)}
                     />
-                    <label htmlFor={'radioinput-' + time + '-' + i.value}>{i.label}</label>
+                    <label htmlFor={'radioinput-' + time + '-' + x.value}>{x.label}</label>
                 </>);
             })}
             &nbsp;
             <button
                 onClick={() => {
-                    if (inputRef.current) {
-                        onSave(inputRef.current.value);
-                    }
+                    onSave(currentValue);
                 }}
                 ref={buttonRef}
             >Save</button>
