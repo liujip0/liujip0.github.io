@@ -3,7 +3,7 @@ import './App.css';
 import TopBar from './TopBar';
 import Widget from './Widget';
 import ScreensLayout from './ScreensLayout';
-import { Conlang, screenStr, screenPosition } from './Types';
+import { Conlang, screenStr, screenPosition } from './CommonTypes';
 
 export type setSavedFunc = (value: boolean) => void;
 export type setConlangFileHandleFunc = (value: FileSystemFileHandle | null) => void;

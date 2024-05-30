@@ -1,6 +1,6 @@
 import { conlangFileHandleType, setSavedFunc, windowsReducerFunc } from "./App";
 import { writeFile } from "./Common";
-import { Conlang } from "./Types";
+import { Conlang } from "./CommonTypes";
 
 type TopBarProps = {
     conlang: Conlang;

@@ -1,9 +1,9 @@
-import { conlangFileHandleType, conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsArr, windowsReducerFunc } from './App';
+import { conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsArr, windowsReducerFunc } from './App';
 import HomeScreen from './HomeScreen';
 import ScreensMenus from './ScreensMenus';
 import SettingsScreen from './SettingsScreen';
 import StartScreen from './StartScreen';
-import { Conlang, screenPosition } from './Types';
+import { Conlang, screenPosition } from './CommonTypes';
 
 type ScreensLayoutProps = {
     conlang: Conlang;

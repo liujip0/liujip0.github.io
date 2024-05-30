@@ -1,6 +1,6 @@
 import { createRef, useRef, useState } from "react";
 import { conlangReducerFunc } from "./App";
-import { Conlang } from "./Types";
+import { Conlang } from "./CommonTypes";
 
 type SettingsScreenProps = {
     conlang: Conlang;
@@ -43,6 +43,7 @@ export default function SettingsScreen({
                 ]}
                 onSave={(value) => {setTest(value)}}
             ></RadioInput>
+            <div>{test}</div>
         </>
     );
 }

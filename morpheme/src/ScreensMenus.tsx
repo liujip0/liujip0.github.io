@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
-import { screenPosition, screenStr } from "./Types";
+import { screenPosition, screenStr } from "./CommonTypes";
 import { windowsReducerFunc } from "./App";
 
 type ScreensMenusProps = {
