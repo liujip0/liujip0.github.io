@@ -1,4 +1,9 @@
-export default function Widget({children}) {
+type WidgetProps = {
+    children: React.ReactNode;
+};
+export default function Widget({
+    children
+}: WidgetProps) {
     return (
         <div style={{
             backgroundColor: 'darkgray',

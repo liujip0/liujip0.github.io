@@ -1,11 +1,20 @@
+import { conlangFileHandleType, setSavedFunc, windowsReducerFunc } from "./App";
 import { writeFile } from "./Common";
+import { Conlang } from "./Types";
 
+type TopBarProps = {
+    conlang: Conlang;
+    saved: boolean;
+    setSaved: setSavedFunc;
+    windowsDispatch: windowsReducerFunc;
+    conlangFileHandle: conlangFileHandleType;
+};
 export default function TopBar({
     conlang,
     saved, setSaved,
     windowsDispatch,
     conlangFileHandle
-}) {
+}: TopBarProps) {
     return (
         <div style={{
             fontSize: '1.5em',
@@ -34,7 +43,9 @@ export default function TopBar({
                 </MenuItem>
                 <MenuItem onClick={() => {
                     setSaved(true);
-                    writeFile(conlangFileHandle, JSON.stringify(conlang))
+                    if (conlangFileHandle) {
+                        writeFile(conlangFileHandle, JSON.stringify(conlang));
+                    }
                 }}>
                     Save
                 </MenuItem>
@@ -45,7 +56,14 @@ export default function TopBar({
     );
 }
 
-function MenuItem({onClick, children}) {
+type MenuItemProps = {
+    onClick?: () => void;
+    children: React.ReactNode;
+};
+function MenuItem({
+    onClick,
+    children
+}: MenuItemProps) {
     return (
         <div style={{
             margin: '0.2em 0em 0.2em 1em',
