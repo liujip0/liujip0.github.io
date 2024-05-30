@@ -1,11 +1,11 @@
-import { act, useReducer } from "react";
+import { useReducer } from "react";
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
 import { screenPosition, screenStr } from "./Types";
 import { windowsReducerFunc } from "./App";
 
 type ScreensMenusProps = {
     windowsDispatch: windowsReducerFunc;
-}
+};
 type menuStr = 'add' | 'swap' | '';
 type submenusArr = Array<menuStr>;
 export default function ScreensMenus({
@@ -53,7 +53,7 @@ export default function ScreensMenus({
 type MenuButtonContProps = {
     position: Record<string, string>;
     children: React.ReactNode;
-}
+};
 function MenuButtonCont({
     position,
     children

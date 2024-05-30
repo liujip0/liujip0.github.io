@@ -1,11 +1,21 @@
+import { useRef } from "react";
+import { conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsReducerFunc } from "./App";
 import { getFile, writeFile, createFile } from "./Common";
 
+type StartScreenProps = {
+    conlangDispatch: conlangReducerFunc;
+    setConlangFileHandle: setConlangFileHandleFunc;
+    windowsDispatch: windowsReducerFunc;
+    setSaved: setSavedFunc;
+};
 export default function StartScreen({
     conlangDispatch,
     setConlangFileHandle,
     windowsDispatch,
     setSaved
-}) {
+}: StartScreenProps) {
+    const conlangNameRef = useRef<HTMLInputElement>(null);
+    const createNewConlangRef = useRef<HTMLButtonElement>(null);
     return (
         <>
             <h1>Welcome to Morpheme</h1>
@@ -43,44 +53,58 @@ export default function StartScreen({
                 Conlang name:&nbsp;
                 <input
                     type="text"
-                    id="conlangname"
+                    ref={conlangNameRef}
                     onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                            document.getElementById("createnewconlang").click();
+                        if (event.key === 'Enter' && createNewConlangRef.current) {
+                            createNewConlangRef.current.click();
                         }
                     }}
                 />
             </label>
             &nbsp;
-            <button id="createnewconlang" onClick={() => {
-                const name = document.getElementById("conlangname").value
-                const newConlang = {
-                    name: name
-                };
-                createFile({
-                    types: [{
-                        description: 'JSON Files',
-                        accept: {'application/json': ['.json']}
-                    }],
-                    id: 'morpheme-picker',
-                    startIn: 'downloads',
-                    suggestedName: name + '.json'
-                }).then((value) => {
-                    console.log('createnewconlang' + value);
-                    setConlangFileHandle(value);
-                    if (value) {
-                        writeFile(value, JSON.stringify(newConlang));
-                        conlangDispatch({
-                            type: 'replaceAll',
-                            newValue: newConlang
+            <button ref={createNewConlangRef} onClick={() => {
+                if (conlangNameRef.current) {
+                    const name = conlangNameRef.current.value
+                    const newConlang = {
+                        name: name,
+                        widgets: {
+                            charInsert: {
+                                enabled: true,
+                                chars: ['A', 'a', 'B', 'b', 'C', 'c']
+                            },
+                            dictSearch: {
+                                enabled: true
+                            },
+                            cxs: {
+                                enabled: true
+                            }
+                        }
+                    };
+                    createFile({
+                        types: [{
+                            description: 'JSON Files',
+                            accept: {'application/json': ['.json']}
+                        }],
+                        id: 'morpheme-picker',
+                        startIn: 'downloads',
+                        suggestedName: name + '.json'
+                    }).then((value) => {
+                        console.log('createnewconlang' + value);
+                        setConlangFileHandle(value);
+                        if (value) {
+                            writeFile(value, JSON.stringify(newConlang));
+                            conlangDispatch({
+                                type: 'replaceAll',
+                                newValue: newConlang
+                            });
+                        }
+                        windowsDispatch({
+                            type: 'swapAll',
+                            newValue: ['0-home', '0-home', '0-home', '0-home']
                         });
-                    }
-                    windowsDispatch({
-                        type: 'swapAll',
-                        newValue: ['0-home', '0-home', '0-home', '0-home']
+                        setSaved(true);
                     });
-                    setSaved(true);
-                });
+                }
             }}>Submit</button>
         </>
     );

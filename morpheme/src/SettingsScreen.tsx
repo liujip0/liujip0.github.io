@@ -1,4 +1,15 @@
-export default function SettingsScreen({conlang, conlangDispatch}) {
+import { createRef, useRef, useState } from "react";
+import { conlangReducerFunc } from "./App";
+import { Conlang } from "./Types";
+
+type SettingsScreenProps = {
+    conlang: Conlang;
+    conlangDispatch: conlangReducerFunc;
+};
+export default function SettingsScreen({
+    conlang,
+    conlangDispatch
+}: SettingsScreenProps) {
     return (
         <>
             <h1>Settings</h1>
@@ -16,28 +27,87 @@ export default function SettingsScreen({conlang, conlangDispatch}) {
     );
 }
 
-function TextInput({label, defaultValue, onSave}) {
-    const time = new Date().getMilliseconds();
+type TextInputProps = {
+    label: string;
+    defaultValue: string;
+    onSave: (value: string) => void;
+};
+function TextInput({
+    label,
+    defaultValue,
+    onSave
+}: TextInputProps) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
     return (
         <label>
             {label}&nbsp;
-            <input id={'textinput-' + time} defaultValue={defaultValue} type="text" />
+            <input
+                ref={inputRef}
+                defaultValue={defaultValue}
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter' && buttonRef.current) {
+                        buttonRef.current.click();
+                    }
+                }}
+                type="text"
+            />
             &nbsp;
-            <button id={'textinputsave-' + time} onClick={() => {
-                onSave(document.getElementById('textinput-' + time).value);
-            }}>Save</button>
+            <button
+                onClick={() => {
+                    if (inputRef.current) {
+                        onSave(inputRef.current.value);
+                    }
+                }}
+                ref={buttonRef}
+            >Save</button>
         </label>
     );
 }
 
-function RadioInput({label, options, defaultValue, onSave}) {
-    const time = new Date().getMilliseconds();
+type radioInputOption = {
+    label: string;
+    value: string;
+};
+type RadioInputProps = {
+    label: string;
+    options: Array<radioInputOption>;
+    defaultValue?: string;
+    onSave: (value: string) => void;
+};
+function RadioInput({
+    label,
+    options,
+    defaultValue,
+    onSave
+}: RadioInputProps) {
+    const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
+        Array.from({length: options.length}, () => createRef<HTMLInputElement>())
+    );
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const [currentValue, setCurrentValue] = useState<string | null>(null);
     return (
         <label>
             {label}
-            {options.map((value) => {
-                
+            {options.map((i: radioInputOption) => {
+                return (<>
+                    <input
+                        id={'radioinput-' + time + '-' + i.value}
+                        type="radio"
+                        checked={defaultValue != null && defaultValue === i.value ? true : false}
+                    />
+                    <label htmlFor={'radioinput-' + time + '-' + i.value}>{i.label}</label>
+                </>);
             })}
+            &nbsp;
+            <button
+                onClick={() => {
+                    if (inputRef.current) {
+                        onSave(inputRef.current.value);
+                    }
+                }}
+                ref={buttonRef}
+            >Save</button>
         </label>
     );
 }
