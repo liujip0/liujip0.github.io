@@ -1,19 +1,12 @@
 import { useRef } from "react";
-import { conlangReducerFunc, setConlangFileHandleFunc, setSavedFunc, windowsReducerFunc } from "./App";
 import { getFile, writeFile, createFile } from "./CommonFuncs";
+import { useConlangContext, useFileHandleContext, useSavedContext, useWindowsContext } from "./CommonVals";
 
-type StartScreenProps = {
-    conlangDispatch: conlangReducerFunc;
-    setConlangFileHandle: setConlangFileHandleFunc;
-    windowsDispatch: windowsReducerFunc;
-    setSaved: setSavedFunc;
-};
-export default function StartScreen({
-    conlangDispatch,
-    setConlangFileHandle,
-    windowsDispatch,
-    setSaved
-}: StartScreenProps) {
+export default function StartScreen() {
+    const {setConlang} = useConlangContext();
+    const {setFileHandle} = useFileHandleContext();
+    const {setWindows} = useWindowsContext();
+    const {setSaved} = useSavedContext();
     const conlangNameRef = useRef<HTMLInputElement>(null);
     const createNewConlangRef = useRef<HTMLButtonElement>(null);
     return (
@@ -35,12 +28,12 @@ export default function StartScreen({
                 }).then((value) => {
                     console.log(value.fileHandle);
                     console.log(value.contents);
-                    setConlangFileHandle(value.fileHandle);
-                    conlangDispatch({
+                    setFileHandle(value.fileHandle);
+                    setConlang({
                         type: 'replaceAll',
                         newValue: JSON.parse(value.contents)
                     });
-                    windowsDispatch({
+                    setWindows({
                         type: 'swapAll',
                         newValue: ['0-home', '0-home', '0-home', '0-home']
                     });
@@ -90,15 +83,15 @@ export default function StartScreen({
                         suggestedName: name + '.json'
                     }).then((value) => {
                         console.log('createnewconlang' + value);
-                        setConlangFileHandle(value);
+                        setFileHandle(value);
                         if (value) {
                             writeFile(value, JSON.stringify(newConlang));
-                            conlangDispatch({
+                            setConlang({
                                 type: 'replaceAll',
                                 newValue: newConlang
                             });
                         }
-                        windowsDispatch({
+                        setWindows({
                             type: 'swapAll',
                             newValue: ['0-home', '0-home', '0-home', '0-home']
                         });

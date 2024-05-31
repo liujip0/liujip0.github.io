@@ -1,41 +1,32 @@
-import { useReducer } from "react";
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
 import { screenPosition, screenStr } from "./CommonTypes";
-import { windowsReducerFunc } from "./App";
+import { useSubmenusContext, useWindowsContext } from "./CommonVals";
 
-type ScreensMenusProps = {
-    windowsDispatch: windowsReducerFunc;
-};
-type menuStr = 'add' | 'swap' | '';
-type submenusArr = Array<menuStr>;
-export default function ScreensMenus({
-    windowsDispatch
-}: ScreensMenusProps) {
-    const [submenus, submenuDispatch] = useReducer(submenusReducer, ['', '', '', ''])
+export default function ScreensMenus() {
     return (
         <>
             <MenuButtonCont position={{
                 gridRowStart: 'a0',
                 gridColumnStart: 'a0'
             }}>
-                <MenuButtons windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} position={0}></MenuButtons>
-                <Submenu menu={submenus[0]} position={0} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch}></Submenu>
+                <MenuButtons position={0} />
+                <Submenu position={0} />
             </MenuButtonCont>
             <MenuButtonCont position={{
                 gridRowStart: 'a1',
                 gridColumnEnd: 'a1',
                 marginLeft: 'auto'
             }}>
-                <Submenu menu={submenus[1]} position={1} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch}></Submenu>
-                <MenuButtons windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} position={1}></MenuButtons>
+                <Submenu position={1} />
+                <MenuButtons position={1} />
             </MenuButtonCont>
             <MenuButtonCont position={{
                 gridRowEnd: 'a2',
                 gridColumnStart: 'a2',
                 marginTop: 'auto'
             }}>
-                <MenuButtons windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} position={2}></MenuButtons>
-                <Submenu menu={submenus[2]} position={2} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch}></Submenu>
+                <MenuButtons position={2} />
+                <Submenu position={2} />
             </MenuButtonCont>
             <MenuButtonCont position={{
                 gridRowEnd: 'a3',
@@ -43,8 +34,8 @@ export default function ScreensMenus({
                 marginTop: 'auto',
                 marginLeft: 'auto'
             }}>
-                <Submenu menu={submenus[3]} position={3} windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch}></Submenu>
-                <MenuButtons windowsDispatch={windowsDispatch} submenuDispatch={submenuDispatch} position={3}></MenuButtons>
+                <Submenu position={3} />
+                <MenuButtons position={3} />
             </MenuButtonCont>
         </>
     );
@@ -94,32 +85,32 @@ function MenuButton({
 
 type MenuButtonsProps = {
     position: screenPosition;
-    submenuDispatch: submenusReducerFunc;
-    windowsDispatch: windowsReducerFunc;
 }
 function MenuButtons({
-    position,
-    submenuDispatch,
-    windowsDispatch
+    position
 }: MenuButtonsProps) {
+    const {setWindows} = useWindowsContext();
+    const {setSubmenus} = useSubmenusContext();
     return (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
         }}>
-            <MenuButton onClick={() => {windowsDispatch({
+            <MenuButton onClick={() => {setWindows({
                 type: 'remove',
                 position: position
             })}}>
                 <MdClose />
             </MenuButton>
-            <MenuButton onClick={() => {submenuDispatch({
+            <MenuButton onClick={() => {setSubmenus({
+                type: 'replace',
                 position: position,
                 menu: 'swap'
             })}}>
                 <MdOutlineSwapHoriz />
             </MenuButton>
-            <MenuButton onClick={() => {submenuDispatch({
+            <MenuButton onClick={() => {setSubmenus({
+                type: 'replace',
                 position: position,
                 menu: 'add'
             })}}>
@@ -130,29 +121,25 @@ function MenuButtons({
 }
 
 type SubmenuButtonProps = {
-    action: menuStr;
     position: screenPosition;
     screen: screenStr;
-    windowsDispatch: windowsReducerFunc;
-    submenuDispatch: submenusReducerFunc;
     children: React.ReactNode;
 };
 function SubmenuButton({
-    action,
     position,
     screen,
-    windowsDispatch,
-    submenuDispatch,
     children
 }: SubmenuButtonProps) {
+    const {setWindows} = useWindowsContext();
+    const {submenus, setSubmenus} = useSubmenusContext();
     return (
         <button style={{
             border: 'none',
             backgroundColor: 'transparent',
             padding: '0.3em'
         }} onClick={() => {
-            windowsDispatch(
-                action === 'add' ? {
+            setWindows(
+                submenus[position] === 'add' ? {
                     type: 'add',
                     position: position,
                     screen: screen
@@ -162,7 +149,8 @@ function SubmenuButton({
                     screen: screen
                 }
             );
-            submenuDispatch({
+            setSubmenus({
+                type: 'replace',
                 position: position,
                 menu: ''
             });
@@ -173,85 +161,49 @@ function SubmenuButton({
 }
 
 type SubmenuProps = {
-    menu: menuStr;
     position: screenPosition;
-    windowsDispatch: windowsReducerFunc;
-    submenuDispatch: submenusReducerFunc;
 }
 function Submenu({
-    menu,
-    position,
-    windowsDispatch,
-    submenuDispatch
+    position
 }: SubmenuProps) {
+    const {submenus, setSubmenus} = useSubmenusContext();
     return (
         <div style={{
-            display: menu ? 'flex' : 'none',
+            display: submenus[position] ? 'flex' : 'none',
             flexDirection: 'column',
             backgroundColor: 'lightgray'
         }}>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'start'}
             >Start</SubmenuButton>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'home'}
             >Home</SubmenuButton>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'phonology'}
             >Phonology</SubmenuButton>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'grammar'}
             >Grammar</SubmenuButton>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'lexicon'}
             >Lexicon</SubmenuButton>
             <SubmenuButton
-                action={menu}
                 position={position}
-                windowsDispatch={windowsDispatch}
-                submenuDispatch={submenuDispatch}
                 screen={'settings'}
             >Settings</SubmenuButton>
             <button style={{
 
-            }} onClick={() => {submenuDispatch({
+            }} onClick={() => {setSubmenus({
+                type: 'replace',
                 position: position,
                 menu: ''
             })}}>Close</button>
         </div>
     );
-}
-
-type submenusReducerAction = {
-    position: screenPosition;
-    menu: menuStr;
-}
-type submenusReducerFunc = (action: submenusReducerAction) => void;
-function submenusReducer(
-    submenus: submenusArr,
-    action: submenusReducerAction
-): submenusArr {
-    const newSubmenus = [...submenus];
-    newSubmenus[action.position] = action.menu;
-    return newSubmenus;
 }

@@ -1,11 +1,7 @@
-import { Conlang } from "./CommonTypes";
+import { useConlangContext } from "./CommonVals";
 
-type WidgetsProps = {
-    conlang: Conlang;
-}
-export default function Widgets({
-    conlang
-}: WidgetsProps) {
+export default function Widgets() {
+    const {conlang} = useConlangContext();
     return (
         <div style={{
             display: 'flex',

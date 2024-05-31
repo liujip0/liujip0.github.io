@@ -1,16 +1,9 @@
 import { createRef, useRef, useState } from "react";
-import { conlangReducerFunc } from "./App";
-import { Conlang } from "./CommonTypes";
 import { DimenRes } from "./Resources";
+import { useConlangContext } from "./CommonVals";
 
-type SettingsScreenProps = {
-    conlang: Conlang;
-    conlangDispatch: conlangReducerFunc;
-};
-export default function SettingsScreen({
-    conlang,
-    conlangDispatch
-}: SettingsScreenProps) {
+export default function SettingsScreen() {
+    const {conlang, setConlang} = useConlangContext();
     return (
         <>
             <h1>Settings</h1>
@@ -19,7 +12,7 @@ export default function SettingsScreen({
                 description="This will not change the file name."
                 defaultValue={conlang.name}
                 onSave={(value) => {
-                    conlangDispatch({
+                    setConlang({
                         type: 'replace',
                         path: ['name'],
                         newValue: value
@@ -42,7 +35,7 @@ export default function SettingsScreen({
                     }
                 ]}
                 onSave={(value) => {
-                    conlangDispatch({
+                    setConlang({
                         type: 'replace',
                         path: ['widgets', 'charInsert', 'enabled'],
                         newValue: value === 'true'
@@ -54,7 +47,7 @@ export default function SettingsScreen({
                 description="Enter characters or character groups separated by commas."
                 defaultValue={conlang.widgets.charInsert.chars.join(',')}
                 onSave={(value) => {
-                    conlangDispatch({
+                    setConlang({
                         type: 'replace',
                         path: ['widgets', 'charInsert', 'chars'],
                         newValue: value.split(',')

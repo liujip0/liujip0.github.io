@@ -1,20 +1,11 @@
-import { conlangFileHandleType, setSavedFunc, windowsReducerFunc } from "./App";
 import { writeFile } from "./CommonFuncs";
-import { Conlang } from "./CommonTypes";
+import { useConlangContext, useFileHandleContext, useSavedContext, useWindowsContext } from "./CommonVals";
 
-type TopBarProps = {
-    conlang: Conlang;
-    saved: boolean;
-    setSaved: setSavedFunc;
-    windowsDispatch: windowsReducerFunc;
-    conlangFileHandle: conlangFileHandleType;
-};
-export default function TopBar({
-    conlang,
-    saved, setSaved,
-    windowsDispatch,
-    conlangFileHandle
-}: TopBarProps) {
+export default function TopBar() {
+    const {conlang} = useConlangContext();
+    const {saved, setSaved} = useSavedContext();
+    const {setWindows} = useWindowsContext();
+    const {fileHandle} = useFileHandleContext();
     return (
         <div style={{
             fontSize: '1.5em',
@@ -31,7 +22,7 @@ export default function TopBar({
             <div style={{
                 display: 'flex'
             }}>
-                <MenuItem onClick={() => {windowsDispatch({
+                <MenuItem onClick={() => {setWindows({
                     type: 'swapAll',
                     newValue: ['0-start', '0-start', '0-start', '0-start']
                 })}}>
@@ -43,8 +34,8 @@ export default function TopBar({
                 </MenuItem>
                 <MenuItem onClick={() => {
                     setSaved(true);
-                    if (conlangFileHandle) {
-                        writeFile(conlangFileHandle, JSON.stringify(conlang));
+                    if (fileHandle) {
+                        writeFile(fileHandle, JSON.stringify(conlang));
                     }
                 }}>
                     Save
