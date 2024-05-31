@@ -7,6 +7,7 @@ export default function SettingsScreen() {
     return (
         <>
             <h1>Settings</h1>
+            <h2>General</h2>
             <TextInput
                 label="Conlang Name:"
                 description="This will not change the file name."
@@ -20,8 +21,7 @@ export default function SettingsScreen() {
                 }}
             />
 
-            <h2>Widgets</h2>
-            <h3>Character Inserter</h3>
+            <h2>Character Inserter Widget</h2>
             <RadioInput
                 label="Enabled"
                 options={[
