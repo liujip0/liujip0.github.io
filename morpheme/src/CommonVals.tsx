@@ -2,12 +2,13 @@
 import { createContext, useContext, useReducer, useState } from "react";
 import { deepUpdate } from "./CommonFuncs";
 import { Conlang, submenuStr, screenPosition, screenStr, submenusArr, windowsArr } from "./CommonTypes";
+import { create } from "zustand";
 
 type ContextProviderProps = {
     children: React.ReactNode;
 }
 export function ContextProvider({children}: ContextProviderProps) {
-    const [saved, setSaved] = useState(savedInit);
+    const setSaved = useSavedState((state) => state.set);
     const [conlang, setConlang] = useReducer(conlangReducer, conlangInit);
     const [windows, setWindows] = useReducer(windowsReducer, windowsInit);
     const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(fileHandleInit);
@@ -21,27 +22,22 @@ export function ContextProvider({children}: ContextProviderProps) {
                 setConlang(action);
             }
         }}>
-            <SavedContext.Provider value={{
-                saved: saved,
-                setSaved: setSaved
+            <WindowsContext.Provider value={{
+                windows: windows,
+                setWindows: setWindows
             }}>
-                <WindowsContext.Provider value={{
-                    windows: windows,
-                    setWindows: setWindows
+                <FileHandleContext.Provider value={{
+                    fileHandle: fileHandle,
+                    setFileHandle: setFileHandle
                 }}>
-                    <FileHandleContext.Provider value={{
-                        fileHandle: fileHandle,
-                        setFileHandle: setFileHandle
+                    <SubmenusContext.Provider value={{
+                        submenus: submenus,
+                        setSubmenus: setSubmenus
                     }}>
-                        <SubmenusContext.Provider value={{
-                            submenus: submenus,
-                            setSubmenus: setSubmenus
-                        }}>
-                            {children}
-                        </SubmenusContext.Provider>
-                    </FileHandleContext.Provider>
-                </WindowsContext.Provider>
-            </SavedContext.Provider>
+                        {children}
+                    </SubmenusContext.Provider>
+                </FileHandleContext.Provider>
+            </WindowsContext.Provider>
         </ConlangContext.Provider>
     );
 }
@@ -108,6 +104,14 @@ export function useSavedContext() {
         throw Error ('`useSavedContext` not in context provider');
     }
 }
+interface SavedState {
+    saved: boolean;
+    set: (value: boolean) => void;
+}
+export const useSavedState = create<SavedState>()((set) => ({
+    saved: savedInit,
+    set: (value) => set(() => ({saved: value}))
+}));
 
 const windowsInit = ['0-start', '0-start', '0-start', '0-start'];
 type windowsReducerAction = {
