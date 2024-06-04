@@ -1,39 +1,56 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useReducer, useState } from "react";
-import { deepUpdate } from "./CommonFuncs";
-import { Conlang, submenuStr, screenPosition, screenStr, submenusArr, windowsArr } from "./CommonTypes";
-import { create } from "zustand";
+import {createContext, useContext, useReducer, useState} from 'react';
+import {deepUpdate} from './CommonFuncs';
+import {
+    Conlang,
+    submenuStr,
+    screenPosition,
+    screenStr,
+    submenusArr,
+    windowsArr
+} from './CommonTypes';
+import {create} from 'zustand';
 
 type ContextProviderProps = {
     children: React.ReactNode;
-}
+};
 export function ContextProvider({children}: ContextProviderProps) {
-    const setSaved = useSavedState((state) => state.set);
+    const setSaved = useStore((state) => state.setSaved);
     const [conlang, setConlang] = useReducer(conlangReducer, conlangInit);
     const [windows, setWindows] = useReducer(windowsReducer, windowsInit);
-    const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(fileHandleInit);
+    const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(
+        fileHandleInit
+    );
     const [submenus, setSubmenus] = useReducer(submenusReducer, submenusInit);
 
     return (
-        <ConlangContext.Provider value={{
-            conlang: conlang,
-            setConlang: (action: conlangReducerAction) => {
-                setSaved(false);
-                setConlang(action);
-            }
-        }}>
-            <WindowsContext.Provider value={{
-                windows: windows,
-                setWindows: setWindows
-            }}>
-                <FileHandleContext.Provider value={{
-                    fileHandle: fileHandle,
-                    setFileHandle: setFileHandle
-                }}>
-                    <SubmenusContext.Provider value={{
-                        submenus: submenus,
-                        setSubmenus: setSubmenus
-                    }}>
+        <ConlangContext.Provider
+            value={{
+                conlang: conlang,
+                setConlang: (action: conlangReducerAction) => {
+                    setSaved(false);
+                    setConlang(action);
+                }
+            }}
+        >
+            <WindowsContext.Provider
+                value={{
+                    windows: windows,
+                    setWindows: setWindows
+                }}
+            >
+                <FileHandleContext.Provider
+                    value={{
+                        fileHandle: fileHandle,
+                        setFileHandle: setFileHandle
+                    }}
+                >
+                    <SubmenusContext.Provider
+                        value={{
+                            submenus: submenus,
+                            setSubmenus: setSubmenus
+                        }}
+                    >
                         {children}
                     </SubmenusContext.Provider>
                 </FileHandleContext.Provider>
@@ -57,14 +74,16 @@ const conlangInit: Conlang = {
         }
     }
 };
-type conlangReducerAction = {
-    type: 'replaceAll';
-    newValue: Conlang;
-} | {
-    type: 'replace';
-    path: Array<string>;
-    newValue: unknown;
-};
+type conlangReducerAction =
+    | {
+          type: 'replaceAll';
+          newValue: Conlang;
+      }
+    | {
+          type: 'replace';
+          path: Array<string>;
+          newValue: unknown;
+      };
 function conlangReducer(
     conlang: Conlang,
     action: conlangReducerAction
@@ -101,30 +120,25 @@ export function useSavedContext() {
     if (savedContext) {
         return savedContext;
     } else {
-        throw Error ('`useSavedContext` not in context provider');
+        throw Error('`useSavedContext` not in context provider');
     }
 }
-interface SavedState {
-    saved: boolean;
-    set: (value: boolean) => void;
-}
-export const useSavedState = create<SavedState>()((set) => ({
-    saved: savedInit,
-    set: (value) => set(() => ({saved: value}))
-}));
 
 const windowsInit = ['0-start', '0-start', '0-start', '0-start'];
-type windowsReducerAction = {
-    type: 'add' | 'swap',
-    position: screenPosition,
-    screen: screenStr
-} | {
-    type: 'remove',
-    position: screenPosition
-} | {
-    type: 'swapAll',
-    newValue: windowsArr
-};
+type windowsReducerAction =
+    | {
+          type: 'add' | 'swap';
+          position: screenPosition;
+          screen: screenStr;
+      }
+    | {
+          type: 'remove';
+          position: screenPosition;
+      }
+    | {
+          type: 'swapAll';
+          newValue: windowsArr;
+      };
 export type windowsReducerFunc = (action: windowsReducerAction) => void;
 function windowsReducer(
     windows: windowsArr,
@@ -135,12 +149,19 @@ function windowsReducer(
         case 'add': {
             switch (action.position) {
                 case 0: {
-                    if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+                    if (
+                        windows[0] === windows[1] &&
+                        windows[1] === windows[2] &&
+                        windows[2] === windows[3]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[0] = time + '-' + action.screen;
                         newWindows[2] = time + '-' + action.screen;
                         return newWindows;
-                    } else if (windows[2] === windows[0] || windows[1] === windows[0]) {
+                    } else if (
+                        windows[2] === windows[0] ||
+                        windows[1] === windows[0]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[0] = time + '-' + action.screen;
                         return newWindows;
@@ -149,12 +170,19 @@ function windowsReducer(
                     }
                 }
                 case 1: {
-                    if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+                    if (
+                        windows[0] === windows[1] &&
+                        windows[1] === windows[2] &&
+                        windows[2] === windows[3]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[1] = time + '-' + action.screen;
                         newWindows[3] = time + '-' + action.screen;
                         return newWindows;
-                    } else if (windows[0] === windows[1] || windows[3] === windows[1]) {
+                    } else if (
+                        windows[0] === windows[1] ||
+                        windows[3] === windows[1]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[1] = time + '-' + action.screen;
                         return newWindows;
@@ -163,12 +191,19 @@ function windowsReducer(
                     }
                 }
                 case 2: {
-                    if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+                    if (
+                        windows[0] === windows[1] &&
+                        windows[1] === windows[2] &&
+                        windows[2] === windows[3]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[2] = time + '-' + action.screen;
                         newWindows[3] = time + '-' + action.screen;
                         return newWindows;
-                    } else if (windows[0] === windows[2] || windows[3] === windows[2]) {
+                    } else if (
+                        windows[0] === windows[2] ||
+                        windows[3] === windows[2]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[2] = time + '-' + action.screen;
                         return newWindows;
@@ -177,12 +212,19 @@ function windowsReducer(
                     }
                 }
                 case 3: {
-                    if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+                    if (
+                        windows[0] === windows[1] &&
+                        windows[1] === windows[2] &&
+                        windows[2] === windows[3]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[1] = time + '-' + action.screen;
                         newWindows[3] = time + '-' + action.screen;
                         return newWindows;
-                    } else if (windows[1] === windows[3] || windows[2] === windows[3]) {
+                    } else if (
+                        windows[1] === windows[3] ||
+                        windows[2] === windows[3]
+                    ) {
                         const newWindows = [...windows];
                         newWindows[3] = time + '-' + action.screen;
                         return newWindows;
@@ -191,107 +233,119 @@ function windowsReducer(
                     }
                 }
                 default: {
-                    throw Error('Unknown position for `add`: ' + action.position);
+                    throw Error(
+                        'Unknown position for `add`: ' + action.position
+                    );
                 }
             }
         }
         case 'remove': {
-            if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+            if (
+                windows[0] === windows[1] &&
+                windows[1] === windows[2] &&
+                windows[2] === windows[3]
+            ) {
                 return ['0-home', '0-home', '0-home', '0-home'];
             } else {
                 switch (action.position) {
                     case 0: {
-                    if (windows[0] === windows[2]) {
-                        const newWindows = [...windows];
-                        newWindows[0] = windows[1];
-                        newWindows[2] = windows[3];
-                        return newWindows;
-                    } else if (windows[0] === windows[1]) {
-                        const newWindows = [...windows];
-                        newWindows[0] = windows[2];
-                        newWindows[1] = windows[3];
-                        return newWindows;
-                    } else if (windows[2] === windows[3]) {
-                        const newWindows = [...windows];
-                        newWindows[0] = windows[1];
-                        return newWindows;
-                    } else {
-                        const newWindows = [...windows];
-                        newWindows[0] = windows[2];
-                        return newWindows;
-                    }
+                        if (windows[0] === windows[2]) {
+                            const newWindows = [...windows];
+                            newWindows[0] = windows[1];
+                            newWindows[2] = windows[3];
+                            return newWindows;
+                        } else if (windows[0] === windows[1]) {
+                            const newWindows = [...windows];
+                            newWindows[0] = windows[2];
+                            newWindows[1] = windows[3];
+                            return newWindows;
+                        } else if (windows[2] === windows[3]) {
+                            const newWindows = [...windows];
+                            newWindows[0] = windows[1];
+                            return newWindows;
+                        } else {
+                            const newWindows = [...windows];
+                            newWindows[0] = windows[2];
+                            return newWindows;
+                        }
                     }
                     case 1: {
-                    if (windows[1] === windows[3]) {
-                        const newWindows = [...windows];
-                        newWindows[1] = windows[0];
-                        newWindows[3] = windows[2];
-                        return newWindows;
-                    } else if (windows[1] === windows[0]) {
-                        const newWindows = [...windows];
-                        newWindows[1] = windows[3];
-                        newWindows[2] = windows[0];
-                        return newWindows;
-                    } else if (windows[2] === windows[3]) {
-                        const newWindows = [...windows];
-                        newWindows[1] = windows[0];
-                        return newWindows;
-                    } else {
-                        const newWindows = [...windows];
-                        newWindows[1] = windows[3];
-                        return newWindows;
-                    }
+                        if (windows[1] === windows[3]) {
+                            const newWindows = [...windows];
+                            newWindows[1] = windows[0];
+                            newWindows[3] = windows[2];
+                            return newWindows;
+                        } else if (windows[1] === windows[0]) {
+                            const newWindows = [...windows];
+                            newWindows[1] = windows[3];
+                            newWindows[2] = windows[0];
+                            return newWindows;
+                        } else if (windows[2] === windows[3]) {
+                            const newWindows = [...windows];
+                            newWindows[1] = windows[0];
+                            return newWindows;
+                        } else {
+                            const newWindows = [...windows];
+                            newWindows[1] = windows[3];
+                            return newWindows;
+                        }
                     }
                     case 2: {
-                    if (windows[2] === windows[0]) {
-                        const newWindows = [...windows];
-                        newWindows[0] = windows[1];
-                        newWindows[2] = windows[3];
-                        return newWindows;
-                    } else if (windows[2] === windows[3]) {
-                        const newWindows = [...windows];
-                        newWindows[2] = windows[0];
-                        newWindows[3] = windows[1];
-                        return newWindows;
-                    } else if (windows[0] === windows[1]) {
-                        const newWindows = [...windows];
-                        newWindows[2] = windows[3];
-                        return newWindows;
-                    } else {
-                        const newWindows = [...windows];
-                        newWindows[2] = windows[0];
-                        return newWindows;
-                    }
+                        if (windows[2] === windows[0]) {
+                            const newWindows = [...windows];
+                            newWindows[0] = windows[1];
+                            newWindows[2] = windows[3];
+                            return newWindows;
+                        } else if (windows[2] === windows[3]) {
+                            const newWindows = [...windows];
+                            newWindows[2] = windows[0];
+                            newWindows[3] = windows[1];
+                            return newWindows;
+                        } else if (windows[0] === windows[1]) {
+                            const newWindows = [...windows];
+                            newWindows[2] = windows[3];
+                            return newWindows;
+                        } else {
+                            const newWindows = [...windows];
+                            newWindows[2] = windows[0];
+                            return newWindows;
+                        }
                     }
                     case 3: {
-                    if (windows[3] === windows[1]) {
-                        const newWindows = [...windows];
-                        newWindows[1] = windows[0];
-                        newWindows[3] = windows[2];
-                        return newWindows;
-                    } else if (windows[3] === windows[2]) {
-                        const newWindows = [...windows];
-                        newWindows[2] = windows[0];
-                        newWindows[3] = windows[1];
-                        return newWindows;
-                    } else if (windows[0] === windows[1]) {
-                        const newWindows = [...windows];
-                        newWindows[3] = windows[2];
-                        return newWindows;
-                    } else {
-                        const newWindows = [...windows];
-                        newWindows[3] = windows[1];
-                        return newWindows;
-                    }
+                        if (windows[3] === windows[1]) {
+                            const newWindows = [...windows];
+                            newWindows[1] = windows[0];
+                            newWindows[3] = windows[2];
+                            return newWindows;
+                        } else if (windows[3] === windows[2]) {
+                            const newWindows = [...windows];
+                            newWindows[2] = windows[0];
+                            newWindows[3] = windows[1];
+                            return newWindows;
+                        } else if (windows[0] === windows[1]) {
+                            const newWindows = [...windows];
+                            newWindows[3] = windows[2];
+                            return newWindows;
+                        } else {
+                            const newWindows = [...windows];
+                            newWindows[3] = windows[1];
+                            return newWindows;
+                        }
                     }
                     default: {
-                        throw Error('Unknown position for `remove`: ' + action.position);
+                        throw Error(
+                            'Unknown position for `remove`: ' + action.position
+                        );
                     }
                 }
             }
         }
         case 'swap': {
-            if (windows[0] === windows[1] && windows[1] === windows[2] && windows[2] === windows[3]) {
+            if (
+                windows[0] === windows[1] &&
+                windows[1] === windows[2] &&
+                windows[2] === windows[3]
+            ) {
                 return Array(4).fill(time + '-' + action.screen);
             } else {
                 switch (action.position) {
@@ -364,7 +418,9 @@ function windowsReducer(
                         }
                     }
                     default: {
-                        throw Error('Unknown position for `remove`' + action.position);
+                        throw Error(
+                            'Unknown position for `remove`' + action.position
+                        );
                     }
                 }
             }
@@ -390,7 +446,7 @@ export function useWindowsContext() {
 const fileHandleInit = null;
 const FileHandleContext = createContext<{
     fileHandle: FileSystemFileHandle | null;
-    setFileHandle: (value: (FileSystemFileHandle | null)) => void;
+    setFileHandle: (value: FileSystemFileHandle | null) => void;
 } | null>(null);
 export function useFileHandleContext() {
     const fileHandleContext = useContext(FileHandleContext);
@@ -406,7 +462,7 @@ type submenusReducerAction = {
     type: 'replace';
     position: screenPosition;
     menu: submenuStr;
-}
+};
 function submenusReducer(
     submenus: submenusArr,
     action: submenusReducerAction
@@ -431,3 +487,12 @@ export function useSubmenusContext() {
         throw Error('`useSubmenusContext` not in context provider');
     }
 }
+
+interface StoreState {
+    saved: boolean;
+    setSaved: (value: boolean) => void;
+}
+export const useStore = create<StoreState>()((set) => ({
+    saved: savedInit,
+    setSaved: (value) => set(() => ({saved: value}))
+}));

@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { getFile, writeFile, createFile } from "./CommonFuncs";
-import { useConlangContext, useFileHandleContext, useSavedState, useWindowsContext } from "./CommonVals";
+import { useConlangContext, useFileHandleContext, useStore, useWindowsContext } from "./CommonVals";
 
 export default function StartScreen() {
     const {setConlang} = useConlangContext();
     const {setFileHandle} = useFileHandleContext();
     const {setWindows} = useWindowsContext();
-    const setSaved = useSavedState((state) => state.set);
+    const setSaved = useStore((state) => state.setSaved);
     const conlangNameRef = useRef<HTMLInputElement>(null);
     const createNewConlangRef = useRef<HTMLButtonElement>(null);
     return (

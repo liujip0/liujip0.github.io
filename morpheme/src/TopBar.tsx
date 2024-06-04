@@ -1,10 +1,10 @@
 import { writeFile } from "./CommonFuncs";
-import { useConlangContext, useFileHandleContext, useSavedState, useWindowsContext } from "./CommonVals";
+import { useConlangContext, useFileHandleContext, useStore, useWindowsContext } from "./CommonVals";
 
 export default function TopBar() {
     const {conlang} = useConlangContext();
-    const saved = useSavedState((state) => state.saved);
-    const setSaved = useSavedState((state) => state.set);
+    const saved = useStore((state) => state.saved);
+    const setSaved = useStore((state) => state.setSaved);
     const {setWindows} = useWindowsContext();
     const {fileHandle} = useFileHandleContext();
     return (
