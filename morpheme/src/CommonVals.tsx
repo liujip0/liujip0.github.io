@@ -491,8 +491,10 @@ export function useSubmenusContext() {
 interface StoreState {
     saved: boolean;
     setSaved: (value: boolean) => void;
+    fileHandle: FileSystemFileHandle | null;
 }
 export const useStore = create<StoreState>()((set) => ({
     saved: savedInit,
-    setSaved: (value) => set(() => ({saved: value}))
+    setSaved: (value) => set(() => ({saved: value})),
+    fileHandle: fileHandleInit
 }));
