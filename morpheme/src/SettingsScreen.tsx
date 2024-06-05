@@ -1,23 +1,21 @@
-import { createRef, useRef, useState } from "react";
-import { DimenRes } from "./Resources";
-import { useConlangContext } from "./CommonVals";
+import {createRef, useRef, useState} from 'react';
+import {useStoreState} from './CommonVals';
+import {DimenRes} from './Resources';
 
 export default function SettingsScreen() {
-    const {conlang, setConlang} = useConlangContext();
+    const conlang = useStoreState((s) => s.conlang);
+    const changeConlang = useStoreState((s) => s.changeConlang);
     return (
         <>
             <h1>Settings</h1>
             <h2>General</h2>
             <TextInput
+                id="settingsconlangname"
                 label="Conlang Name:"
                 description="This will not change the file name."
                 defaultValue={conlang.name}
                 onSave={(value) => {
-                    setConlang({
-                        type: 'replace',
-                        path: ['name'],
-                        newValue: value
-                    })
+                    changeConlang(['name'], value);
                 }}
             />
 
@@ -34,24 +32,24 @@ export default function SettingsScreen() {
                         value: 'false'
                     }
                 ]}
+                defaultValue={conlang.widgets.charInsert.enabled.toString()}
                 onSave={(value) => {
-                    setConlang({
-                        type: 'replace',
-                        path: ['widgets', 'charInsert', 'enabled'],
-                        newValue: value === 'true'
-                    })
+                    changeConlang(
+                        ['widgets', 'charInsert', 'enabled'],
+                        value === 'true'
+                    );
                 }}
             />
             <TextInput
+                id="settingschars"
                 label="Characters"
                 description="Enter characters or character groups separated by commas."
                 defaultValue={conlang.widgets.charInsert.chars.join(',')}
                 onSave={(value) => {
-                    setConlang({
-                        type: 'replace',
-                        path: ['widgets', 'charInsert', 'chars'],
-                        newValue: value.split(',')
-                    })
+                    changeConlang(
+                        ['widgets', 'charInsert', 'chars'],
+                        value.split(',')
+                    );
                 }}
             />
         </>
@@ -59,35 +57,44 @@ export default function SettingsScreen() {
 }
 
 type TextInputProps = {
+    id: string;
     label: string;
     description?: string;
-    defaultValue: string;
+    defaultValue?: string;
     onSave: (value: string) => void;
 };
 function TextInput({
+    id,
     label,
     description,
     defaultValue,
     onSave
 }: TextInputProps) {
+    const setLastInput = useStoreState((s) => s.setLastInput);
     const inputRef = useRef<HTMLInputElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const time = new Date().getMilliseconds();
     return (
-        <label style={{
-            fontSize: DimenRes.input.label,
-            display: 'block',
-            marginBottom: DimenRes.input.spaceBetween,
-            fontWeight: 'bold'
-        }}>
+        <label
+            style={{
+                fontSize: DimenRes.input.label,
+                display: 'block',
+                marginBottom: DimenRes.input.spaceBetween,
+                fontWeight: 'bold'
+            }}>
             {label}
             <div>
                 <input
+                    id={time + id}
                     ref={inputRef}
-                    defaultValue={defaultValue}
+                    defaultValue={defaultValue ? defaultValue : ''}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter' && buttonRef.current) {
                             buttonRef.current.click();
                         }
+                    }}
+                    onFocus={() => {
+                        setLastInput(time + id);
                     }}
                     type="text"
                     style={{
@@ -105,15 +112,19 @@ function TextInput({
                     ref={buttonRef}
                     style={{
                         fontSize: DimenRes.input.button
-                    }}
-                >Save</button>
+                    }}>
+                    Save
+                </button>
             </div>
-            {description &&
-                <div style={{
-                    fontSize: DimenRes.input.description,
-                    fontWeight: 'normal'
-                }}>{description}</div>
-            }
+            {description && (
+                <div
+                    style={{
+                        fontSize: DimenRes.input.description,
+                        fontWeight: 'normal'
+                    }}>
+                    {description}
+                </div>
+            )}
         </label>
     );
 }
@@ -129,32 +140,34 @@ type RadioInputProps = {
     defaultValue?: string;
     onSave: (value: string) => void;
 };
-function RadioInput({
-    label,
-    options,
-    defaultValue,
-    onSave
-}: RadioInputProps) {
+function RadioInput({label, options, defaultValue, onSave}: RadioInputProps) {
     const time = new Date().getTime();
     const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
-        Array.from({length: options.length}, () => createRef<HTMLInputElement>())
+        Array.from({length: options.length}, () =>
+            createRef<HTMLInputElement>()
+        )
     );
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const [currentValue, setCurrentValue] = useState(defaultValue ? defaultValue : '');
+    const [currentValue, setCurrentValue] = useState(
+        defaultValue ? defaultValue : ''
+    );
     return (
-        <label style={{
-            fontSize: DimenRes.input.label,
-            display: 'block',
-            marginBottom: DimenRes.input.spaceBetween,
-            fontWeight: 'bold'
-        }}>
+        <label
+            style={{
+                fontSize: DimenRes.input.label,
+                display: 'block',
+                marginBottom: DimenRes.input.spaceBetween,
+                fontWeight: 'bold'
+            }}>
             {label}
             {options.map((x: radioInputOption, i: number) => {
                 return (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center'
-                    }}>
+                    <div
+                        key={i}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
                         <input
                             ref={inputRefs.current[i]}
                             id={'radioinput-' + time + '-' + x.value}
@@ -168,14 +181,17 @@ function RadioInput({
                                 marginLeft: '0.5em',
                                 fontWeight: 'normal'
                             }}
-                            htmlFor={'radioinput-' + time + '-' + x.value}
-                        >
-                            {x.label}<br />
-                            {x.description &&
-                                <span style={{
-                                    fontSize: DimenRes.input.description
-                                }}>{x.description}</span>
-                            }
+                            htmlFor={'radioinput-' + time + '-' + x.value}>
+                            {x.label}
+                            <br />
+                            {x.description && (
+                                <span
+                                    style={{
+                                        fontSize: DimenRes.input.description
+                                    }}>
+                                    {x.description}
+                                </span>
+                            )}
                         </label>
                     </div>
                 );
@@ -188,8 +204,9 @@ function RadioInput({
                 style={{
                     fontSize: DimenRes.input.button,
                     marginTop: '0.3em'
-                }}
-            >Save</button>
+                }}>
+                Save
+            </button>
         </label>
     );
 }

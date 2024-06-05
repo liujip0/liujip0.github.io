@@ -6,6 +6,7 @@ export default function AppLayout() {
     return (
         <div
             style={{
+                margin: '0',
                 position: 'relative',
                 top: '0',
                 left: '0',
@@ -17,8 +18,7 @@ export default function AppLayout() {
                 gridTemplateAreas: `'a a a' 'b b b' 'a0 c a1' 'd d d' 'a2 e a3'`,
                 overflow: 'scroll',
                 backgroundColor: 'lightgray'
-            }}
-        >
+            }}>
             <TopBar />
             <Widgets />
             <ScreensLayout />

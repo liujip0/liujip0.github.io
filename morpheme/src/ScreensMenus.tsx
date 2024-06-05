@@ -1,39 +1,43 @@
-import { MdAdd, MdClose, MdOutlineSwapHoriz } from "react-icons/md";
-import { screenPosition, screenStr } from "./CommonTypes";
-import { useSubmenusContext, useWindowsContext } from "./CommonVals";
+import {MdAdd, MdClose, MdOutlineSwapHoriz} from 'react-icons/md';
+import {screenPosition, screenStr} from './CommonTypes';
+import {useStoreState} from './CommonVals';
 
 export default function ScreensMenus() {
     return (
         <>
-            <MenuButtonCont position={{
-                gridRowStart: 'a0',
-                gridColumnStart: 'a0'
-            }}>
+            <MenuButtonCont
+                position={{
+                    gridRowStart: 'a0',
+                    gridColumnStart: 'a0'
+                }}>
                 <MenuButtons position={0} />
                 <Submenu position={0} />
             </MenuButtonCont>
-            <MenuButtonCont position={{
-                gridRowStart: 'a1',
-                gridColumnEnd: 'a1',
-                marginLeft: 'auto'
-            }}>
+            <MenuButtonCont
+                position={{
+                    gridRowStart: 'a1',
+                    gridColumnEnd: 'a1',
+                    marginLeft: 'auto'
+                }}>
                 <Submenu position={1} />
                 <MenuButtons position={1} />
             </MenuButtonCont>
-            <MenuButtonCont position={{
-                gridRowEnd: 'a2',
-                gridColumnStart: 'a2',
-                marginTop: 'auto'
-            }}>
+            <MenuButtonCont
+                position={{
+                    gridRowEnd: 'a2',
+                    gridColumnStart: 'a2',
+                    marginTop: 'auto'
+                }}>
                 <MenuButtons position={2} />
                 <Submenu position={2} />
             </MenuButtonCont>
-            <MenuButtonCont position={{
-                gridRowEnd: 'a3',
-                gridColumnEnd: 'a3',
-                marginTop: 'auto',
-                marginLeft: 'auto'
-            }}>
+            <MenuButtonCont
+                position={{
+                    gridRowEnd: 'a3',
+                    gridColumnEnd: 'a3',
+                    marginTop: 'auto',
+                    marginLeft: 'auto'
+                }}>
                 <Submenu position={3} />
                 <MenuButtons position={3} />
             </MenuButtonCont>
@@ -45,19 +49,17 @@ type MenuButtonContProps = {
     position: Record<string, string>;
     children: React.ReactNode;
 };
-function MenuButtonCont({
-    position,
-    children
-}: MenuButtonContProps) {
+function MenuButtonCont({position, children}: MenuButtonContProps) {
     return (
-        <div style={{
-            ...position,
-            width: 'min-content',
-            height: 'min-content',
-            display: 'flex',
-            backgroundColor: 'darkgray',
-            zIndex: '2'
-        }}>
+        <div
+            style={{
+                ...position,
+                width: 'min-content',
+                height: 'min-content',
+                display: 'flex',
+                backgroundColor: 'darkgray',
+                zIndex: '2'
+            }}>
             {children}
         </div>
     );
@@ -66,18 +68,17 @@ function MenuButtonCont({
 type MenuButtonProps = {
     onClick: () => void;
     children: React.ReactNode;
-}
-function MenuButton({
-    onClick,
-    children
-}: MenuButtonProps) {
+};
+function MenuButton({onClick, children}: MenuButtonProps) {
     return (
-        <button onClick={onClick} style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            margin: '0',
-            padding: '0.3em'
-        }}>
+        <button
+            onClick={onClick}
+            style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                margin: '0',
+                padding: '0.3em'
+            }}>
             {children}
         </button>
     );
@@ -85,35 +86,32 @@ function MenuButton({
 
 type MenuButtonsProps = {
     position: screenPosition;
-}
-function MenuButtons({
-    position
-}: MenuButtonsProps) {
-    const {setWindows} = useWindowsContext();
-    const {setSubmenus} = useSubmenusContext();
+};
+function MenuButtons({position}: MenuButtonsProps) {
+    const removeWindows = useStoreState((s) => s.removeWindows);
+    const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
-            <MenuButton onClick={() => {setWindows({
-                type: 'remove',
-                position: position
-            })}}>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+            <MenuButton
+                onClick={() => {
+                    removeWindows(position);
+                }}>
                 <MdClose />
             </MenuButton>
-            <MenuButton onClick={() => {setSubmenus({
-                type: 'replace',
-                position: position,
-                menu: 'swap'
-            })}}>
+            <MenuButton
+                onClick={() => {
+                    replaceSubmenus(position, 'swap');
+                }}>
                 <MdOutlineSwapHoriz />
             </MenuButton>
-            <MenuButton onClick={() => {setSubmenus({
-                type: 'replace',
-                position: position,
-                menu: 'add'
-            })}}>
+            <MenuButton
+                onClick={() => {
+                    replaceSubmenus(position, 'add');
+                }}>
                 <MdAdd />
             </MenuButton>
         </div>
@@ -125,36 +123,26 @@ type SubmenuButtonProps = {
     screen: screenStr;
     children: React.ReactNode;
 };
-function SubmenuButton({
-    position,
-    screen,
-    children
-}: SubmenuButtonProps) {
-    const {setWindows} = useWindowsContext();
-    const {submenus, setSubmenus} = useSubmenusContext();
+function SubmenuButton({position, screen, children}: SubmenuButtonProps) {
+    const addWindows = useStoreState((s) => s.addWindows);
+    const swapWindows = useStoreState((s) => s.swapWindows);
+    const submenus = useStoreState((s) => s.submenus);
+    const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
     return (
-        <button style={{
-            border: 'none',
-            backgroundColor: 'transparent',
-            padding: '0.3em'
-        }} onClick={() => {
-            setWindows(
-                submenus[position] === 'add' ? {
-                    type: 'add',
-                    position: position,
-                    screen: screen
-                } : {
-                    type: 'swap',
-                    position: position,
-                    screen: screen
+        <button
+            style={{
+                border: 'none',
+                backgroundColor: 'transparent',
+                padding: '0.3em'
+            }}
+            onClick={() => {
+                if (submenus[position] === 'add') {
+                    addWindows(position, screen);
+                } else {
+                    swapWindows(position, screen);
                 }
-            );
-            setSubmenus({
-                type: 'replace',
-                position: position,
-                menu: ''
-            });
-        }}>
+                replaceSubmenus(position, '');
+            }}>
             {children}
         </button>
     );
@@ -162,48 +150,54 @@ function SubmenuButton({
 
 type SubmenuProps = {
     position: screenPosition;
-}
-function Submenu({
-    position
-}: SubmenuProps) {
-    const {submenus, setSubmenus} = useSubmenusContext();
+};
+function Submenu({position}: SubmenuProps) {
+    const submenus = useStoreState((s) => s.submenus);
+    const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
     return (
-        <div style={{
-            display: submenus[position] ? 'flex' : 'none',
-            flexDirection: 'column',
-            backgroundColor: 'lightgray'
-        }}>
+        <div
+            style={{
+                display: submenus[position] ? 'flex' : 'none',
+                flexDirection: 'column',
+                backgroundColor: 'lightgray'
+            }}>
             <SubmenuButton
                 position={position}
-                screen={'start'}
-            >Start</SubmenuButton>
+                screen={'start'}>
+                Start
+            </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'home'}
-            >Home</SubmenuButton>
+                screen={'home'}>
+                Home
+            </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'phonology'}
-            >Phonology</SubmenuButton>
+                screen={'phonology'}>
+                Phonology
+            </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'grammar'}
-            >Grammar</SubmenuButton>
+                screen={'grammar'}>
+                Grammar
+            </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'lexicon'}
-            >Lexicon</SubmenuButton>
+                screen={'lexicon'}>
+                Lexicon
+            </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'settings'}
-            >Settings</SubmenuButton>
-            <button style={{
-
-            }} onClick={() => {setSubmenus({
-                type: 'replace',
-                position: position,
-                menu: ''
-            })}}>Close</button>
+                screen={'settings'}>
+                Settings
+            </SubmenuButton>
+            <button
+                style={{}}
+                onClick={() => {
+                    replaceSubmenus(position, '');
+                }}>
+                Close
+            </button>
         </div>
     );
 }

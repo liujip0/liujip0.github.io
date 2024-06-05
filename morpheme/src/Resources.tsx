@@ -1,6 +1,4 @@
-export const StringRes = {
-
-};
+export const StringRes = {};
 export const DimenRes = {
     input: {
         label: '1em',
