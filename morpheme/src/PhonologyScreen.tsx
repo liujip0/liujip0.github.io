@@ -429,12 +429,10 @@ function Phono({colSpan, children}: PhonoProps) {
                 changeConlang(['inventory'], newInventory);
             }}
             colSpan={colSpan}
+            className="charis"
             style={{
                 backgroundColor:
-                    conlang.inventory.includes(children) ?
-                        'lightgreen'
-                    :   'white',
-                fontFamily: 'serif'
+                    conlang.inventory.includes(children) ? 'lightblue' : 'white'
             }}>
             {children}
         </td>
@@ -448,6 +446,6 @@ function PhonoX({colSpan}: PhonoXProps) {
     return (
         <td
             colSpan={colSpan}
-            style={{backgroundColor: 'lightgray'}}></td>
+            style={{backgroundColor: 'gray', border: 'none'}}></td>
     );
 }

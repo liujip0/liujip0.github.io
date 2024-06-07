@@ -73,6 +73,7 @@ export default function Widgets() {
                         setCxsExpanded(true);
                     }}>
                     <input
+                        className="charis"
                         ref={cxsinRef}
                         id="cxsin"
                         onFocus={() => {
@@ -90,15 +91,19 @@ export default function Widgets() {
                     />
                     &nbsp;
                     <button
-                        onClick={() => {
+                        onClick={async () => {
                             if (cxsinRef.current) {
-                                cxsinRef.current.value = '';
-                            }
-                            if (cxsoutRef.current) {
-                                cxsoutRef.current.value = '';
+                                if (navigator.clipboard) {
+                                    await navigator.clipboard.writeText(
+                                        cxsinRef.current.value
+                                    );
+                                } else {
+                                    cxsinRef.current.select();
+                                    document.execCommand('copy');
+                                }
                             }
                         }}>
-                        Clear
+                        Copy
                     </button>
                     <div
                         style={{
@@ -106,6 +111,7 @@ export default function Widgets() {
                             display: cxsExpanded ? 'block' : 'none'
                         }}>
                         <input
+                            className="charis"
                             ref={cxsoutRef}
                             id="cxsout"
                             onFocus={() => {
@@ -120,6 +126,22 @@ export default function Widgets() {
                                 }
                             }}
                         />
+                        &nbsp;
+                        <button
+                            onClick={async () => {
+                                if (cxsoutRef.current) {
+                                    if (navigator.clipboard) {
+                                        await navigator.clipboard.writeText(
+                                            cxsoutRef.current.value
+                                        );
+                                    } else {
+                                        cxsoutRef.current.select();
+                                        document.execCommand('copy');
+                                    }
+                                }
+                            }}>
+                            Copy
+                        </button>
                     </div>
                 </Widget>
             )}
@@ -141,7 +163,8 @@ function Widget({id, onClick, children}: WidgetProps) {
                 backgroundColor: 'darkgray',
                 padding: '0.5em',
                 border: '1px solid black',
-                height: 'min-content'
+                height: 'min-content',
+                zIndex: '2'
             }}>
             {children}
         </div>

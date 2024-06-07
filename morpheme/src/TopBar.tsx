@@ -38,7 +38,9 @@ export default function TopBar() {
                         ]);
                     }}>
                     Currently Editing:&nbsp;
-                    <code>{conlang.name ? conlang.name : 'none'}</code>
+                    <span className="monospace">
+                        {conlang.name ? conlang.name : 'none'}
+                    </span>
                     {saved ? '' : '*'}
                 </MenuItem>
                 <MenuItem
