@@ -1,6 +1,7 @@
 import {screenPosition} from './CommonTypes';
 import {useStoreState} from './CommonVals';
 import HomeScreen from './HomeScreen';
+import PhonologyScreen from './PhonologyScreen.tsx';
 import ScreensMenus from './ScreensMenus';
 import SettingsScreen from './SettingsScreen';
 import StartScreen from './StartScreen';
@@ -76,6 +77,9 @@ function Screen({location, position}: ScreenProps) {
             }}>
             {windows[position].split('-')[1] === 'start' && <StartScreen />}
             {windows[position].split('-')[1] === 'home' && <HomeScreen />}
+            {windows[position].split('-')[1] === 'phonology' && (
+                <PhonologyScreen />
+            )}
             {windows[position].split('-')[1] === 'settings' && (
                 <SettingsScreen />
             )}
