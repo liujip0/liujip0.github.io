@@ -1,3 +1,5 @@
+import {CXStoIPA, IPAtoCXS} from './ConlangXSampa.tsx';
+
 export async function getFile(options: object) {
     if (!window.showOpenFilePicker) {
         throw Error('File System Access API not supported');
@@ -46,4 +48,43 @@ export function deepUpdate<T>(obj: T, path: string[], value: unknown): T {
             value
         )
     };
+}
+
+export function parseCxs(input: string): string {
+    const cxs = input;
+    const ipa: Array<string> = [];
+    for (let i = 0; i < cxs.length; i++) {
+        const current = cxs[i];
+        if (current === '`' || current === '\\') {
+            const x = ipa.pop();
+            if (x) {
+                ipa.push(CXStoIPA[x + current]);
+                continue;
+            }
+        } else if (cxs[i - 1] === '_') {
+            ipa.pop();
+            if (!'<'.includes(current)) {
+                ipa.push(CXStoIPA['_' + current]);
+            } else {
+                const x = ipa.pop();
+                if (x) {
+                    ipa.push(CXStoIPA[x + '_' + current]);
+                    continue;
+                } else {
+                    ipa.push('_');
+                }
+            }
+            continue;
+        }
+        ipa.push(current in CXStoIPA ? CXStoIPA[current] : current);
+    }
+    return ipa.join('');
+}
+
+export function unparseCxs(ipa: string): string {
+    let cxs = '';
+    for (let i = 0; i < ipa.length; i++) {
+        cxs += IPAtoCXS[ipa[i]];
+    }
+    return cxs;
 }

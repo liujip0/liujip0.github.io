@@ -32,6 +32,9 @@ interface StoreState {
 
     lastInput: string;
     setLastInput: (value: string) => void;
+
+    cxsExpanded: boolean;
+    setCxsExpanded: (value: boolean) => void;
 }
 export const useStoreState = create<StoreState>()((set) => ({
     saved: true,
@@ -344,5 +347,8 @@ export const useStoreState = create<StoreState>()((set) => ({
     replaceConlang: (value) => set(() => ({conlang: value, saved: false})),
 
     lastInput: '',
-    setLastInput: (value) => set(() => ({lastInput: value}))
+    setLastInput: (value) => set(() => ({lastInput: value})),
+
+    cxsExpanded: false,
+    setCxsExpanded: (value) => set(() => ({cxsExpanded: value}))
 }));
