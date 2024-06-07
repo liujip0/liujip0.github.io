@@ -338,7 +338,10 @@ export const useStoreState = create<StoreState>()((set) => ({
                 enabled: true
             }
         },
-        inventory: []
+        inventory: {
+            consonants: [],
+            vowels: []
+        }
     },
     changeConlang: (path, value) =>
         set((s) => ({

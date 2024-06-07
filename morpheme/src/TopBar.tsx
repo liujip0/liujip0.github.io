@@ -1,5 +1,5 @@
-import {writeFile} from './CommonFuncs';
-import {useStoreState} from './CommonVals';
+import {writeFile} from './common/CommonFuncs';
+import {useStoreState} from './common/CommonVals';
 
 export default function TopBar() {
     const conlang = useStoreState((s) => s.conlang);

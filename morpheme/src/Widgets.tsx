@@ -1,6 +1,6 @@
 import {MutableRefObject, useRef} from 'react';
-import {parseCxs, unparseCxs} from './CommonFuncs.tsx';
-import {useStoreState} from './CommonVals';
+import {parseCxs, unparseCxs} from './common/CommonFuncs.tsx';
+import {useStoreState} from './common/CommonVals.tsx';
 
 export default function Widgets() {
     const conlang = useStoreState((s) => s.conlang);

@@ -1,23 +1,16 @@
-import {NavBar} from './CommonFuncs.tsx';
-import {useStoreState} from './CommonVals.tsx';
+import {NavSection} from '../../common/CommonFuncs.tsx';
+import {useStoreState} from '../../common/CommonVals.tsx';
 
-export default function PhonologyScreen() {
+export default function PhoneticInventory() {
     const conlang = useStoreState((s) => s.conlang);
     return (
         <>
-            <NavBar
-                sections={[
-                    {id: 'inventory', label: 'Phonetic Inventory'},
-                    {id: 'orthography', label: 'Orthography & Romanization'},
-                    {id: 'phonotactics', label: 'Phonotactics'}
-                ]}
-            />
-            <h1 id="inventory">Phonetic Inventory</h1>
+            <NavSection id="inventory">Phonetic Inventory</NavSection>
             <p>Select sounds to add to {conlang.name}&apos;s inventory.</p>
             <h2>Consonants</h2>
             <ConsonantsTable />
-            <h1 id="orthography">Orthography &amp; Romanization</h1>
-            <h1 id="phonotactics">Phonotactics</h1>
+            <h2>Vowels</h2>
+            <VowelsTable />
         </>
     );
 }
@@ -406,18 +399,137 @@ function ConsonantsTable() {
         </div>
     );
 }
+function VowelsTable() {
+    return (
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th colSpan={2}>Front</th>
+                        <th colSpan={2}></th>
+                        <th colSpan={2}>Central</th>
+                        <th colSpan={2}></th>
+                        <th colSpan={2}>Back</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Close</th>
+                        <Phono vowel>i</Phono>
+                        <Phono vowel>y</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɨ</Phono>
+                        <Phono vowel>ʉ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɯ</Phono>
+                        <Phono vowel>u</Phono>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɪ</Phono>
+                        <Phono vowel>ʏ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ʊ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                    </tr>
+                    <tr>
+                        <th>Close-mid</th>
+                        <Phono vowel>e</Phono>
+                        <Phono vowel>ø</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɘ</Phono>
+                        <Phono vowel>ɵ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɤ</Phono>
+                        <Phono vowel>o</Phono>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono
+                            colSpan={2}
+                            vowel>
+                            ə
+                        </Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                    </tr>
+                    <tr>
+                        <th>Open-mid</th>
+                        <Phono vowel>ɛ</Phono>
+                        <Phono vowel>œ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɜ</Phono>
+                        <Phono vowel>ɞ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ʌ</Phono>
+                        <Phono vowel>ɔ</Phono>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <Phono vowel>æ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɐ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                    </tr>
+                    <tr>
+                        <th>Open</th>
+                        <Phono vowel>a</Phono>
+                        <Phono vowel>ɶ</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
+                        <Phono vowel>ɑ</Phono>
+                        <Phono vowel>ɒ</Phono>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+}
 
 type PhonoProps = {
     colSpan?: number;
+    vowel?: boolean;
     children: string;
 };
-function Phono({colSpan, children}: PhonoProps) {
+function Phono({colSpan, vowel = false, children}: PhonoProps) {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
+    console.log(vowel);
+    console.log(conlang.inventory);
+    console.log(conlang.inventory[vowel ? 'vowels' : 'consonants']);
     return (
         <td
             onClick={() => {
-                let newInventory = conlang.inventory;
+                let newInventory =
+                    conlang.inventory[vowel ? 'vowels' : 'consonants'];
                 if (newInventory.includes(children)) {
                     newInventory = newInventory.filter((value) => {
                         return value !== children;
@@ -426,13 +538,22 @@ function Phono({colSpan, children}: PhonoProps) {
                     newInventory.push(children);
                     newInventory.sort();
                 }
-                changeConlang(['inventory'], newInventory);
+                changeConlang(
+                    ['inventory', vowel ? 'vowels' : 'consonants'],
+                    newInventory
+                );
             }}
             colSpan={colSpan}
             className="charis"
             style={{
                 backgroundColor:
-                    conlang.inventory.includes(children) ? 'lightblue' : 'white'
+                    (
+                        conlang.inventory[
+                            vowel ? 'vowels' : 'consonants'
+                        ].includes(children)
+                    ) ?
+                        'lightblue'
+                    :   'white'
             }}>
             {children}
         </td>

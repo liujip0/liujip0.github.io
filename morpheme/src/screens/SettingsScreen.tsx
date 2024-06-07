@@ -1,6 +1,6 @@
 import {createRef, useRef, useState} from 'react';
-import {useStoreState} from './CommonVals';
-import {DimenRes} from './Resources';
+import {useStoreState} from '../common/CommonVals';
+import {DimenRes} from '../common/Resources';
 
 export default function SettingsScreen() {
     const conlang = useStoreState((s) => s.conlang);

@@ -12,7 +12,10 @@ export interface Conlang {
             enabled: boolean;
         };
     };
-    inventory: Array<string>;
+    inventory: {
+        consonants: Array<string>;
+        vowels: Array<string>;
+    };
 }
 
 export type screenPosition = 0 | 1 | 2 | 3;

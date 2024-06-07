@@ -132,3 +132,19 @@ export function NavBar({sections}: NavBarProps) {
         </div>
     );
 }
+
+type NavSectionProps = {
+    id: string;
+    children: React.ReactNode;
+};
+export function NavSection({id, children}: NavSectionProps) {
+    return (
+        <h1
+            style={{
+                marginTop: '1em'
+            }}
+            id={id}>
+            {children}
+        </h1>
+    );
+}

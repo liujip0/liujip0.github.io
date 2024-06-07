@@ -1,6 +1,6 @@
 import {useRef} from 'react';
-import {createFile, getFile, writeFile} from './CommonFuncs';
-import {useStoreState} from './CommonVals';
+import {createFile, getFile, writeFile} from '../common/CommonFuncs';
+import {useStoreState} from '../common/CommonVals';
 
 export default function StartScreen() {
     const replaceConlang = useStoreState((s) => s.replaceConlang);
@@ -85,7 +85,10 @@ export default function StartScreen() {
                                     enabled: true
                                 }
                             },
-                            inventory: []
+                            inventory: {
+                                consonants: [],
+                                vowels: []
+                            }
                         };
                         createFile({
                             types: [
