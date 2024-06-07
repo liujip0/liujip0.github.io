@@ -45,6 +45,17 @@ export default function Widgets() {
                                             start + char.length
                                         );
                                     }
+                                    if (cxsoutRef.current && cxsinRef.current) {
+                                        if (lastInput === 'cxsin') {
+                                            cxsoutRef.current.value = parseCxs(
+                                                cxsinRef.current.value
+                                            );
+                                        } else if (lastInput === 'cxsout') {
+                                            cxsinRef.current.value = unparseCxs(
+                                                cxsoutRef.current.value
+                                            );
+                                        }
+                                    }
                                 }}>
                                 {char}
                             </button>

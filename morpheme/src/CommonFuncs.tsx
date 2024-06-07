@@ -84,7 +84,7 @@ export function parseCxs(input: string): string {
 export function unparseCxs(ipa: string): string {
     let cxs = '';
     for (let i = 0; i < ipa.length; i++) {
-        cxs += IPAtoCXS[ipa[i]];
+        cxs += ipa[i] in IPAtoCXS ? IPAtoCXS[ipa[i]] : ipa[i];
     }
     return cxs;
 }
