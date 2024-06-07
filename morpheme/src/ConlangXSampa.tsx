@@ -108,6 +108,7 @@ export const CXStoIPA: Record<string, string> = {
     '.': '.',
     ':': 'ː',
     'ː\\': 'ˑ',
+    ';': 'ʲ',
     '<\\': 'ʢ',
     '<R>': '↗',
     '<F>': '↘',
