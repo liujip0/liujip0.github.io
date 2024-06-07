@@ -76,6 +76,11 @@ export function parseCxs(input: string): string {
                 }
             }
             continue;
+        } else if (current === ')' && cxs[i - 2]) {
+            const x = ipa.pop();
+            ipa.push('\u0361');
+            ipa.push(x!);
+            continue;
         }
         ipa.push(current in CXStoIPA ? CXStoIPA[current] : current);
     }

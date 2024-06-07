@@ -84,7 +84,8 @@ export default function StartScreen() {
                                 cxs: {
                                     enabled: true
                                 }
-                            }
+                            },
+                            inventory: []
                         };
                         createFile({
                             types: [

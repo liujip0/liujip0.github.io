@@ -337,7 +337,8 @@ export const useStoreState = create<StoreState>()((set) => ({
             cxs: {
                 enabled: true
             }
-        }
+        },
+        inventory: []
     },
     changeConlang: (path, value) =>
         set((s) => ({

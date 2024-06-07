@@ -409,18 +409,34 @@ function ConsonantsTable() {
 
 type PhonoProps = {
     colSpan?: number;
-    children?: string;
+    children: string;
 };
 function Phono({colSpan, children}: PhonoProps) {
+    const conlang = useStoreState((s) => s.conlang);
+    const changeConlang = useStoreState((s) => s.changeConlang);
     return (
-        <td colSpan={colSpan}>
-            <button
-                style={{
-                    border: 'none',
-                    backgroundColor: 'transparent'
-                }}>
-                {children}
-            </button>
+        <td
+            onClick={() => {
+                let newInventory = conlang.inventory;
+                if (newInventory.includes(children)) {
+                    newInventory = newInventory.filter((value) => {
+                        return value !== children;
+                    });
+                } else {
+                    newInventory.push(children);
+                    newInventory.sort();
+                }
+                changeConlang(['inventory'], newInventory);
+            }}
+            colSpan={colSpan}
+            style={{
+                backgroundColor:
+                    conlang.inventory.includes(children) ?
+                        'lightgreen'
+                    :   'white',
+                fontFamily: 'serif'
+            }}>
+            {children}
         </td>
     );
 }

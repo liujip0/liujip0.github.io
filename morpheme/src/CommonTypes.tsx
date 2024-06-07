@@ -12,6 +12,7 @@ export interface Conlang {
             enabled: boolean;
         };
     };
+    inventory: Array<string>;
 }
 
 export type screenPosition = 0 | 1 | 2 | 3;
