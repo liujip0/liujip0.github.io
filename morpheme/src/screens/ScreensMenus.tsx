@@ -1,6 +1,6 @@
 import {MdAdd, MdClose, MdOutlineSwapHoriz} from 'react-icons/md';
-import {screenPosition, screenStr} from './common/CommonTypes';
-import {useStoreState} from './common/CommonVals';
+import {screenPosition, screenStr} from '../common/CommonTypes';
+import {useStoreState} from '../common/CommonVals';
 
 export default function ScreensMenus() {
     return (

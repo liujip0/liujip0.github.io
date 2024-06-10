@@ -1,5 +1,6 @@
 import {useRef} from 'react';
 import {createFile, getFile, writeFile} from '../common/CommonFuncs';
+import {Conlang} from '../common/CommonTypes.tsx';
 import {useStoreState} from '../common/CommonVals';
 
 export default function StartScreen() {
@@ -71,7 +72,7 @@ export default function StartScreen() {
                 onClick={() => {
                     if (conlangNameRef.current) {
                         const name = conlangNameRef.current.value;
-                        const newConlang = {
+                        const newConlang: Conlang = {
                             name: name,
                             widgets: {
                                 charInsert: {
@@ -85,10 +86,7 @@ export default function StartScreen() {
                                     enabled: true
                                 }
                             },
-                            inventory: {
-                                consonants: [],
-                                vowels: []
-                            }
+                            inventory: []
                         };
                         createFile({
                             types: [

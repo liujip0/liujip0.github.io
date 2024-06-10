@@ -12,11 +12,68 @@ export interface Conlang {
             enabled: boolean;
         };
     };
-    inventory: {
-        consonants: Array<string>;
-        vowels: Array<string>;
-    };
+    inventory: Array<
+        | {
+              id: string;
+              ipa: string;
+              base: string;
+              romanization: string;
+              type: 'vowel';
+              diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
+          }
+        | {
+              id: string;
+              ipa: string;
+              base: string;
+              romanization: string;
+              type: 'consonant';
+              diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
+          }
+    >;
 }
+type IpaVowelDiacritic =
+    | ''
+    | 'more rounded'
+    | 'less rounded'
+    | 'advanced'
+    | 'retracted'
+    | 'centralized'
+    | 'mid-centralized'
+    | 'raised'
+    | 'lowered'
+    | '+ATR'
+    | '-ATR'
+    | 'nonsyllabic'
+    | 'rhoticized'
+    | 'creaky'
+    | 'breathy'
+    | 'nasalized'
+    | 'long'
+    | 'half-long'
+    | 'extra-short';
+
+type IpaConsonantDiacritic =
+    | ''
+    | 'voiceless'
+    | 'voiced'
+    | 'aspirated'
+    | 'syllabic'
+    | 'breathy'
+    | 'creaky'
+    | 'linguolabial'
+    | 'labialized'
+    | 'palatalized'
+    | 'velarized'
+    | 'pharyngealized'
+    | 'velarized or pharyngealized (~)'
+    | 'raised'
+    | 'lowered'
+    | 'dental'
+    | 'apical'
+    | 'laminal'
+    | 'nasal release'
+    | 'dental release'
+    | 'no audible release';
 
 export type screenPosition = 0 | 1 | 2 | 3;
 export type screenStr =

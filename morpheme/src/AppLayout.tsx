@@ -1,5 +1,5 @@
 import {useStoreState} from './common/CommonVals.tsx';
-import ScreensLayout from './ScreensLayout';
+import ScreensLayout from './screens/ScreensLayout.tsx';
 import TopBar from './TopBar';
 import Widgets from './Widgets';
 

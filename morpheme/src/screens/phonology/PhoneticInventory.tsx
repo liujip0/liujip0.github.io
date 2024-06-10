@@ -401,7 +401,10 @@ function ConsonantsTable() {
 }
 function VowelsTable() {
     return (
-        <div>
+        <div
+            style={{
+                overflowX: 'scroll'
+            }}>
             <table>
                 <thead>
                     <tr>
@@ -522,36 +525,59 @@ type PhonoProps = {
 function Phono({colSpan, vowel = false, children}: PhonoProps) {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
-    console.log(vowel);
+    const time = new Date().getMilliseconds();
     console.log(conlang.inventory);
-    console.log(conlang.inventory[vowel ? 'vowels' : 'consonants']);
     return (
         <td
             onClick={() => {
-                let newInventory =
-                    conlang.inventory[vowel ? 'vowels' : 'consonants'];
-                if (newInventory.includes(children)) {
-                    newInventory = newInventory.filter((value) => {
-                        return value !== children;
-                    });
+                let newInventory = conlang.inventory;
+                if (newInventory.some((item) => item.base === children)) {
+                    newInventory = newInventory.filter(
+                        (item) => item.base !== children
+                    );
                 } else {
-                    newInventory.push(children);
-                    newInventory.sort();
+                    newInventory.push(
+                        vowel ?
+                            {
+                                id: time + '-' + children,
+                                ipa: children,
+                                base: children,
+                                romanization: '',
+                                type: 'vowel',
+                                diacritics: ['', '']
+                            }
+                        :   {
+                                id: time + '-' + children,
+                                ipa: children,
+                                base: children,
+                                romanization: '',
+                                type: 'consonant',
+                                diacritics: ['', '']
+                            }
+                    );
+                    newInventory.sort((a, b) => {
+                        if (a.type === 'consonant') {
+                            if (b.type === 'consonant') {
+                                return a.ipa < b.ipa ? -1 : 1;
+                            } else {
+                                return -1;
+                            }
+                        } else {
+                            if (b.type === 'consonant') {
+                                return 1;
+                            } else {
+                                return a.ipa < b.ipa ? -1 : 1;
+                            }
+                        }
+                    });
                 }
-                changeConlang(
-                    ['inventory', vowel ? 'vowels' : 'consonants'],
-                    newInventory
-                );
+                changeConlang(['inventory'], newInventory);
             }}
             colSpan={colSpan}
             className="charis"
             style={{
                 backgroundColor:
-                    (
-                        conlang.inventory[
-                            vowel ? 'vowels' : 'consonants'
-                        ].includes(children)
-                    ) ?
+                    conlang.inventory.some((item) => item.base === children) ?
                         'lightblue'
                     :   'white'
             }}>

@@ -1,10 +1,10 @@
+import {screenPosition} from '../common/CommonTypes.tsx';
+import {useStoreState} from '../common/CommonVals.tsx';
+import HomeScreen from './HomeScreen.tsx';
 import ScreensMenus from './ScreensMenus';
-import {screenPosition} from './common/CommonTypes.tsx';
-import {useStoreState} from './common/CommonVals.tsx';
-import HomeScreen from './screens/HomeScreen.tsx';
-import SettingsScreen from './screens/SettingsScreen.tsx';
-import StartScreen from './screens/StartScreen.tsx';
-import PhonologyScreen from './screens/phonology/PhonologyScreen.tsx';
+import SettingsScreen from './SettingsScreen.tsx';
+import StartScreen from './StartScreen.tsx';
+import PhonologyScreen from './phonology/PhonologyScreen.tsx';
 
 export default function ScreensLayout() {
     const windows = useStoreState((s) => s.windows);
