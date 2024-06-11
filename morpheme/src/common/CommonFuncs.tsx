@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import {CXStoIPA, IPAtoCXS} from './ConlangXSampa.tsx';
+import { IpaConsonantDiacritic, IpaVowelDiacritic } from './CommonTypes.tsx';
+import { CXStoIPA, IPAtoCXS } from './ConlangXSampa.tsx';
 
 export async function getFile(options: object) {
     if (!window.showOpenFilePicker) {
@@ -35,7 +36,7 @@ export async function createFile(options: object) {
     return fileHandle;
 }
 
-type NestedObject = {[key: string]: unknown};
+type NestedObject = { [key: string]: unknown };
 export function deepUpdate<T>(obj: T, path: string[], value: unknown): T {
     if (path.length === 0) {
         return value as T;
@@ -101,7 +102,7 @@ type NavBarProps = {
         id: string;
     }>;
 };
-export function NavBar({sections}: NavBarProps) {
+export function NavBar({ sections }: NavBarProps) {
     return (
         <div
             style={{
@@ -137,7 +138,7 @@ type NavSectionProps = {
     id: string;
     children: React.ReactNode;
 };
-export function NavSection({id, children}: NavSectionProps) {
+export function NavSection({ id, children }: NavSectionProps) {
     return (
         <h1
             style={{
@@ -147,4 +148,143 @@ export function NavSection({id, children}: NavSectionProps) {
             {children}
         </h1>
     );
+}
+
+export function sortConsonantsDiacritics(
+    a: IpaConsonantDiacritic,
+    b: IpaConsonantDiacritic
+): [IpaConsonantDiacritic, IpaConsonantDiacritic] {
+    if (a === 'voiceless' || b === '') {
+        return [a, b];
+    } else if (b === 'voiceless' || a === '') {
+        return [b, a];
+    } else {
+        return [a, b];
+    }
+}
+
+export function sortVowelDiacritics(
+    a: IpaVowelDiacritic,
+    b: IpaVowelDiacritic
+): [IpaVowelDiacritic, IpaVowelDiacritic] {
+    if (b === '') {
+        return [a, b];
+    } else if (a === '') {
+        return [b, a];
+    } else {
+        return [a, b];
+    }
+}
+
+export function diacriticToChar(
+    diacritic: IpaConsonantDiacritic | IpaVowelDiacritic,
+    descender: boolean = false
+) {
+    switch (diacritic) {
+        case '': {
+            return '';
+        }
+        case '+ATR': {
+            return '\u0318';
+        }
+        case '-ATR': {
+            return '\u0319';
+        }
+        case 'advanced': {
+            return '\u031f';
+        }
+        case 'apical': {
+            return '\u033a';
+        }
+        case 'aspirated': {
+            return 'ʰ';
+        }
+        case 'breathy': {
+            return '\u0324';
+        }
+        case 'centralized': {
+            return '\u0308';
+        }
+        case 'creaky': {
+            return '\u0330';
+        }
+        case 'dental': {
+            return '\u032a';
+        }
+        case 'dental release': {
+            return 'ⁿ';
+        }
+        case 'extra-short': {
+            return '\u0306';
+        }
+        case 'half-long': {
+            return 'ˑ';
+        }
+        case 'labialized': {
+            return 'ʷ';
+        }
+        case 'laminal': {
+            return '\u033b';
+        }
+        case 'less rounded': {
+            return '\u031c';
+        }
+        case 'linguolabial': {
+            return '\u033c';
+        }
+        case 'long': {
+            return 'ː';
+        }
+        case 'lowered': {
+            return '\u031e';
+        }
+        case 'mid-centralized': {
+            return '\u033d';
+        }
+        case 'more rounded': {
+            return '\u0339';
+        }
+        case 'nasal release': {
+            return 'ⁿ';
+        }
+        case 'nasalized': {
+            return '\u0303';
+        }
+        case 'no audible release': {
+            return '˺';
+        }
+        case 'nonsyllabic': {
+            return '\u032f';
+        }
+        case 'palatalized': {
+            return 'ʲ';
+        }
+        case 'pharyngealized': {
+            return 'ˤ';
+        }
+        case 'raised': {
+            return '\u031d';
+        }
+        case 'retracted': {
+            return '\u0331';
+        }
+        case 'rhoticized': {
+            return '\u02de';
+        }
+        case 'syllabic': {
+            return '\u0329';
+        }
+        case 'velarized': {
+            return 'ˠ';
+        }
+        case 'velarized/pharyngealized': {
+            return '\u0334';
+        }
+        case 'voiced': {
+            return '\u032c';
+        }
+        case 'voiceless': {
+            return descender ? '\u030a' : '\u0325';
+        }
+    }
 }

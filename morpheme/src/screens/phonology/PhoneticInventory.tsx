@@ -1,12 +1,16 @@
-import {NavSection} from '../../common/CommonFuncs.tsx';
-import {useStoreState} from '../../common/CommonVals.tsx';
+import { NavSection } from '../../common/CommonFuncs.tsx';
+import { useStoreState } from '../../common/CommonVals.tsx';
 
 export default function PhoneticInventory() {
     const conlang = useStoreState((s) => s.conlang);
+    console.log(conlang.inventory);
     return (
         <>
             <NavSection id="inventory">Phonetic Inventory</NavSection>
-            <p>Select sounds to add to {conlang.name}&apos;s inventory.</p>
+            <p>
+                Select sounds to add to {conlang.name}&apos;s inventory. Use the
+                next section to add diacritics and set romanizations.
+            </p>
             <h2>Consonants</h2>
             <ConsonantsTable />
             <h2>Vowels</h2>
@@ -81,27 +85,27 @@ function ConsonantsTable() {
                     </tr>
                     <tr>
                         <th>Nasal</th>
-                        <Phono>m&#x0325;</Phono>
+                        <PhonoX />
                         <Phono>m</Phono>
-                        <Phono>ɱ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ɱ</Phono>
-                        <Phono>n&#x032a;&#x030a;</Phono>
-                        <Phono>n&#x032a;</Phono>
-                        <Phono>n&#x0325;</Phono>
+                        <PhonoX />
+                        <PhonoX />
+                        <PhonoX />
                         <Phono>n</Phono>
                         <PhonoX />
                         <PhonoX />
-                        <Phono>ɳ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ɳ</Phono>
-                        <Phono>ȵ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ȵ</Phono>
-                        <Phono>ɲ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ɲ</Phono>
                         <PhonoX />
                         <PhonoX />
-                        <Phono>ŋ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ŋ</Phono>
-                        <Phono>ɴ&#x0325;</Phono>
+                        <PhonoX />
                         <Phono>ɴ</Phono>
                         <PhonoX />
                         <PhonoX />
@@ -299,7 +303,7 @@ function ConsonantsTable() {
                         <Phono>w</Phono>
                         <Phono>ɰ&#x030a;</Phono>
                         <Phono>ɰ</Phono>
-                        <Phono>ʁ&#x030a;</Phono>
+                        <Phono>ʁ&#x0325;</Phono>
                         <Phono>ʁ</Phono>
                         <PhonoX />
                         <PhonoX />
@@ -367,13 +371,13 @@ function ConsonantsTable() {
                         <Phono>ɓ</Phono>
                         <PhonoX />
                         <PhonoX />
-                        <Phono>ƭ&#x032a;</Phono>
-                        <Phono>ɗ&#x032a;</Phono>
+                        <PhonoX />
+                        <PhonoX />
                         <Phono>ƭ</Phono>
                         <Phono>ɗ</Phono>
                         <PhonoX />
                         <PhonoX />
-                        <Phono>ᶑ&#x030a;</Phono>
+                        <PhonoX />
                         <Phono>ᶑ</Phono>
                         <PhonoX />
                         <PhonoX />
@@ -522,11 +526,10 @@ type PhonoProps = {
     vowel?: boolean;
     children: string;
 };
-function Phono({colSpan, vowel = false, children}: PhonoProps) {
+function Phono({ colSpan, vowel = false, children }: PhonoProps) {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
     const time = new Date().getMilliseconds();
-    console.log(conlang.inventory);
     return (
         <td
             onClick={() => {
@@ -589,10 +592,10 @@ function Phono({colSpan, vowel = false, children}: PhonoProps) {
 type PhonoXProps = {
     colSpan?: number;
 };
-function PhonoX({colSpan}: PhonoXProps) {
+function PhonoX({ colSpan }: PhonoXProps) {
     return (
         <td
             colSpan={colSpan}
-            style={{backgroundColor: 'gray', border: 'none'}}></td>
+            style={{ backgroundColor: 'gray', border: 'none' }}></td>
     );
 }

@@ -31,7 +31,7 @@ export interface Conlang {
           }
     >;
 }
-type IpaVowelDiacritic =
+export type IpaVowelDiacritic =
     | ''
     | 'more rounded'
     | 'less rounded'
@@ -52,7 +52,7 @@ type IpaVowelDiacritic =
     | 'half-long'
     | 'extra-short';
 
-type IpaConsonantDiacritic =
+export type IpaConsonantDiacritic =
     | ''
     | 'voiceless'
     | 'voiced'
@@ -65,7 +65,7 @@ type IpaConsonantDiacritic =
     | 'palatalized'
     | 'velarized'
     | 'pharyngealized'
-    | 'velarized or pharyngealized (~)'
+    | 'velarized/pharyngealized'
     | 'raised'
     | 'lowered'
     | 'dental'

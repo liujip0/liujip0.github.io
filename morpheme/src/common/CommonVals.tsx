@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import {create} from 'zustand';
-import {deepUpdate} from './CommonFuncs';
+import { create } from 'zustand';
+import { deepUpdate } from './CommonFuncs';
 import {
     Conlang,
     screenPosition,
@@ -38,10 +38,10 @@ interface StoreState {
 }
 export const useStoreState = create<StoreState>()((set) => ({
     saved: true,
-    setSaved: (value) => set(() => ({saved: value})),
+    setSaved: (value) => set(() => ({ saved: value })),
 
     fileHandle: null,
-    setFileHandle: (value) => set(() => ({fileHandle: value})),
+    setFileHandle: (value) => set(() => ({ fileHandle: value })),
 
     submenus: ['', '', '', ''],
     replaceSubmenus: (position, menu) =>
@@ -67,14 +67,14 @@ export const useStoreState = create<StoreState>()((set) => ({
                         const newWindows = [...s.windows];
                         newWindows[0] = time + '-' + screen;
                         newWindows[2] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else if (
                         s.windows[2] === s.windows[0] ||
                         s.windows[1] === s.windows[0]
                     ) {
                         const newWindows = [...s.windows];
                         newWindows[0] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else {
                         return {};
                     }
@@ -88,14 +88,14 @@ export const useStoreState = create<StoreState>()((set) => ({
                         const newWindows = [...s.windows];
                         newWindows[1] = time + '-' + screen;
                         newWindows[3] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else if (
                         s.windows[0] === s.windows[1] ||
                         s.windows[3] === s.windows[1]
                     ) {
                         const newWindows = [...s.windows];
                         newWindows[1] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else {
                         return {};
                     }
@@ -109,14 +109,14 @@ export const useStoreState = create<StoreState>()((set) => ({
                         const newWindows = [...s.windows];
                         newWindows[2] = time + '-' + screen;
                         newWindows[3] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else if (
                         s.windows[0] === s.windows[2] ||
                         s.windows[3] === s.windows[2]
                     ) {
                         const newWindows = [...s.windows];
                         newWindows[2] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else {
                         return {};
                     }
@@ -130,14 +130,14 @@ export const useStoreState = create<StoreState>()((set) => ({
                         const newWindows = [...s.windows];
                         newWindows[1] = time + '-' + screen;
                         newWindows[3] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else if (
                         s.windows[1] === s.windows[3] ||
                         s.windows[2] === s.windows[3]
                     ) {
                         const newWindows = [...s.windows];
                         newWindows[3] = time + '-' + screen;
-                        return {windows: newWindows};
+                        return { windows: newWindows };
                     } else {
                         return {};
                     }
@@ -152,7 +152,7 @@ export const useStoreState = create<StoreState>()((set) => ({
                 s.windows[1] === s.windows[2] &&
                 s.windows[2] === s.windows[3]
             ) {
-                return {windows: Array(4).fill(time + '-' + screen)};
+                return { windows: Array(4).fill(time + '-' + screen) };
             } else {
                 switch (position) {
                     case 0: {
@@ -160,16 +160,16 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[0] = time + '-' + screen;
                             newWindows[1] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[0] === s.windows[2]) {
                             const newWindows = [...s.windows];
                             newWindows[0] = time + '-' + screen;
                             newWindows[2] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[0] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 1: {
@@ -177,16 +177,16 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[0] = time + '-' + screen;
                             newWindows[1] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[1] === s.windows[3]) {
                             const newWindows = [...s.windows];
                             newWindows[1] = time + '-' + screen;
                             newWindows[3] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[1] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 2: {
@@ -194,16 +194,16 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[2] = time + '-' + screen;
                             newWindows[3] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[2] === s.windows[0]) {
                             const newWindows = [...s.windows];
                             newWindows[2] = time + '-' + screen;
                             newWindows[0] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[2] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 3: {
@@ -211,16 +211,16 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[2] = time + '-' + screen;
                             newWindows[3] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[3] === s.windows[1]) {
                             const newWindows = [...s.windows];
                             newWindows[1] = time + '-' + screen;
                             newWindows[3] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[3] = time + '-' + screen;
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                 }
@@ -233,7 +233,7 @@ export const useStoreState = create<StoreState>()((set) => ({
                 s.windows[1] === s.windows[2] &&
                 s.windows[2] === s.windows[3]
             ) {
-                return {windows: ['0-home', '0-home', '0-home', '0-home']};
+                return { windows: ['0-home', '0-home', '0-home', '0-home'] };
             } else {
                 switch (position) {
                     case 0: {
@@ -241,20 +241,20 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[0] = s.windows[1];
                             newWindows[2] = s.windows[3];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[0] === s.windows[1]) {
                             const newWindows = [...s.windows];
                             newWindows[0] = s.windows[2];
                             newWindows[1] = s.windows[3];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[2] === s.windows[3]) {
                             const newWindows = [...s.windows];
                             newWindows[0] = s.windows[1];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[0] = s.windows[2];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 1: {
@@ -262,20 +262,20 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[1] = s.windows[0];
                             newWindows[3] = s.windows[2];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[1] === s.windows[0]) {
                             const newWindows = [...s.windows];
                             newWindows[1] = s.windows[3];
                             newWindows[2] = s.windows[0];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[2] === s.windows[3]) {
                             const newWindows = [...s.windows];
                             newWindows[1] = s.windows[0];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[1] = s.windows[3];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 2: {
@@ -283,20 +283,20 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[0] = s.windows[1];
                             newWindows[2] = s.windows[3];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[2] === s.windows[3]) {
                             const newWindows = [...s.windows];
                             newWindows[2] = s.windows[0];
                             newWindows[3] = s.windows[1];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[0] === s.windows[1]) {
                             const newWindows = [...s.windows];
                             newWindows[2] = s.windows[3];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[2] = s.windows[0];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                     case 3: {
@@ -304,26 +304,26 @@ export const useStoreState = create<StoreState>()((set) => ({
                             const newWindows = [...s.windows];
                             newWindows[1] = s.windows[0];
                             newWindows[3] = s.windows[2];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[3] === s.windows[2]) {
                             const newWindows = [...s.windows];
                             newWindows[2] = s.windows[0];
                             newWindows[3] = s.windows[1];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else if (s.windows[0] === s.windows[1]) {
                             const newWindows = [...s.windows];
                             newWindows[3] = s.windows[2];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         } else {
                             const newWindows = [...s.windows];
                             newWindows[3] = s.windows[1];
-                            return {windows: newWindows};
+                            return { windows: newWindows };
                         }
                     }
                 }
             }
         }),
-    swapAllWindows: (value) => set(() => ({windows: value})),
+    swapAllWindows: (value) => set(() => ({ windows: value })),
     conlang: {
         name: 'none',
         widgets: {
@@ -345,11 +345,11 @@ export const useStoreState = create<StoreState>()((set) => ({
             conlang: deepUpdate(s.conlang, path, value),
             saved: false
         })),
-    replaceConlang: (value) => set(() => ({conlang: value, saved: false})),
+    replaceConlang: (value) => set(() => ({ conlang: value, saved: false })),
 
     lastInput: '',
-    setLastInput: (value) => set(() => ({lastInput: value})),
+    setLastInput: (value) => set(() => ({ lastInput: value })),
 
     cxsExpanded: false,
-    setCxsExpanded: (value) => set(() => ({cxsExpanded: value}))
+    setCxsExpanded: (value) => set(() => ({ cxsExpanded: value }))
 }));
