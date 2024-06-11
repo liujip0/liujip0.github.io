@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavSection } from '../../common/Components.tsx';
+import { Alert, NavSection } from '../../common/Components.tsx';
 import {
     diacriticToChar,
     sortConsonantsDiacritics,
@@ -46,9 +46,25 @@ function PhonemesList() {
                         <th>
                             Romanization
                             <br />
-                            {copyIpa ?
+                            {!copyIpa ?
                                 <button
                                     onClick={() => {
+                                        setCopyIpa(true);
+                                    }}>
+                                    Copy IPA
+                                </button>
+                            :   <Alert
+                                    title="Test"
+                                    description={
+                                        'Are you sure you want to set ' +
+                                        'the romanizations of all phonemes ' +
+                                        'to their IPA values? This cannot be ' +
+                                        'undone.'
+                                    }
+                                    onDecline={() => {
+                                        setCopyIpa(false);
+                                    }}
+                                    onAccept={() => {
                                         const newInventory = conlang.inventory;
                                         conlang.inventory.forEach(
                                             (item, index) => {
@@ -58,13 +74,13 @@ function PhonemesList() {
                                                 });
                                             }
                                         );
-                                    }}></button>
-                            :   <button
-                                    onClick={() => {
-                                        setCopyIpa(true);
-                                    }}>
-                                    Copy IPA
-                                </button>
+                                        changeConlang(
+                                            ['inventory'],
+                                            newInventory
+                                        );
+                                        setCopyIpa(false);
+                                    }}
+                                />
                             }
                         </th>
                         <th>Actions</th>
