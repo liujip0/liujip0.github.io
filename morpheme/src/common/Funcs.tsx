@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { IpaConsonantDiacritic, IpaVowelDiacritic } from './CommonTypes.tsx';
 import { CXStoIPA, IPAtoCXS } from './ConlangXSampa.tsx';
+import { IpaConsonantDiacritic, IpaVowelDiacritic } from './Types.tsx';
 
 export async function getFile(options: object) {
     if (!window.showOpenFilePicker) {
@@ -94,60 +94,6 @@ export function unparseCxs(ipa: string): string {
         cxs += ipa[i] in IPAtoCXS ? IPAtoCXS[ipa[i]] : ipa[i];
     }
     return cxs;
-}
-
-type NavBarProps = {
-    sections: Array<{
-        label: string;
-        id: string;
-    }>;
-};
-export function NavBar({ sections }: NavBarProps) {
-    return (
-        <div
-            style={{
-                position: 'sticky',
-                top: '0',
-                display: 'flex',
-                backgroundColor: 'white'
-            }}>
-            {sections.map((x) => {
-                return (
-                    <button
-                        key={x.id}
-                        style={{
-                            margin: '0.2em'
-                        }}
-                        onClick={() => {
-                            const element = document.getElementById(x.id)!;
-                            element.scrollIntoView({
-                                block: 'center',
-                                inline: 'nearest',
-                                behavior: 'smooth'
-                            });
-                        }}>
-                        {x.label}
-                    </button>
-                );
-            })}
-        </div>
-    );
-}
-
-type NavSectionProps = {
-    id: string;
-    children: React.ReactNode;
-};
-export function NavSection({ id, children }: NavSectionProps) {
-    return (
-        <h1
-            style={{
-                marginTop: '1em'
-            }}
-            id={id}>
-            {children}
-        </h1>
-    );
 }
 
 export function sortConsonantsDiacritics(

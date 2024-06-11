@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { create } from 'zustand';
-import { deepUpdate } from './CommonFuncs';
+import { deepUpdate } from './Funcs';
 import {
     Conlang,
     screenPosition,
@@ -8,7 +8,7 @@ import {
     submenuStr,
     submenusArr,
     windowsArr
-} from './CommonTypes';
+} from './Types';
 
 interface StoreState {
     saved: boolean;

@@ -1,6 +1,6 @@
-import {createRef, useRef, useState} from 'react';
-import {useStoreState} from '../common/CommonVals';
-import {DimenRes} from '../common/Resources';
+import { createRef, useRef, useState } from 'react';
+import { DimenRes } from '../common/Resources';
+import { useStoreState } from '../common/Vals';
 
 export default function SettingsScreen() {
     const conlang = useStoreState((s) => s.conlang);
@@ -140,10 +140,10 @@ type RadioInputProps = {
     defaultValue?: string;
     onSave: (value: string) => void;
 };
-function RadioInput({label, options, defaultValue, onSave}: RadioInputProps) {
+function RadioInput({ label, options, defaultValue, onSave }: RadioInputProps) {
     const time = new Date().getTime();
     const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
-        Array.from({length: options.length}, () =>
+        Array.from({ length: options.length }, () =>
             createRef<HTMLInputElement>()
         )
     );

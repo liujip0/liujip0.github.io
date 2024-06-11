@@ -1,14 +1,15 @@
+import { useState } from 'react';
+import { NavSection } from '../../common/Components.tsx';
 import {
-    NavSection,
     diacriticToChar,
     sortConsonantsDiacritics,
     sortVowelDiacritics
-} from '../../common/CommonFuncs.tsx';
+} from '../../common/Funcs.tsx';
 import {
     IpaConsonantDiacritic,
     IpaVowelDiacritic
-} from '../../common/CommonTypes.tsx';
-import { useStoreState } from '../../common/CommonVals.tsx';
+} from '../../common/Types.tsx';
+import { useStoreState } from '../../common/Vals.tsx';
 
 export default function Phonemes() {
     return (
@@ -27,6 +28,7 @@ function PhonemesList() {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
     const time = new Date().getMilliseconds();
+    const [copyIpa, setCopyIpa] = useState(false);
     return (
         <div
             style={{
@@ -44,7 +46,26 @@ function PhonemesList() {
                         <th>
                             Romanization
                             <br />
-                            <button>Copy IPA</button>
+                            {copyIpa ?
+                                <button
+                                    onClick={() => {
+                                        const newInventory = conlang.inventory;
+                                        conlang.inventory.forEach(
+                                            (item, index) => {
+                                                newInventory.splice(index, 1, {
+                                                    ...item,
+                                                    romanization: item.ipa
+                                                });
+                                            }
+                                        );
+                                    }}></button>
+                            :   <button
+                                    onClick={() => {
+                                        setCopyIpa(true);
+                                    }}>
+                                    Copy IPA
+                                </button>
+                            }
                         </th>
                         <th>Actions</th>
                     </tr>

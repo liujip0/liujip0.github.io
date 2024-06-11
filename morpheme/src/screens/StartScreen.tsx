@@ -1,7 +1,7 @@
-import {useRef} from 'react';
-import {createFile, getFile, writeFile} from '../common/CommonFuncs';
-import {Conlang} from '../common/CommonTypes.tsx';
-import {useStoreState} from '../common/CommonVals';
+import { useRef } from 'react';
+import { createFile, getFile, writeFile } from '../common/Funcs.tsx';
+import { Conlang } from '../common/Types.tsx';
+import { useStoreState } from '../common/Vals.tsx';
 
 export default function StartScreen() {
     const replaceConlang = useStoreState((s) => s.replaceConlang);
@@ -92,7 +92,7 @@ export default function StartScreen() {
                             types: [
                                 {
                                     description: 'JSON Files',
-                                    accept: {'application/json': ['.json']}
+                                    accept: { 'application/json': ['.json'] }
                                 }
                             ],
                             id: 'morpheme-picker',

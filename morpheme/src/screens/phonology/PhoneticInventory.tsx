@@ -1,5 +1,5 @@
-import { NavSection } from '../../common/CommonFuncs.tsx';
-import { useStoreState } from '../../common/CommonVals.tsx';
+import { NavSection } from '../../common/Components.tsx';
+import { useStoreState } from '../../common/Vals.tsx';
 
 export default function PhoneticInventory() {
     const conlang = useStoreState((s) => s.conlang);

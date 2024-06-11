@@ -1,5 +1,5 @@
-import {screenPosition} from '../common/CommonTypes.tsx';
-import {useStoreState} from '../common/CommonVals.tsx';
+import { screenPosition } from '../common/Types.tsx';
+import { useStoreState } from '../common/Vals.tsx';
 import HomeScreen from './HomeScreen.tsx';
 import ScreensMenus from './ScreensMenus';
 import SettingsScreen from './SettingsScreen.tsx';
@@ -65,7 +65,7 @@ type ScreenProps = {
     location: Record<string, string>;
     position: screenPosition;
 };
-function Screen({location, position}: ScreenProps) {
+function Screen({ location, position }: ScreenProps) {
     const windows = useStoreState((s) => s.windows);
     return (
         <div

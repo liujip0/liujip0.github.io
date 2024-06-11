@@ -1,5 +1,5 @@
-import {writeFile} from './common/CommonFuncs';
-import {useStoreState} from './common/CommonVals';
+import { writeFile } from './common/Funcs';
+import { useStoreState } from './common/Vals';
 
 export default function TopBar() {
     const conlang = useStoreState((s) => s.conlang);
@@ -63,7 +63,7 @@ type MenuItemProps = {
     onClick?: () => void;
     children: React.ReactNode;
 };
-function MenuItem({onClick, children}: MenuItemProps) {
+function MenuItem({ onClick, children }: MenuItemProps) {
     return (
         <div
             style={{

@@ -1,6 +1,6 @@
-import {MutableRefObject, useRef} from 'react';
-import {parseCxs, unparseCxs} from './common/CommonFuncs.tsx';
-import {useStoreState} from './common/CommonVals.tsx';
+import { MutableRefObject, useRef } from 'react';
+import { parseCxs, unparseCxs } from './common/Funcs.tsx';
+import { useStoreState } from './common/Vals.tsx';
 
 export default function Widgets() {
     const conlang = useStoreState((s) => s.conlang);
@@ -154,7 +154,7 @@ type WidgetProps = {
     onClick?: () => void;
     children: React.ReactNode;
 };
-function Widget({id, onClick, children}: WidgetProps) {
+function Widget({ id, onClick, children }: WidgetProps) {
     return (
         <div
             id={id}

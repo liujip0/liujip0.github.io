@@ -1,6 +1,6 @@
-import {MdAdd, MdClose, MdOutlineSwapHoriz} from 'react-icons/md';
-import {screenPosition, screenStr} from '../common/CommonTypes';
-import {useStoreState} from '../common/CommonVals';
+import { MdAdd, MdClose, MdOutlineSwapHoriz } from 'react-icons/md';
+import { screenPosition, screenStr } from '../common/Types';
+import { useStoreState } from '../common/Vals';
 
 export default function ScreensMenus() {
     return (
@@ -49,7 +49,7 @@ type MenuButtonContProps = {
     position: Record<string, string>;
     children: React.ReactNode;
 };
-function MenuButtonCont({position, children}: MenuButtonContProps) {
+function MenuButtonCont({ position, children }: MenuButtonContProps) {
     return (
         <div
             style={{
@@ -69,7 +69,7 @@ type MenuButtonProps = {
     onClick: () => void;
     children: React.ReactNode;
 };
-function MenuButton({onClick, children}: MenuButtonProps) {
+function MenuButton({ onClick, children }: MenuButtonProps) {
     return (
         <button
             onClick={onClick}
@@ -87,7 +87,7 @@ function MenuButton({onClick, children}: MenuButtonProps) {
 type MenuButtonsProps = {
     position: screenPosition;
 };
-function MenuButtons({position}: MenuButtonsProps) {
+function MenuButtons({ position }: MenuButtonsProps) {
     const removeWindows = useStoreState((s) => s.removeWindows);
     const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
     return (
@@ -123,7 +123,7 @@ type SubmenuButtonProps = {
     screen: screenStr;
     children: React.ReactNode;
 };
-function SubmenuButton({position, screen, children}: SubmenuButtonProps) {
+function SubmenuButton({ position, screen, children }: SubmenuButtonProps) {
     const addWindows = useStoreState((s) => s.addWindows);
     const swapWindows = useStoreState((s) => s.swapWindows);
     const submenus = useStoreState((s) => s.submenus);
@@ -151,7 +151,7 @@ function SubmenuButton({position, screen, children}: SubmenuButtonProps) {
 type SubmenuProps = {
     position: screenPosition;
 };
-function Submenu({position}: SubmenuProps) {
+function Submenu({ position }: SubmenuProps) {
     const submenus = useStoreState((s) => s.submenus);
     const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
     return (
