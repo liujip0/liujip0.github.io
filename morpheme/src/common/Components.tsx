@@ -23,7 +23,7 @@ export function NavBar({ sections }: NavBarProps) {
                         onClick={() => {
                             const element = document.getElementById(x.id)!;
                             element.scrollIntoView({
-                                block: 'center',
+                                block: 'start',
                                 inline: 'nearest',
                                 behavior: 'smooth'
                             });
@@ -44,7 +44,8 @@ export function NavSection({ id, children }: NavSectionProps) {
     return (
         <h1
             style={{
-                marginTop: '1em'
+                marginTop: '1em',
+                paddingTop: '1.3em'
             }}
             id={id}>
             {children}

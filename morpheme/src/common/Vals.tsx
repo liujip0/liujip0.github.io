@@ -233,7 +233,9 @@ export const useStoreState = create<StoreState>()((set) => ({
                 s.windows[1] === s.windows[2] &&
                 s.windows[2] === s.windows[3]
             ) {
-                return { windows: ['0-home', '0-home', '0-home', '0-home'] };
+                return {
+                    windows: ['0-start', '0-start', '0-start', '0-start']
+                };
             } else {
                 switch (position) {
                     case 0: {

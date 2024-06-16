@@ -539,25 +539,16 @@ function Phono({ colSpan, vowel = false, children }: PhonoProps) {
                         (item) => item.base !== children
                     );
                 } else {
-                    newInventory.push(
-                        vowel ?
-                            {
-                                id: time + '-' + children,
-                                ipa: children,
-                                base: children,
-                                romanization: '',
-                                type: 'vowel',
-                                diacritics: ['', '']
-                            }
-                        :   {
-                                id: time + '-' + children,
-                                ipa: children,
-                                base: children,
-                                romanization: '',
-                                type: 'consonant',
-                                diacritics: ['', '']
-                            }
-                    );
+                    newInventory.push({
+                        id: time + '-' + children,
+                        ipa: children,
+                        base: children,
+                        romanization: '',
+                        type: vowel ? 'vowel' : 'consonant',
+                        diacritics: ['', ''],
+                        allophones: [],
+                        allophoneOf: ''
+                    });
                     newInventory.sort((a, b) => {
                         if (a.type === 'consonant') {
                             if (b.type === 'consonant') {

@@ -12,24 +12,7 @@ export interface Conlang {
             enabled: boolean;
         };
     };
-    inventory: Array<
-        | {
-              id: string;
-              ipa: string;
-              base: string;
-              romanization: string;
-              type: 'vowel';
-              diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
-          }
-        | {
-              id: string;
-              ipa: string;
-              base: string;
-              romanization: string;
-              type: 'consonant';
-              diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
-          }
-    >;
+    inventory: Array<Phoneme>;
 }
 export type IpaVowelDiacritic =
     | ''
@@ -74,6 +57,27 @@ export type IpaConsonantDiacritic =
     | 'nasal release'
     | 'dental release'
     | 'no audible release';
+export type Phoneme =
+    | {
+          id: string;
+          ipa: string;
+          base: string;
+          romanization: string;
+          type: 'vowel';
+          diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
+          allophones: Array<string>;
+          allophoneOf: string;
+      }
+    | {
+          id: string;
+          ipa: string;
+          base: string;
+          romanization: string;
+          type: 'consonant';
+          diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
+          allophones: Array<string>;
+          allophoneOf: string;
+      };
 
 export type screenPosition = 0 | 1 | 2 | 3;
 export type screenStr =
