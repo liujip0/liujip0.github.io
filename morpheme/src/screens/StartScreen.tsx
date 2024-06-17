@@ -72,7 +72,10 @@ export default function StartScreen() {
                 onClick={() => {
                     if (conlangNameRef.current) {
                         const name = conlangNameRef.current.value;
-                        const newConlang: Conlang = conlangInit as Conlang;
+                        const newConlang: Conlang = {
+                            ...conlangInit,
+                            name: name
+                        } as Conlang;
                         createFile({
                             types: [
                                 {
