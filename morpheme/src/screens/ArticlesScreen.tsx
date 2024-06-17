@@ -13,27 +13,9 @@ import { Article, Folder } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export function ArticlesScreen() {
-    return (
-        <div
-            style={{
-                display: 'flex',
-                border: '1px solid black',
-                height: '100%'
-            }}>
-            <Articles />
-            <ArticlesEditor />
-        </div>
-    );
-}
-
-function Articles() {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
     const [currentArticle, setCurrentArticle] = useState('root');
-    console.log(currentArticle);
-    console.log(conlang.articles.list);
-    const [deleteArticle, setDeleteArticle] = useState(false);
-    const [renameArticle, setRenameArticle] = useState(false);
     const sortArticles = () => {
         const newArticles = conlang.articles.list;
         newArticles.sort((a, b) => {
@@ -71,6 +53,45 @@ function Articles() {
             sortArticles();
         }
     };
+    return (
+        <div
+            style={{
+                display: 'flex',
+                border: '1px solid black',
+                height: '100%'
+            }}>
+            <Articles
+                currentArticle={currentArticle}
+                setCurrentArticle={setCurrentArticle}
+                changeArticle={changeArticle}
+                sortArticles={sortArticles}
+            />
+            <ArticleEditor
+                currentArticle={currentArticle}
+                changeArticle={changeArticle}
+            />
+        </div>
+    );
+}
+
+type ArticlesProps = {
+    currentArticle: string;
+    setCurrentArticle: (value: string) => void;
+    changeArticle: (id: string, property: string, newValue: unknown) => void;
+    sortArticles: () => void;
+};
+function Articles({
+    currentArticle,
+    setCurrentArticle,
+    changeArticle,
+    sortArticles
+}: ArticlesProps) {
+    const conlang = useStoreState((s) => s.conlang);
+    const changeConlang = useStoreState((s) => s.changeConlang);
+    console.log(currentArticle);
+    console.log(conlang.articles.list);
+    const [deleteArticle, setDeleteArticle] = useState(false);
+    const [renameArticle, setRenameArticle] = useState(false);
     const addArticle = (article: Folder | Article) => {
         const datetime = new Date();
         const id =
@@ -342,12 +363,34 @@ function ArticlesList({
     );
 }
 
-function ArticlesEditor() {
+type ArticleEditorProps = {
+    currentArticle: string;
+    changeArticle: (id: string, property: string, newValue: unknown) => void;
+};
+function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
+    const conlang = useStoreState((s) => s.conlang);
+    const article = conlang.articles.list.find((x) => x.id === currentArticle)!;
     return (
         <div
             style={{
                 border: '2px solid aquamarine',
                 flex: '1'
-            }}></div>
+            }}>
+            {article.type === 'article' && (
+                <textarea
+                    style={{
+                        width: '100%',
+                        height: '100%'
+                    }}
+                    value={article.contents}
+                    onInput={(event) => {
+                        changeArticle(
+                            article.id,
+                            'contents',
+                            event.currentTarget.value
+                        );
+                    }}></textarea>
+            )}
+        </div>
     );
 }
