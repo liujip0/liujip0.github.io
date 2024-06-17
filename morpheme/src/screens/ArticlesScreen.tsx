@@ -57,7 +57,6 @@ export function ArticlesScreen() {
         <div
             style={{
                 display: 'flex',
-                border: '1px solid black',
                 height: '100%'
             }}>
             <Articles
@@ -121,7 +120,6 @@ function Articles({
     return (
         <div
             style={{
-                border: '1px solid red',
                 width: '12em',
                 display: 'flex',
                 backgroundColor: 'lightgray',
@@ -373,7 +371,6 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
     return (
         <div
             style={{
-                border: '2px solid aquamarine',
                 flex: '1'
             }}>
             {article.type === 'article' && (
