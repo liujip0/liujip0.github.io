@@ -1,5 +1,6 @@
 import { screenPosition } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
+import { ArticlesScreen } from './ArticlesScreen.tsx';
 import HomeScreen from './HomeScreen.tsx';
 import ScreensMenus from './ScreensMenus';
 import SettingsScreen from './SettingsScreen.tsx';
@@ -79,6 +80,9 @@ function Screen({ location, position }: ScreenProps) {
             {windows[position].split('-')[1] === 'home' && <HomeScreen />}
             {windows[position].split('-')[1] === 'phonology' && (
                 <PhonologyScreen />
+            )}
+            {windows[position].split('-')[1] === 'articles' && (
+                <ArticlesScreen />
             )}
             {windows[position].split('-')[1] === 'settings' && (
                 <SettingsScreen />

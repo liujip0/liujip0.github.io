@@ -52,6 +52,31 @@ export default function SettingsScreen() {
                     );
                 }}
             />
+
+            <h2>Articles</h2>
+            <RadioInput
+                label="Folders on top"
+                description={
+                    'When articles are listed together, folders will show up ' +
+                    'on top regardless of alphabetical order.'
+                }
+                options={[
+                    {
+                        label: 'Yes',
+                        value: 'true'
+                    },
+                    {
+                        label: 'No',
+                        value: 'false'
+                    }
+                ]}
+                onSave={(value) => {
+                    changeConlang(
+                        ['articles', 'foldersOnTop'],
+                        value === 'true'
+                    );
+                }}
+            />
         </>
     );
 }
@@ -138,9 +163,16 @@ type RadioInputProps = {
     label: string;
     options: Array<radioInputOption>;
     defaultValue?: string;
+    description?: string;
     onSave: (value: string) => void;
 };
-function RadioInput({ label, options, defaultValue, onSave }: RadioInputProps) {
+function RadioInput({
+    label,
+    options,
+    defaultValue,
+    description,
+    onSave
+}: RadioInputProps) {
     const time = new Date().getTime();
     const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
         Array.from({ length: options.length }, () =>
@@ -207,6 +239,15 @@ function RadioInput({ label, options, defaultValue, onSave }: RadioInputProps) {
                 }}>
                 Save
             </button>
+            {description && (
+                <div
+                    style={{
+                        fontSize: DimenRes.input.description,
+                        fontWeight: 'normal'
+                    }}>
+                    {description}
+                </div>
+            )}
         </label>
     );
 }

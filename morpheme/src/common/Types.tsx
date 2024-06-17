@@ -12,8 +12,28 @@ export interface Conlang {
             enabled: boolean;
         };
     };
-    inventory: Array<Phoneme>;
+    phonology: {
+        inventory: Array<Phoneme>;
+    };
+    articles: {
+        list: Array<Folder | Article>;
+        foldersOnTop: boolean;
+    };
 }
+export type Folder = {
+    id: string;
+    name: string;
+    type: 'folder';
+    path: Array<string>;
+    contents: Array<string>;
+};
+export type Article = {
+    id: string;
+    name: string;
+    type: 'article';
+    path: Array<string>;
+    contents: string;
+};
 export type IpaVowelDiacritic =
     | ''
     | 'more rounded'
@@ -84,7 +104,7 @@ export type screenStr =
     | 'start'
     | 'home'
     | 'phonology'
-    | 'grammar'
+    | 'articles'
     | 'lexicon'
     | 'settings';
 export type windowsArr = Array<string>;

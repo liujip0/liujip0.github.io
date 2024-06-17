@@ -100,3 +100,22 @@ export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
         </div>
     );
 }
+
+type IconButtonProps = {
+    onClick?: () => void;
+    children: React.ReactNode;
+};
+export function IconButton({ onClick, children }: IconButtonProps) {
+    return (
+        <button
+            onClick={onClick}
+            style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                margin: '0',
+                padding: '0.3em'
+            }}>
+            {children}
+        </button>
+    );
+}

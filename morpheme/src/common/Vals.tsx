@@ -10,6 +10,37 @@ import {
     windowsArr
 } from './Types';
 
+export const conlangInit = {
+    name: 'none',
+    widgets: {
+        charInsert: {
+            enabled: true,
+            chars: ['A', 'a', 'B', 'b', 'C', 'c']
+        },
+        dictSearch: {
+            enabled: true
+        },
+        cxs: {
+            enabled: true
+        }
+    },
+    phonology: {
+        inventory: []
+    },
+    articles: {
+        list: [
+            {
+                type: 'folder',
+                id: 'root',
+                path: [],
+                contents: [],
+                name: '/'
+            }
+        ],
+        foldersOnTop: false
+    }
+};
+
 interface StoreState {
     saved: boolean;
     setSaved: (value: boolean) => void;
@@ -326,22 +357,7 @@ export const useStoreState = create<StoreState>()((set) => ({
             }
         }),
     swapAllWindows: (value) => set(() => ({ windows: value })),
-    conlang: {
-        name: 'none',
-        widgets: {
-            charInsert: {
-                enabled: true,
-                chars: ['A', 'a', 'B', 'b', 'C', 'c']
-            },
-            dictSearch: {
-                enabled: true
-            },
-            cxs: {
-                enabled: true
-            }
-        },
-        inventory: []
-    },
+    conlang: conlangInit as Conlang,
     changeConlang: (path, value) =>
         set((s) => ({
             conlang: deepUpdate(s.conlang, path, value),

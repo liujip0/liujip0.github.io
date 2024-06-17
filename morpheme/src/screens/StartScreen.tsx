@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { createFile, getFile, writeFile } from '../common/Funcs.tsx';
 import { Conlang } from '../common/Types.tsx';
-import { useStoreState } from '../common/Vals.tsx';
+import { conlangInit, useStoreState } from '../common/Vals.tsx';
 
 export default function StartScreen() {
     const replaceConlang = useStoreState((s) => s.replaceConlang);
@@ -72,22 +72,7 @@ export default function StartScreen() {
                 onClick={() => {
                     if (conlangNameRef.current) {
                         const name = conlangNameRef.current.value;
-                        const newConlang: Conlang = {
-                            name: name,
-                            widgets: {
-                                charInsert: {
-                                    enabled: true,
-                                    chars: ['A', 'a', 'B', 'b', 'C', 'c']
-                                },
-                                dictSearch: {
-                                    enabled: true
-                                },
-                                cxs: {
-                                    enabled: true
-                                }
-                            },
-                            inventory: []
-                        };
+                        const newConlang: Conlang = conlangInit as Conlang;
                         createFile({
                             types: [
                                 {

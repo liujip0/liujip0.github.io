@@ -1,6 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { CXStoIPA, IPAtoCXS } from './ConlangXSampa.tsx';
-import { IpaConsonantDiacritic, IpaVowelDiacritic } from './Types.tsx';
+import {
+    Article,
+    Folder,
+    IpaConsonantDiacritic,
+    IpaVowelDiacritic
+} from './Types.tsx';
 
 export async function getFile(options: object) {
     if (!window.showOpenFilePicker) {
@@ -233,4 +238,24 @@ export function diacriticToChar(
             return descender ? '\u030a' : '\u0325';
         }
     }
+}
+
+export function findArticleChildren(
+    id: string,
+    articles: Array<Folder | Article>
+): Array<string> {
+    const article = articles.find((x) => x.id === id)!;
+    let res: Array<string> = [];
+    res.push(id);
+    if (article.type === 'folder') {
+        article.contents.forEach((item) => {
+            res = res.concat(
+                findArticleChildren(
+                    articles.find((x) => x.id === item)!.id,
+                    articles
+                )
+            );
+        });
+    }
+    return res;
 }

@@ -1,4 +1,5 @@
 import { MdAdd, MdClose, MdOutlineSwapHoriz } from 'react-icons/md';
+import { IconButton } from '../common/Components.tsx';
 import { screenPosition, screenStr } from '../common/Types';
 import { useStoreState } from '../common/Vals';
 
@@ -65,25 +66,6 @@ function MenuButtonCont({ position, children }: MenuButtonContProps) {
     );
 }
 
-type MenuButtonProps = {
-    onClick: () => void;
-    children: React.ReactNode;
-};
-function MenuButton({ onClick, children }: MenuButtonProps) {
-    return (
-        <button
-            onClick={onClick}
-            style={{
-                backgroundColor: 'transparent',
-                border: 'none',
-                margin: '0',
-                padding: '0.3em'
-            }}>
-            {children}
-        </button>
-    );
-}
-
 type MenuButtonsProps = {
     position: screenPosition;
 };
@@ -96,24 +78,24 @@ function MenuButtons({ position }: MenuButtonsProps) {
                 display: 'flex',
                 flexDirection: 'column'
             }}>
-            <MenuButton
+            <IconButton
                 onClick={() => {
                     removeWindows(position);
                 }}>
-                <MdClose />
-            </MenuButton>
-            <MenuButton
+                <MdClose size={17} />
+            </IconButton>
+            <IconButton
                 onClick={() => {
                     replaceSubmenus(position, 'swap');
                 }}>
-                <MdOutlineSwapHoriz />
-            </MenuButton>
-            <MenuButton
+                <MdOutlineSwapHoriz size={17} />
+            </IconButton>
+            <IconButton
                 onClick={() => {
                     replaceSubmenus(position, 'add');
                 }}>
-                <MdAdd />
-            </MenuButton>
+                <MdAdd size={17} />
+            </IconButton>
         </div>
     );
 }
@@ -178,8 +160,8 @@ function Submenu({ position }: SubmenuProps) {
             </SubmenuButton>
             <SubmenuButton
                 position={position}
-                screen={'grammar'}>
-                Grammar
+                screen={'articles'}>
+                Articles
             </SubmenuButton>
             <SubmenuButton
                 position={position}

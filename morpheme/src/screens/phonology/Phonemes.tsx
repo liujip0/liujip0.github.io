@@ -28,21 +28,23 @@ export default function Phonemes() {
 function PhonemesTable() {
     const conlang = useStoreState((s) => s.conlang);
     const changeConlang = useStoreState((s) => s.changeConlang);
-    const time = new Date().getMilliseconds();
     const [copyIpa, setCopyIpa] = useState(false);
     const changePhoneme = (id: string, property: string, newValue: unknown) => {
-        const index = conlang.inventory.findIndex((value) => value.id === id);
-        const newInventory = conlang.inventory;
+        const index = conlang.phonology.inventory.findIndex(
+            (value) => value.id === id
+        );
+        const newInventory = conlang.phonology.inventory;
         if (index !== -1) {
             newInventory.splice(index, 1, {
-                ...conlang.inventory[index],
+                ...conlang.phonology.inventory[index],
                 [property]: newValue
             });
-            changeConlang(['inventory'], newInventory);
+            changeConlang(['phonology', 'inventory'], newInventory);
         }
     };
     const addPhoneme = (phoneme: Phoneme) => {
-        const newInventory = conlang.inventory;
+        const time = new Date().getMilliseconds();
+        const newInventory = conlang.phonology.inventory;
         newInventory.push({
             ...phoneme,
             id: time + '-' + phoneme.base
@@ -62,10 +64,10 @@ function PhonemesTable() {
                 }
             }
         });
-        changeConlang(['inventory'], newInventory);
+        changeConlang(['phoology', 'inventory'], newInventory);
     };
     const deletePhoneme = (id: string) => {
-        let newInventory = conlang.inventory;
+        let newInventory = conlang.phonology.inventory;
         newInventory = newInventory.filter((x) => x.id !== id);
         newInventory.sort((a, b) => {
             if (a.type === 'consonant') {
@@ -82,11 +84,13 @@ function PhonemesTable() {
                 }
             }
         });
-        changeConlang(['inventory'], newInventory);
+        changeConlang(['phonology', 'inventory'], newInventory);
     };
     const getPhoneme = (id: string) => {
-        const index = conlang.inventory.findIndex((value) => value.id === id);
-        return conlang.inventory[index];
+        const index = conlang.phonology.inventory.findIndex(
+            (value) => value.id === id
+        );
+        return conlang.phonology.inventory[index];
     };
     return (
         <div
@@ -106,15 +110,15 @@ function PhonemesTable() {
                         <th>
                             Romanization
                             <br />
-                            {!copyIpa ?
-                                <button
-                                    onClick={() => {
-                                        setCopyIpa(true);
-                                    }}>
-                                    Copy IPA
-                                </button>
-                            :   <Alert
-                                    title="Test"
+                            <button
+                                onClick={() => {
+                                    setCopyIpa(true);
+                                }}>
+                                Copy IPA
+                            </button>
+                            {copyIpa && (
+                                <Alert
+                                    title="Confirmation"
                                     description={
                                         'Are you sure you want to set ' +
                                         'the romanizations of all phonemes ' +
@@ -125,8 +129,9 @@ function PhonemesTable() {
                                         setCopyIpa(false);
                                     }}
                                     onAccept={() => {
-                                        const newInventory = conlang.inventory;
-                                        conlang.inventory.forEach(
+                                        const newInventory =
+                                            conlang.phonology.inventory;
+                                        conlang.phonology.inventory.forEach(
                                             (item, index) => {
                                                 newInventory.splice(index, 1, {
                                                     ...item,
@@ -135,20 +140,20 @@ function PhonemesTable() {
                                             }
                                         );
                                         changeConlang(
-                                            ['inventory'],
+                                            ['phonology', 'inventory'],
                                             newInventory
                                         );
                                         setCopyIpa(false);
                                     }}
                                 />
-                            }
+                            )}
                         </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <PhonemesList
-                        list={conlang.inventory}
+                        list={conlang.phonology.inventory}
                         changePhoneme={changePhoneme}
                         addPhoneme={addPhoneme}
                         deletePhoneme={deletePhoneme}
@@ -305,7 +310,7 @@ function PhonemeTr({
                     }}
                     value={allophoneOf}>
                     <option value={''}>-</option>
-                    {conlang.inventory.map((x) => {
+                    {conlang.phonology.inventory.map((x) => {
                         if (x.id !== item.id) {
                             return (
                                 <option
