@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import {
     MdOutlineCreateNewFolder,
     MdOutlineDelete,
+    MdOutlineDriveFileRenameOutline,
     MdOutlineFolder,
     MdOutlineInsertDriveFile,
     MdOutlineNoteAdd
@@ -32,26 +33,9 @@ function Articles() {
     console.log(currentArticle);
     console.log(conlang.articles.list);
     const [deleteArticle, setDeleteArticle] = useState(false);
-    const changeArticle = (id: string, property: string, newValue: unknown) => {
-        const index = conlang.articles.list.findIndex(
-            (value) => value.id === id
-        );
+    const [renameArticle, setRenameArticle] = useState(false);
+    const sortArticles = () => {
         const newArticles = conlang.articles.list;
-        if (index !== -1) {
-            newArticles.splice(index, 1, {
-                ...conlang.articles.list[index],
-                [property]: newValue
-            });
-            changeConlang(['articles', 'list'], newArticles);
-        }
-    };
-    const addArticle = (article: Folder | Article) => {
-        const time = new Date().getMilliseconds();
-        const newArticles = conlang.articles.list;
-        newArticles.push({
-            ...article,
-            id: article.type + '-' + time + '-' + article.name
-        });
         newArticles.sort((a, b) => {
             if (conlang.articles.foldersOnTop) {
                 if (a.type === 'folder') {
@@ -71,7 +55,41 @@ function Articles() {
                 return a.name < b.name ? -1 : 1;
             }
         });
-        return article.type + '-' + time + '-' + article.name;
+        changeConlang(['articles', 'list'], newArticles);
+    };
+    const changeArticle = (id: string, property: string, newValue: unknown) => {
+        const index = conlang.articles.list.findIndex(
+            (value) => value.id === id
+        );
+        const newArticles = conlang.articles.list;
+        if (index !== -1) {
+            newArticles.splice(index, 1, {
+                ...conlang.articles.list[index],
+                [property]: newValue
+            });
+            changeConlang(['articles', 'list'], newArticles);
+            sortArticles();
+        }
+    };
+    const addArticle = (article: Folder | Article) => {
+        const datetime = new Date();
+        const id =
+            article.type +
+            datetime.getHours() +
+            '-' +
+            datetime.getMinutes() +
+            '-' +
+            datetime.getSeconds() +
+            '-' +
+            datetime.getMilliseconds();
+        const newArticles = conlang.articles.list;
+        newArticles.push({
+            ...article,
+            id: id
+        });
+        changeConlang(['articles', 'list'], newArticles);
+        sortArticles();
+        return id;
     };
     const getArticle = (id: string) => {
         const index = conlang.articles.list.findIndex(
@@ -83,7 +101,7 @@ function Articles() {
         <div
             style={{
                 border: '1px solid red',
-                width: '10em',
+                width: '12em',
                 display: 'flex',
                 backgroundColor: 'lightgray',
                 flexDirection: 'column',
@@ -137,6 +155,18 @@ function Articles() {
                         }
                     }}>
                     <MdOutlineCreateNewFolder size={20} />
+                </IconButton>
+                <IconButton
+                    onClick={() => {
+                        if (currentArticle) {
+                            if (renameArticle) {
+                                setRenameArticle(false);
+                            } else {
+                                setRenameArticle(true);
+                            }
+                        }
+                    }}>
+                    <MdOutlineDriveFileRenameOutline size={20} />
                 </IconButton>
                 <IconButton
                     onClick={() => {
@@ -208,6 +238,9 @@ function Articles() {
                         depth={0}
                         value={currentArticle}
                         onChange={setCurrentArticle}
+                        renameArticle={renameArticle ? currentArticle : null}
+                        changeArticle={changeArticle}
+                        setRenameArticle={setRenameArticle}
                     />
                 </div>
             </div>
@@ -220,8 +253,19 @@ type ArticlesListProps = {
     depth: number;
     value: string;
     onChange: (value: string) => void;
+    renameArticle: string | null;
+    changeArticle: (id: string, property: string, newValue: unknown) => void;
+    setRenameArticle: (value: boolean) => void;
 };
-function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
+function ArticlesList({
+    list,
+    depth,
+    value,
+    onChange,
+    renameArticle,
+    changeArticle,
+    setRenameArticle
+}: ArticlesListProps) {
     const conlang = useStoreState((s) => s.conlang);
     return (
         <>
@@ -254,7 +298,28 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                                         <MdOutlineInsertDriveFile />
                                     :   <MdOutlineFolder />)}
                                 &nbsp;
-                                {item.name}
+                                {renameArticle && item.id === renameArticle ?
+                                    <input
+                                        type="text"
+                                        value={item.name}
+                                        onInput={(event) => {
+                                            changeArticle(
+                                                item.id,
+                                                'name',
+                                                event.currentTarget.value
+                                            );
+                                        }}
+                                        onKeyDown={(event) => {
+                                            if (event.key === 'Enter') {
+                                                event.preventDefault();
+                                                setRenameArticle(false);
+                                            }
+                                        }}
+                                        style={{
+                                            width: 'calc(100% - 3em)'
+                                        }}
+                                    />
+                                :   item.name}
                             </div>
                             {item.type === 'folder' && (
                                 <ArticlesList
@@ -264,6 +329,9 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                                     depth={depth + 1}
                                     value={value}
                                     onChange={onChange}
+                                    renameArticle={renameArticle}
+                                    changeArticle={changeArticle}
+                                    setRenameArticle={setRenameArticle}
                                 />
                             )}
                         </>
