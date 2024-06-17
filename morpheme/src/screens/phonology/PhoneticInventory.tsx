@@ -3,7 +3,7 @@ import { useStoreState } from '../../common/Vals.tsx';
 
 export default function PhoneticInventory() {
     const conlang = useStoreState((s) => s.conlang);
-    console.log(conlang.inventory);
+    console.log(conlang.phonology.inventory);
     return (
         <>
             <NavSection id="inventory">Phonetic Inventory</NavSection>
@@ -533,7 +533,7 @@ function Phono({ colSpan, vowel = false, children }: PhonoProps) {
     return (
         <td
             onClick={() => {
-                let newInventory = conlang.inventory;
+                let newInventory = conlang.phonology.inventory;
                 if (newInventory.some((item) => item.base === children)) {
                     newInventory = newInventory.filter(
                         (item) => item.base !== children
@@ -565,13 +565,17 @@ function Phono({ colSpan, vowel = false, children }: PhonoProps) {
                         }
                     });
                 }
-                changeConlang(['inventory'], newInventory);
+                changeConlang(['phonology', 'inventory'], newInventory);
             }}
             colSpan={colSpan}
             className="charis"
             style={{
                 backgroundColor:
-                    conlang.inventory.some((item) => item.base === children) ?
+                    (
+                        conlang.phonology.inventory.some(
+                            (item) => item.base === children
+                        )
+                    ) ?
                         'lightblue'
                     :   'white'
             }}>
