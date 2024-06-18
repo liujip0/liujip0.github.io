@@ -67,7 +67,7 @@ export default function StartScreen() {
             const newConlang: Conlang = {
               ...conlangInit,
               name: name
-            } as Conlang;
+            };
             createFile({
               types: [
                 {

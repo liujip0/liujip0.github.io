@@ -18,6 +18,33 @@ export default function SettingsScreen() {
           changeConlang(['name'], value);
         }}
       />
+      <RadioInput
+        label="Autosave"
+        options={[
+          {
+            label: 'Disabled',
+            value: '0'
+          },
+          {
+            label: 'Every 1 minute',
+            value: '1'
+          },
+          {
+            label: 'Every 5 minutes',
+            value: '5'
+          },
+          {
+            label: 'Every 10 minutes',
+            value: '10'
+          }
+        ]}
+        customOption={{
+          label: 'Custom:',
+          description: 'Time in minutes between saves'
+        }}
+        defaultValue={conlang.autosave.toString()}
+        onSave={(value) => changeConlang(['autosave'], parseInt(value))}
+      />
 
       <h2>Character Inserter Widget</h2>
       <RadioInput
@@ -156,22 +183,35 @@ type RadioInputProps = {
   defaultValue?: string;
   description?: string;
   onSave: (value: string) => void;
+  customOption?: {
+    defaultValue?: string;
+    label: string;
+    description?: string;
+  };
 };
 function RadioInput({
   label,
   options,
   defaultValue,
   description,
-  onSave
+  onSave,
+  customOption
 }: RadioInputProps) {
   const time = new Date().getTime();
   const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
-    Array.from({ length: options.length }, () => createRef<HTMLInputElement>())
+    Array.from(
+      { length: customOption ? options.length + 1 : options.length },
+      () => createRef<HTMLInputElement>()
+    )
   );
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [currentSelection, setCurrentSelection] = useState(
+    defaultValue ? defaultValue : ''
+  );
   const [currentValue, setCurrentValue] = useState(
     defaultValue ? defaultValue : ''
   );
+  const customInputRef = useRef<HTMLInputElement>(null);
   return (
     <label
       style={{
@@ -187,14 +227,18 @@ function RadioInput({
             key={i}
             style={{
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              margin: '0.25em 0'
             }}>
             <input
               ref={inputRefs.current[i]}
               id={'radioinput-' + time + '-' + x.value}
               type="radio"
-              checked={currentValue === x.value}
-              onChange={() => setCurrentValue(x.value)}
+              checked={currentSelection === x.value}
+              onChange={() => {
+                setCurrentSelection(x.value);
+                setCurrentValue(x.value);
+              }}
             />
             <label
               style={{
@@ -217,6 +261,54 @@ function RadioInput({
           </div>
         );
       })}
+      {customOption && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            margin: '0.25em 0'
+          }}>
+          <input
+            ref={inputRefs.current[options.length]}
+            id={'radioinput-custom'}
+            type="radio"
+            checked={currentSelection === 'custom'}
+            onChange={() => {
+              setCurrentSelection('custom');
+              if (customInputRef.current) {
+                setCurrentValue(customInputRef.current.value);
+              }
+            }}
+          />
+          <label
+            style={{
+              fontSize: DimenRes.input.input,
+              marginLeft: '0.5em',
+              fontWeight: 'normal',
+              padding: '0'
+            }}
+            htmlFor={'radioinput-custom'}>
+            {customOption.label}&nbsp;
+            {
+              <input
+                defaultValue={customOption.defaultValue}
+                ref={customInputRef}
+                type="text"
+              />
+            }
+            <br />
+            {customOption.description && (
+              <span
+                style={{
+                  fontSize: DimenRes.input.description,
+                  padding: '0'
+                }}>
+                {customOption.description}
+              </span>
+            )}
+          </label>
+        </div>
+      )}
       <button
         onClick={() => {
           onSave(currentValue);

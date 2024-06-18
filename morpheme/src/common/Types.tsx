@@ -1,5 +1,6 @@
 export interface Conlang {
   name: string;
+  autosave: number;
   widgets: {
     charInsert: {
       enabled: boolean;

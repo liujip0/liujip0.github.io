@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { writeFile } from './common/Funcs';
 import { useStoreState } from './common/Vals';
 
@@ -7,6 +8,18 @@ export default function TopBar() {
   const setSaved = useStoreState((s) => s.setSaved);
   const swapAllWindows = useStoreState((s) => s.swapAllWindows);
   const fileHandle = useStoreState((s) => s.fileHandle);
+  useEffect(() => {
+    if (conlang.autosave) {
+      const autosaveInterval = setInterval(() => {
+        console.log('saved');
+        setSaved(true);
+        if (fileHandle) {
+          writeFile(fileHandle, JSON.stringify(conlang));
+        }
+      }, conlang.autosave * 60000);
+      return () => clearInterval(autosaveInterval);
+    }
+  }, [conlang, fileHandle, setSaved]);
   return (
     <div
       style={{

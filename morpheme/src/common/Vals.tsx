@@ -10,8 +10,9 @@ import {
   windowsArr
 } from './Types';
 
-export const conlangInit = {
+export const conlangInit: Conlang = {
   name: 'none',
+  autosave: 0,
   widgets: {
     charInsert: {
       enabled: true,
@@ -357,7 +358,7 @@ export const useStoreState = create<StoreState>()((set) => ({
       }
     }),
   swapAllWindows: (value) => set(() => ({ windows: value })),
-  conlang: conlangInit as Conlang,
+  conlang: conlangInit,
   changeConlang: (path, value) =>
     set((s) => ({
       conlang: deepUpdate(s.conlang, path, value),
