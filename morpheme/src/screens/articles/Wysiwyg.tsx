@@ -4,6 +4,7 @@ import {
   ContentState,
   Editor,
   EditorState,
+  Modifier,
   RawDraftContentState,
   RichUtils,
   convertFromRaw
@@ -432,13 +433,41 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         </WysiwygSection>
 
         <WysiwygSection>
-          <WysiwygIcon>
+          <WysiwygIcon
+            onClick={(event) => {
+              event.preventDefault();
+              handleEditorChange(EditorState.undo(editorState));
+            }}>
             <MdUndo />
           </WysiwygIcon>
-          <WysiwygIcon>
+          <WysiwygIcon
+            onClick={(event) => {
+              event.preventDefault();
+              handleEditorChange(EditorState.redo(editorState));
+            }}>
             <MdRedo />
           </WysiwygIcon>
-          <WysiwygIcon>
+          <WysiwygIcon
+            onClick={(event) => {
+              event.preventDefault();
+              toggleBlockType('unstyled');
+              const stylesToRemove = editorState
+                .getCurrentInlineStyle()
+                .toArray();
+              handleEditorChange(
+                EditorState.push(
+                  editorState,
+                  stylesToRemove.reduce((state, style) => {
+                    return Modifier.removeInlineStyle(
+                      state,
+                      editorState.getSelection(),
+                      style
+                    );
+                  }, editorState.getCurrentContent()),
+                  'change-block-type'
+                )
+              );
+            }}>
             <MdFormatClear />
           </WysiwygIcon>
         </WysiwygSection>
