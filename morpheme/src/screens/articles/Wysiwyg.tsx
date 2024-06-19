@@ -1,5 +1,7 @@
 import {
+  AtomicBlockUtils,
   ContentBlock,
+  ContentState,
   Editor,
   EditorState,
   RawDraftContentState,
@@ -16,8 +18,6 @@ import {
   MdFormatAlignRight,
   MdFormatBold,
   MdFormatClear,
-  MdFormatIndentDecrease,
-  MdFormatIndentIncrease,
   MdFormatItalic,
   MdFormatListBulleted,
   MdFormatListNumbered,
@@ -58,32 +58,63 @@ const inlineMap = {
     verticalAlign: 'sub'
   }
 };
-interface CustomCodeBlockProps {
+
+type CustomBlockProps = {
   block: ContentBlock;
-  contentState: unknown;
-}
-const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ block }) => {
-  const text = block.getText();
-  return (
-    <pre
-      style={{
-        backgroundColor: 'lightgray',
-        padding: '4px 6px',
-        borderRadius: '4px'
-      }}>
-      <code className="monospace">{text}</code>
-    </pre>
-  );
+  contentState: ContentState;
 };
-const blockRendererFn = (contentBlock: ContentBlock) => {
-  if (contentBlock.getType() === 'code-block') {
-    return {
-      component: CustomCodeBlock,
-      editable: true
-    };
+
+class CodeBlock extends React.Component<CustomBlockProps> {
+  render() {
+    const { block } = this.props;
+    return (
+      <pre
+        style={{
+          backgroundColor: 'lightgray',
+          padding: '4px 6px',
+          borderRadius: '4px'
+        }}>
+        <code className="monospace">{block.getText()}</code>
+      </pre>
+    );
   }
-  return null;
+}
+
+type TextAlignProps = {
+  blockProps: {
+    align: 'left' | 'center' | 'right' | 'justify';
+  };
 };
+class TextAlign extends React.Component<CustomBlockProps & TextAlignProps> {
+  render() {
+    const { block, blockProps } = this.props;
+    const { align } = blockProps;
+    return (
+      <div
+        style={{
+          textAlign: align
+        }}>
+        {block.getText()}
+      </div>
+    );
+  }
+}
+
+class HorizontalRule extends React.Component {
+  render() {
+    console.log('hr');
+    return <hr />;
+  }
+}
+
+class Image extends React.Component<CustomBlockProps> {
+  render() {
+    const { block, contentState } = this.props;
+    const entity = contentState.getEntity(block.getEntityAt(0));
+    const { src } = entity.getData();
+    return <img src={src} />;
+  }
+}
 
 type WysiwygProps = {
   value: RawDraftContentState;
@@ -110,6 +141,89 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
   };
   const toggleBlockType = (blockType: string) => {
     handleEditorChange(RichUtils.toggleBlockType(editorState, blockType));
+  };
+  const insertComponent = (
+    componentType: string,
+    data?: Record<string, unknown>
+  ) => {
+    const stateWithEntity = editorState
+      .getCurrentContent()
+      .createEntity(componentType, 'IMMUTABLE', data);
+    const entityKey = stateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = AtomicBlockUtils.insertAtomicBlock(
+      editorState,
+      entityKey,
+      '-'
+    );
+    handleEditorChange(
+      EditorState.forceSelection(
+        newEditorState,
+        newEditorState.getCurrentContent().getSelectionAfter()
+      )
+    );
+  };
+  const blockRendererFn = (contentBlock: ContentBlock) => {
+    console.log(contentBlock.getType());
+    switch (contentBlock.getType()) {
+      case 'atomic': {
+        const entity = editorState
+          .getCurrentContent()
+          .getEntity(contentBlock.getEntityAt(0));
+        switch (entity.getType()) {
+          case 'horizontal-rule':
+            return {
+              component: HorizontalRule,
+              editable: false
+            };
+          case 'image':
+            return {
+              component: Image,
+              editable: false
+            };
+          default:
+            return null;
+        }
+      }
+      case 'code-block':
+        return {
+          component: CodeBlock,
+          editable: true
+        };
+      case 'align-left':
+        return {
+          component: TextAlign,
+          editable: true,
+          props: {
+            align: 'left'
+          }
+        };
+      case 'align-center':
+        return {
+          component: TextAlign,
+          editable: true,
+          props: {
+            align: 'center'
+          }
+        };
+      case 'align-right':
+        return {
+          component: TextAlign,
+          editable: true,
+          props: {
+            align: 'right'
+          }
+        };
+      case 'align-justify':
+        return {
+          component: TextAlign,
+          editable: true,
+          props: {
+            align: 'justify'
+          }
+        };
+      default:
+        return null;
+    }
   };
   return (
     <div
@@ -261,16 +375,32 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         <WysiwygSection>
           <WysiwygSubmenu icon={<MdFormatAlignLeft />}>
             <WysiwygSection>
-              <WysiwygIcon>
+              <WysiwygIcon
+                onClick={(event) => {
+                  event.preventDefault();
+                  toggleBlockType('align-left');
+                }}>
                 <MdFormatAlignLeft />
               </WysiwygIcon>
-              <WysiwygIcon>
+              <WysiwygIcon
+                onClick={(event) => {
+                  event.preventDefault();
+                  toggleBlockType('align-center');
+                }}>
                 <MdFormatAlignCenter />
               </WysiwygIcon>
-              <WysiwygIcon>
+              <WysiwygIcon
+                onClick={(event) => {
+                  event.preventDefault();
+                  toggleBlockType('align-right');
+                }}>
                 <MdFormatAlignRight />
               </WysiwygIcon>
-              <WysiwygIcon>
+              <WysiwygIcon
+                onClick={(event) => {
+                  event.preventDefault();
+                  toggleBlockType('align-justify');
+                }}>
                 <MdFormatAlignJustify />
               </WysiwygIcon>
             </WysiwygSection>
@@ -289,16 +419,14 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
             }}>
             <MdFormatListNumbered />
           </WysiwygIcon>
-          <WysiwygIcon>
-            <MdFormatIndentIncrease />
-          </WysiwygIcon>
-          <WysiwygIcon>
-            <MdFormatIndentDecrease />
-          </WysiwygIcon>
         </WysiwygSection>
 
         <WysiwygSection>
-          <WysiwygIcon>
+          <WysiwygIcon
+            onClick={(event) => {
+              event.preventDefault();
+              insertComponent('horizontal-rule');
+            }}>
             <MdHorizontalRule />
           </WysiwygIcon>
         </WysiwygSection>
@@ -380,8 +508,9 @@ type WysiwygSubmenuProps = {
 function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
   const [open, setOpen] = useState(false);
   return (
-    <div
-      onClick={() => {
+    <button
+      onClick={(event) => {
+        event.preventDefault();
         if (open) {
           setOpen(false);
         } else {
@@ -414,6 +543,6 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
           {children}
         </div>
       )}
-    </div>
+    </button>
   );
 }

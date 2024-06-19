@@ -86,8 +86,6 @@ function Articles({
 }: ArticlesProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
-  console.log(currentArticle);
-  console.log(conlang.articles.list);
   const [deleteArticle, setDeleteArticle] = useState(false);
   const addArticle = (article: Folder | Article) => {
     const datetime = new Date();
