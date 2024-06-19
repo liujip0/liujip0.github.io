@@ -1,3 +1,4 @@
+import { EditorState, convertToRaw } from 'draft-js';
 import { Fragment, useState } from 'react';
 import {
   MdOutlineCreateNewFolder,
@@ -130,16 +131,21 @@ function Articles({
         }}>
         <IconButton
           onClick={() => {
-            if (currentArticle) {
+            if (
+              currentArticle &&
+              getArticle(currentArticle).type === 'folder'
+            ) {
               const id = addArticle({
                 type: 'article',
                 name: 'Untitled',
-                contents: '',
+                contents: convertToRaw(
+                  EditorState.createEmpty().getCurrentContent()
+                ),
                 id: '',
                 path: [...getArticle(currentArticle).path, currentArticle]
               });
               changeArticle(currentArticle, 'contents', [
-                ...getArticle(currentArticle).contents,
+                ...(getArticle(currentArticle) as Folder).contents,
                 id
               ]);
             }
@@ -148,7 +154,10 @@ function Articles({
         </IconButton>
         <IconButton
           onClick={() => {
-            if (currentArticle) {
+            if (
+              currentArticle &&
+              getArticle(currentArticle).type === 'folder'
+            ) {
               const id = addArticle({
                 type: 'folder',
                 name: 'Untitled',
@@ -157,7 +166,7 @@ function Articles({
                 path: [...getArticle(currentArticle).path, currentArticle]
               });
               changeArticle(currentArticle, 'contents', [
-                ...getArticle(currentArticle).contents,
+                ...(getArticle(currentArticle) as Folder).contents,
                 id
               ]);
             }
@@ -186,6 +195,7 @@ function Articles({
             onAccept={() => {
               setDeleteArticle(false);
               const article = getArticle(currentArticle);
+              currentArticle = article.path[article.path.length - 1];
               if (article.path.length > 0) {
                 const newContents = (
                   getArticle(article.path[article.path.length - 1]) as Folder
@@ -297,6 +307,9 @@ type ArticleEditorProps = {
 function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
   const article = conlang.articles.list.find((x) => x.id === currentArticle)!;
+  if (!article) {
+    return null;
+  }
   return (
     <div
       style={{
@@ -322,7 +335,15 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
           />
         </label>
       </div>
-      {article.type === 'article' && <Wysiwyg />}
+      {article.type === 'article' && (
+        <Wysiwyg
+          value={article.contents}
+          setValue={(editorState) => {
+            const content = convertToRaw(editorState.getCurrentContent());
+            changeArticle(article.id, 'contents', content);
+          }}
+        />
+      )}
     </div>
   );
 }

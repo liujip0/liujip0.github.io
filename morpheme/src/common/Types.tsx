@@ -1,3 +1,5 @@
+import { RawDraftContentState } from 'draft-js';
+
 export interface Conlang {
   name: string;
   autosave: number;
@@ -33,7 +35,7 @@ export type Article = {
   name: string;
   type: 'article';
   path: Array<string>;
-  contents: string;
+  contents: RawDraftContentState;
 };
 export type IpaVowelDiacritic =
   | ''

@@ -1,5 +1,12 @@
-import { Editor, EditorState, RichUtils } from 'draft-js';
-import { MouseEventHandler, useState } from 'react';
+import {
+  ContentBlock,
+  Editor,
+  EditorState,
+  RawDraftContentState,
+  RichUtils,
+  convertFromRaw
+} from 'draft-js';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import {
   MdCode,
   MdExpandMore,
@@ -35,10 +42,63 @@ import {
   TbHeadingOff
 } from 'react-icons/tb';
 
-export default function Wysiwyg() {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+const inlineMap = {
+  CODE: {
+    backgroundColor: 'lightgray',
+    padding: '4px 6px',
+    borderRadius: '4px',
+    fontFamily: `'Roboto Mono', 'Courier New', Courier, monospace`
+  },
+  SUPERSCRIPT: {
+    fontSize: '0.83em',
+    verticalAlign: 'super'
+  },
+  SUBSCRIPT: {
+    fontSize: '0.83em',
+    verticalAlign: 'sub'
+  }
+};
+interface CustomCodeBlockProps {
+  block: ContentBlock;
+  contentState: unknown;
+}
+const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ block }) => {
+  const text = block.getText();
+  return (
+    <pre
+      style={{
+        backgroundColor: 'lightgray',
+        padding: '4px 6px',
+        borderRadius: '4px'
+      }}>
+      <code className="monospace">{text}</code>
+    </pre>
+  );
+};
+const blockRendererFn = (contentBlock: ContentBlock) => {
+  if (contentBlock.getType() === 'code-block') {
+    return {
+      component: CustomCodeBlock,
+      editable: true
+    };
+  }
+  return null;
+};
+
+type WysiwygProps = {
+  value: RawDraftContentState;
+  setValue: (value: EditorState) => void;
+};
+export default function Wysiwyg({ value, setValue }: WysiwygProps) {
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  useEffect(() => {
+    setEditorState(EditorState.createWithContent(convertFromRaw(value)));
+  }, [value]);
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
+    setValue(state);
   };
   const handleKeyCommand = (command: string, state: EditorState) => {
     const newState = RichUtils.handleKeyCommand(state, command);
@@ -53,14 +113,6 @@ export default function Wysiwyg() {
   };
   const toggleBlockType = (blockType: string) => {
     handleEditorChange(RichUtils.toggleBlockType(editorState, blockType));
-  };
-  const styleMap = {
-    CODE: {
-      backgroundColor: 'lightgray',
-      padding: '2px 4px',
-      borderRadius: '3px',
-      fontFamily: `'Courier New', Courier, monospace`
-    }
   };
   return (
     <div
@@ -272,7 +324,8 @@ export default function Wysiwyg() {
           flex: '1'
         }}>
         <Editor
-          customStyleMap={styleMap}
+          customStyleMap={inlineMap}
+          blockRendererFn={blockRendererFn}
           handleKeyCommand={handleKeyCommand}
           editorState={editorState}
           onChange={handleEditorChange}

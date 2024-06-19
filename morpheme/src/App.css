@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'CharisSIL';
   src:
-    url('./fonts/CharisSIL-Regular.ttf') format('truetype'),
-    url('./fonts/CharisSIL-Regular.woff') format('woff'),
-    url('./fonts/CharisSIL-Regular.woff2') format('woff2');
+    url('./fonts/charis/CharisSIL-Regular.ttf') format('truetype'),
+    url('./fonts/charis/CharisSIL-Regular.woff') format('woff'),
+    url('./fonts/charis/CharisSIL-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   size-adjust: 90%;
@@ -11,9 +11,9 @@
 @font-face {
   font-family: 'CharisSIL';
   src:
-    url('./fonts/CharisSIL-Bold.ttf') format('truetype'),
-    url('./fonts/CharisSIL-Bold.woff') format('woff'),
-    url('./fonts/CharisSIL-Bold.woff2') format('woff2');
+    url('./fonts/charis/CharisSIL-Bold.ttf') format('truetype'),
+    url('./fonts/charis/CharisSIL-Bold.woff') format('woff'),
+    url('./fonts/charis/CharisSIL-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
   size-adjust: 90%;
@@ -21,9 +21,9 @@
 @font-face {
   font-family: 'CharisSIL';
   src:
-    url('./fonts/CharisSIL-Italic.ttf') format('truetype'),
-    url('./fonts/CharisSIL-Italic.woff') format('woff'),
-    url('./fonts/CharisSIL-Italic.woff2') format('woff2');
+    url('./fonts/charis/CharisSIL-Italic.ttf') format('truetype'),
+    url('./fonts/charis/CharisSIL-Italic.woff') format('woff'),
+    url('./fonts/charis/CharisSIL-Italic.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
   size-adjust: 90%;
@@ -31,12 +31,55 @@
 @font-face {
   font-family: 'CharisSIL';
   src:
-    url('./fonts/CharisSIL-BoldItalic.ttf') format('truetype'),
-    url('./fonts/CharisSIL-BoldItalic.woff') format('woff'),
-    url('./fonts/CharisSIL-BoldItalic.woff2') format('woff2');
+    url('./fonts/charis/CharisSIL-BoldItalic.ttf') format('truetype'),
+    url('./fonts/charis/CharisSIL-BoldItalic.woff') format('woff'),
+    url('./fonts/charis/CharisSIL-BoldItalic.woff2') format('woff2');
   font-weight: bold;
   font-style: italic;
   size-adjust: 90%;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-Bold.ttf');
+  font-weight: bold;
+  font-style: normal;
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-BoldItalic.ttf');
+  font-weight: bold;
+  font-style: italic;
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-Italic.ttf');
+  font-weight: normal;
+  font-style: italic;
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-Thin.ttf');
+  font-weight: lighter;
+  font-style: normal;
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-ThinItalic.ttf');
+  font-weight: lighter;
+  font-style: italic;
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/roboto/RobotoMono-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+  size-adjust: 95%;
 }
 
 * {
@@ -48,7 +91,7 @@
 }
 
 .monospace {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
 }
 
 html,
