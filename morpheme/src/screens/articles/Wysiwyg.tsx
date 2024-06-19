@@ -6,7 +6,7 @@ import {
   RichUtils,
   convertFromRaw
 } from 'draft-js';
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import {
   MdCode,
   MdExpandMore,
@@ -91,11 +91,8 @@ type WysiwygProps = {
 };
 export default function Wysiwyg({ value, setValue }: WysiwygProps) {
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+    EditorState.createWithContent(convertFromRaw(value))
   );
-  useEffect(() => {
-    setEditorState(EditorState.createWithContent(convertFromRaw(value)));
-  }, [value]);
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
     setValue(state);
