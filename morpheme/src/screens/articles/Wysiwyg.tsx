@@ -444,8 +444,8 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
                     document.getElementById('imageSrcButton')?.click();
                   }
                 }}
-                placeholder="Image Source"
-                type="text"
+                placeholder="Image URL"
+                type="url"
               />
               <WysiwygIcon
                 id={'imageSrcButton'}
@@ -577,37 +577,47 @@ type WysiwygSubmenuProps = {
 function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
   const [open, setOpen] = useState(false);
   return (
-    <button
-      onClick={(event) => {
-        event.preventDefault();
-        setOpen(open ? false : true);
-      }}
+    <div
       style={{
+        marginLeft: '0.3em',
+        marginTop: 'auto',
+        marginBottom: 'auto',
         position: 'relative',
         width: '2em',
         height: '1.5em',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        marginLeft: '0.3em',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-        border: 'none',
-        fontSize: '18px',
-        padding: '0'
+        alignItems: 'center'
       }}>
-      {icon}
-      <MdExpandMore />
+      <button
+        onClick={(event) => {
+          event.preventDefault();
+          setOpen(open ? false : true);
+        }}
+        style={{
+          cursor: 'pointer',
+          backgroundColor: 'transparent',
+          border: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          width: '100%',
+          height: '100%',
+          padding: '0',
+          fontSize: '18px'
+        }}>
+        {icon}
+        <MdExpandMore />
+      </button>
       {open && (
         <div
           style={{
             zIndex: '10',
             position: 'absolute',
-            top: '1.5em'
+            top: '1.6em',
+            left: '-3em'
           }}>
           {children}
         </div>
       )}
-    </button>
+    </div>
   );
 }
