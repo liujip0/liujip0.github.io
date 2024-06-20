@@ -9,9 +9,10 @@ import {
   RichUtils,
   convertFromRaw
 } from 'draft-js';
-import React, { MouseEventHandler, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import {
   MdCode,
+  MdDone,
   MdExpandMore,
   MdFormatAlignCenter,
   MdFormatAlignJustify,
@@ -25,6 +26,7 @@ import {
   MdFormatQuote,
   MdFormatUnderlined,
   MdHorizontalRule,
+  MdOutlineImage,
   MdRedo,
   MdStrikethroughS,
   MdSubscript,
@@ -129,6 +131,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
     setEditorState(state);
     setValue(state);
   };
+
   const handleKeyCommand = (command: string, state: EditorState) => {
     const newState = RichUtils.handleKeyCommand(state, command);
     if (newState) {
@@ -226,6 +229,9 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         return null;
     }
   };
+
+  const imageSrcInput = useRef<HTMLInputElement>(null);
+
   return (
     <div
       style={{
@@ -423,6 +429,38 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         </WysiwygSection>
 
         <WysiwygSection>
+          <WysiwygSubmenu icon={<MdOutlineImage />}>
+            <WysiwygSection>
+              <input
+                ref={imageSrcInput}
+                style={{
+                  margin: '0.3em'
+                }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    document.getElementById('imageSrcButton')?.click();
+                  }
+                }}
+                placeholder="Image Source"
+                type="text"
+              />
+              <WysiwygIcon
+                id={'imageSrcButton'}
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (imageSrcInput.current) {
+                    insertComponent('image', {
+                      src: imageSrcInput.current.value
+                    });
+                  }
+                }}>
+                <MdDone />
+              </WysiwygIcon>
+            </WysiwygSection>
+          </WysiwygSubmenu>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
@@ -507,12 +545,14 @@ function WysiwygSection({ children }: WysiwygSectionProps) {
 
 type WysiwygIconProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  id?: string;
   children?: React.ReactNode;
 };
-function WysiwygIcon({ onClick, children }: WysiwygIconProps) {
+function WysiwygIcon({ onClick, id, children }: WysiwygIconProps) {
   return (
     <button
       onClick={onClick}
+      id={id}
       style={{
         width: '1.5em',
         height: '1.5em',
@@ -540,11 +580,7 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
     <button
       onClick={(event) => {
         event.preventDefault();
-        if (open) {
-          setOpen(false);
-        } else {
-          setOpen(true);
-        }
+        setOpen(open ? false : true);
       }}
       style={{
         position: 'relative',

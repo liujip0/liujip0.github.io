@@ -53,6 +53,39 @@ export function NavSection({ id, children }: NavSectionProps) {
   );
 }
 
+type PopupProps = {
+  children: React.ReactNode;
+};
+export function Popup({ children }: PopupProps) {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        backgroundColor: '#00000088',
+        width: '100vw',
+        height: '100vh',
+        zIndex: '99'
+      }}>
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: 'lightgray',
+          border: '3px solid darkgray',
+          padding: '1em'
+        }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 type AlertProps = {
   title: string;
   description: string;
@@ -61,19 +94,7 @@ type AlertProps = {
 };
 export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'lightgray',
-        border: '1px solid darkgray',
-        padding: '1em',
-        zIndex: '99'
-      }}>
+    <Popup>
       <h1
         style={{
           textAlign: 'left',
@@ -97,7 +118,7 @@ export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
         <button onClick={onDecline}>Go Back</button>&nbsp;
         <button onClick={onAccept}>Continue</button>
       </div>
-    </div>
+    </Popup>
   );
 }
 
