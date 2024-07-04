@@ -49,41 +49,31 @@ function PhonemesTable() {
       ...phoneme,
       id: time + '-' + phoneme.base
     });
-    newInventory.sort((a, b) => {
-      if (a.type === 'consonant') {
-        if (b.type === 'consonant') {
-          return a.ipa < b.ipa ? -1 : 1;
-        } else {
-          return -1;
-        }
-      } else {
-        if (b.type === 'consonant') {
-          return 1;
-        } else {
-          return a.ipa < b.ipa ? -1 : 1;
-        }
-      }
-    });
     changeConlang(['phoology', 'inventory'], newInventory);
   };
   const deletePhoneme = (id: string) => {
     let newInventory = conlang.phonology.inventory;
     newInventory = newInventory.filter((x) => x.id !== id);
-    newInventory.sort((a, b) => {
-      if (a.type === 'consonant') {
-        if (b.type === 'consonant') {
-          return a.ipa < b.ipa ? -1 : 1;
-        } else {
-          return -1;
-        }
-      } else {
-        if (b.type === 'consonant') {
-          return 1;
-        } else {
-          return a.ipa < b.ipa ? -1 : 1;
-        }
-      }
-    });
+    changeConlang(['phonology', 'inventory'], newInventory);
+  };
+  const moveUpPhoneme = (id: string) => {
+    const index = conlang.phonology.inventory.findIndex((x) => x.id === id);
+    const phoneme = conlang.phonology.inventory[index];
+    const newInventory = conlang.phonology.inventory;
+    if (index > 0) {
+      newInventory.splice(index, 1);
+      newInventory.splice(index - 1, 0, phoneme);
+    }
+    changeConlang(['phonology', 'inventory'], newInventory);
+  };
+  const moveDownPhoneme = (id: string) => {
+    const index = conlang.phonology.inventory.findIndex((x) => x.id === id);
+    const phoneme = conlang.phonology.inventory[index];
+    const newInventory = conlang.phonology.inventory;
+    if (index < conlang.phonology.inventory.length - 1) {
+      newInventory.splice(index, 1);
+      newInventory.splice(index + 1, 0, phoneme);
+    }
     changeConlang(['phonology', 'inventory'], newInventory);
   };
   const getPhoneme = (id: string) => {
@@ -151,6 +141,8 @@ function PhonemesTable() {
             changePhoneme={changePhoneme}
             addPhoneme={addPhoneme}
             deletePhoneme={deletePhoneme}
+            moveUpPhoneme={moveUpPhoneme}
+            moveDownPhoneme={moveDownPhoneme}
             getPhoneme={getPhoneme}
           />
         </tbody>
@@ -164,6 +156,8 @@ type PhonemesListProps = {
   changePhoneme: (id: string, property: string, newValue: unknown) => void;
   addPhoneme: (phoneme: Phoneme) => void;
   deletePhoneme: (id: string) => void;
+  moveUpPhoneme: (id: string) => void;
+  moveDownPhoneme: (id: string) => void;
   getPhoneme: (id: string) => Phoneme;
 };
 function PhonemesList({
@@ -171,6 +165,8 @@ function PhonemesList({
   changePhoneme,
   addPhoneme,
   deletePhoneme,
+  moveUpPhoneme,
+  moveDownPhoneme,
   getPhoneme
 }: PhonemesListProps) {
   return (
@@ -183,6 +179,8 @@ function PhonemesList({
           changePhoneme={changePhoneme}
           addPhoneme={addPhoneme}
           deletePhoneme={deletePhoneme}
+          moveUpPhoneme={moveUpPhoneme}
+          moveDownPhoneme={moveDownPhoneme}
           getPhoneme={getPhoneme}
         />
       ))}
@@ -196,6 +194,8 @@ type PhonemeTrProps = {
   changePhoneme: (id: string, property: string, newValue: unknown) => void;
   addPhoneme: (phoneme: Phoneme) => void;
   deletePhoneme: (id: string) => void;
+  moveUpPhoneme: (id: string) => void;
+  moveDownPhoneme: (id: string) => void;
   getPhoneme: (id: string) => Phoneme;
 };
 function PhonemeTr({
@@ -204,6 +204,8 @@ function PhonemeTr({
   changePhoneme,
   addPhoneme,
   deletePhoneme,
+  moveUpPhoneme,
+  moveDownPhoneme,
   getPhoneme
 }: PhonemeTrProps) {
   const conlang = useStoreState((s) => s.conlang);
@@ -316,6 +318,20 @@ function PhonemeTr({
         />
       </td>
       <td>
+        <button
+          onClick={() => {
+            moveUpPhoneme(item.id);
+          }}>
+          Move Up
+        </button>
+        &nbsp;
+        <button
+          onClick={() => {
+            moveDownPhoneme(item.id);
+          }}>
+          Move Down
+        </button>
+        <br />
         <button
           onClick={() => {
             addPhoneme(item);

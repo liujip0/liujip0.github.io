@@ -22,7 +22,22 @@ export interface Conlang {
     list: Array<Folder | Article>;
     foldersOnTop: boolean;
   };
+  lexicon: Array<Word>;
 }
+type Word = {
+  id: string;
+  romanization: string;
+  ipa: string;
+  definition: Array<string>;
+  partOfSpeech:
+    | 'noun'
+    | 'verb'
+    | 'adjective'
+    | 'adverb'
+    | 'pronoun'
+    | 'proper noun'
+    | 'particle';
+};
 export type Folder = {
   id: string;
   name: string;

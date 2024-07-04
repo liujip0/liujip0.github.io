@@ -9,7 +9,7 @@ import {
   RichUtils,
   convertFromRaw
 } from 'draft-js';
-import React, { MouseEventHandler, useRef, useState } from 'react';
+import React, { ChangeEvent, MouseEventHandler, useRef, useState } from 'react';
 import {
   MdCode,
   MdDone,
@@ -67,20 +67,17 @@ type CustomBlockProps = {
   contentState: ContentState;
 };
 
-class CodeBlock extends React.Component<CustomBlockProps> {
-  render() {
-    const { block } = this.props;
-    return (
-      <pre
-        style={{
-          backgroundColor: 'lightgray',
-          padding: '4px 6px',
-          borderRadius: '4px'
-        }}>
-        <code className="monospace">{block.getText()}</code>
-      </pre>
-    );
-  }
+function CodeBlock({ block }: CustomBlockProps) {
+  return (
+    <pre
+      style={{
+        backgroundColor: 'lightgray',
+        padding: '4px 6px',
+        borderRadius: '4px'
+      }}>
+      <code className="monospace">{block.getText()}</code>
+    </pre>
+  );
 }
 
 type TextAlignProps = {
@@ -88,35 +85,66 @@ type TextAlignProps = {
     align: 'left' | 'center' | 'right' | 'justify';
   };
 };
-class TextAlign extends React.Component<CustomBlockProps & TextAlignProps> {
-  render() {
-    const { block, blockProps } = this.props;
-    const { align } = blockProps;
-    return (
-      <div
-        style={{
-          textAlign: align
-        }}>
-        {block.getText()}
-      </div>
+function TextAlign({ block, blockProps }: CustomBlockProps & TextAlignProps) {
+  const { align } = blockProps;
+  return (
+    <div
+      style={{
+        textAlign: align
+      }}>
+      {block.getText()}
+    </div>
+  );
+}
+
+function HorizontalRule() {
+  console.log('hr');
+  return <hr />;
+}
+
+function Image({ block, contentState }: CustomBlockProps) {
+  const entity = contentState.getEntity(block.getEntityAt(0));
+  const { src } = entity.getData();
+  return <img src={src} />;
+}
+
+function Table({ block, contentState }: CustomBlockProps) {
+  const data = contentState.getEntity(block.getEntityAt(0)).getData();
+  const initialRows = data.rows;
+  const [rows, setRows] = useState<string[][]>(initialRows);
+  const handleCellChange = (
+    rowIndex: number,
+    cellIndex: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const newRows = rows.map((row: string[], rIndex: number) =>
+      row.map((cell: string, cIndex: number) =>
+        rIndex === rowIndex && cIndex === cellIndex ? event.target.value : cell
+      )
     );
-  }
-}
-
-class HorizontalRule extends React.Component {
-  render() {
-    console.log('hr');
-    return <hr />;
-  }
-}
-
-class Image extends React.Component<CustomBlockProps> {
-  render() {
-    const { block, contentState } = this.props;
-    const entity = contentState.getEntity(block.getEntityAt(0));
-    const { src } = entity.getData();
-    return <img src={src} />;
-  }
+    setRows(newRows);
+  };
+  return (
+    <table>
+      <tbody>
+        {rows.map((row: string[], rowIndex: number) => (
+          <tr key={rowIndex}>
+            {row.map((cell: string, cellIndex: number) => (
+              <td key={cellIndex}>
+                <input
+                  type="text"
+                  value={cell}
+                  onChange={(event) =>
+                    handleCellChange(rowIndex, cellIndex, event)
+                  }
+                />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 type WysiwygProps = {
@@ -183,6 +211,11 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
             return {
               component: Image,
               editable: false
+            };
+          case 'table':
+            return {
+              component: Table,
+              editable: true
             };
           default:
             return null;
