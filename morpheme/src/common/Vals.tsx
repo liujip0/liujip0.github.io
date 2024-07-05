@@ -39,7 +39,8 @@ export const conlangInit: Conlang = {
       }
     ],
     foldersOnTop: false
-  }
+  },
+  lexicon: []
 };
 
 interface StoreState {
