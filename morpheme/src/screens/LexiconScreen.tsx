@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { IconButton } from '../common/Components.tsx';
+import { Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function LexiconScreen() {
@@ -16,25 +17,28 @@ export default function LexiconScreen() {
     }
     return alphabetMap;
   };
-  const alphabeticalOrder = createAlphabetMap(
-    conlang.phonology.inventory.map((x) => x.romanization)
-  );
-  const customComparator = (alphabetMap: Map<string, number>) => {
-    return (a: string, b: string) => {
+  const sortLexicon = () => {
+    const newLexicon = conlang.lexicon;
+    newLexicon.sort((a, b) => {
       let indexA, indexB;
       let i = 0,
         j = 0;
-      while (i < a.length && j < b.length) {
+      while (i < a.romanization.length && j < b.romanization.length) {
         let foundA = false,
           foundB = false;
-        for (const [key, value] of alphabetMap.entries()) {
-          if (a.startsWith(key, i)) {
+        let maxKeyLength = 1;
+        for (const [key, value] of createAlphabetMap(
+          conlang.phonology.inventory.map((x) => x.romanization)
+        ).entries()) {
+          if (a.romanization.startsWith(key, i)) {
             indexA = value;
             foundA = true;
+            maxKeyLength = key.length;
           }
-          if (b.startsWith(key, j)) {
+          if (b.romanization.startsWith(key, j)) {
             indexB = value;
             foundB = true;
+            maxKeyLength = Math.max(maxKeyLength, key.length);
           }
           if (foundA && foundB) break;
         }
@@ -43,26 +47,22 @@ export default function LexiconScreen() {
         if (indexA !== indexB) {
           return indexA! - indexB!;
         }
-        i += Math.max(a.startsWith(key, i) ? key.length : 1, 1);
-        j += Math.max(b.startsWith(key, j) ? key.length : 1, 1);
+        i += maxKeyLength;
+        j += maxKeyLength;
       }
-      return a.length - b.length; // If all parts are the same, compare by length
-    };
-  };
-  const sortLexicon = () => {
-    const newLexicon = conlang.lexicon;
-    newLexicon.sort((a, b) => {});
+      return a.romanization.length - b.romanization.length;
+    });
     changeConlang(['lexicon'], newLexicon);
   };
   const changeWord = (id: string, property: string, newValue: unknown) => {
-    const index = conlang.articles.list.findIndex((value) => value.id === id);
-    const newArticles = conlang.articles.list;
+    const index = conlang.lexicon.findIndex((value) => value.id === id);
+    const newLexicon = conlang.lexicon;
     if (index !== -1) {
-      newArticles.splice(index, 1, {
-        ...conlang.articles.list[index],
+      newLexicon.splice(index, 1, {
+        ...conlang.lexicon[index],
         [property]: newValue
       });
-      changeConlang(['articles', 'list'], newArticles);
+      changeConlang(['lexicon'], newLexicon);
       sortLexicon();
     }
   };
@@ -75,6 +75,8 @@ export default function LexiconScreen() {
       <Words
         currentWord={currentWord}
         setCurrentWord={setCurrentWord}
+        sortLexicon={sortLexicon}
+        changeWord={changeWord}
       />
     </div>
   );
@@ -83,13 +85,22 @@ export default function LexiconScreen() {
 type WordsProps = {
   currentWord: string;
   setCurrentWord: (value: string) => void;
+  sortLexicon: () => void;
+  changeWord: (id: string, property: string, newValue: unknown) => void;
 };
-function Words({ currentWord, setCurrentWord }: WordsProps) {
+function Words({
+  currentWord,
+  setCurrentWord,
+  sortLexicon,
+  changeWord
+}: WordsProps) {
   const conlang = useStoreState((s) => s.conlang);
-  const addArticle = (article: Folder | Article) => {
+  const changeConlang = useStoreState((s) => s.changeConlang);
+  const addWord = (word: Word) => {
     const datetime = new Date();
     const id =
-      article.type +
+      word.romanization +
+      '-' +
       datetime.getHours() +
       '-' +
       datetime.getMinutes() +
@@ -97,13 +108,13 @@ function Words({ currentWord, setCurrentWord }: WordsProps) {
       datetime.getSeconds() +
       '-' +
       datetime.getMilliseconds();
-    const newArticles = conlang.articles.list;
-    newArticles.push({
-      ...article,
+    const newLexicon = conlang.lexicon;
+    newLexicon.push({
+      ...word,
       id: id
     });
-    changeConlang(['articles', 'list'], newArticles);
-    sortArticles();
+    changeConlang(['lexicon'], newLexicon);
+    sortLexicon();
     return id;
   };
   return (
@@ -122,7 +133,16 @@ function Words({ currentWord, setCurrentWord }: WordsProps) {
           display: 'flex',
           justifyContent: 'space-around'
         }}>
-        <IconButton onClick={() => {}}>
+        <IconButton
+          onClick={() => {
+            addWord({
+              id: '',
+              romanization: 'test',
+              ipa: '',
+              definition: [''],
+              partOfSpeech: ''
+            });
+          }}>
           <MdAdd />
         </IconButton>
       </div>
@@ -149,7 +169,11 @@ function Words({ currentWord, setCurrentWord }: WordsProps) {
                 }}
                 onClick={() => {
                   setCurrentWord(item.id);
-                }}></div>
+                }}>
+                {item.romanization}
+                &nbsp;|&nbsp;
+                {item.definition[0]}
+              </div>
             );
           })}
         </div>

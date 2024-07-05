@@ -24,20 +24,22 @@ export interface Conlang {
   };
   lexicon: Array<Word>;
 }
-type Word = {
+export type Word = {
   id: string;
   romanization: string;
   ipa: string;
   definition: Array<string>;
-  partOfSpeech:
-    | 'noun'
-    | 'verb'
-    | 'adjective'
-    | 'adverb'
-    | 'pronoun'
-    | 'proper noun'
-    | 'particle';
+  partOfSpeech: PartOfSpeech;
 };
+type PartOfSpeech =
+  | 'noun'
+  | 'verb'
+  | 'adjective'
+  | 'adverb'
+  | 'pronoun'
+  | 'proper noun'
+  | 'particle'
+  | '';
 export type Folder = {
   id: string;
   name: string;

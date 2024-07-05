@@ -43,11 +43,20 @@ function PhonemesTable() {
     }
   };
   const addPhoneme = (phoneme: Phoneme) => {
-    const time = new Date().getMilliseconds();
+    const datetime = new Date();
     const newInventory = conlang.phonology.inventory;
     newInventory.push({
       ...phoneme,
-      id: time + '-' + phoneme.base
+      id:
+        phoneme.base +
+        '-' +
+        datetime.getHours() +
+        '-' +
+        datetime.getMinutes() +
+        '-' +
+        datetime.getSeconds() +
+        '-' +
+        datetime.getMilliseconds()
     });
     changeConlang(['phoology', 'inventory'], newInventory);
   };
