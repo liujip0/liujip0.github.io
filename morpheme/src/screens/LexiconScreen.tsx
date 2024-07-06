@@ -1,13 +1,24 @@
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { IconButton } from '../common/Components.tsx';
-import { Word } from '../common/Types.tsx';
+import { romanizationToIpa } from '../common/Funcs.tsx';
+import { Phoneme, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function LexiconScreen() {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [currentWord, setCurrentWord] = useState('');
+  const createRomanizationMap = (
+    inventory: Array<Phoneme>
+  ): Array<[string, string]> => {
+    const mappingArr: Array<[string, string]> = [];
+    for (let i = 0; i < inventory.length; i++) {
+      mappingArr.push([inventory[i].romanization, inventory[i].ipa]);
+    }
+    mappingArr.sort((a, b) => b.length - a.length);
+    return mappingArr;
+  };
   const createAlphabetMap = (
     alphabetArray: Array<string>
   ): Map<string, number> => {
@@ -76,7 +87,15 @@ export default function LexiconScreen() {
         currentWord={currentWord}
         setCurrentWord={setCurrentWord}
         sortLexicon={sortLexicon}
-        changeWord={changeWord}
+      />
+      <WordEditor
+        currentWord={currentWord}
+        changeWord={(property, newValue) => {
+          changeWord(currentWord, property, newValue);
+        }}
+        createRomanizationMap={() => {
+          return createRomanizationMap(conlang.phonology.inventory);
+        }}
       />
     </div>
   );
@@ -86,14 +105,8 @@ type WordsProps = {
   currentWord: string;
   setCurrentWord: (value: string) => void;
   sortLexicon: () => void;
-  changeWord: (id: string, property: string, newValue: unknown) => void;
 };
-function Words({
-  currentWord,
-  setCurrentWord,
-  sortLexicon,
-  changeWord
-}: WordsProps) {
+function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const addWord = (word: Word) => {
@@ -137,8 +150,9 @@ function Words({
           onClick={() => {
             addWord({
               id: '',
-              romanization: 'test',
+              romanization: '',
               ipa: '',
+              ipaOverride: false,
               definition: [''],
               partOfSpeech: ''
             });
@@ -163,9 +177,11 @@ function Words({
           {conlang.lexicon.map((item) => {
             return (
               <div
+                key={item.id}
                 style={{
                   backgroundColor:
-                    item.id === currentWord ? 'darkgray' : 'white'
+                    item.id === currentWord ? 'darkgray' : 'white',
+                  paddingLeft: '0.3em'
                 }}
                 onClick={() => {
                   setCurrentWord(item.id);
@@ -178,6 +194,99 @@ function Words({
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+type WordEditorProps = {
+  currentWord: string;
+  changeWord: (property: string, newValue: unknown) => void;
+  createRomanizationMap: () => Array<[string, string]>;
+};
+function WordEditor({
+  currentWord,
+  changeWord,
+  createRomanizationMap
+}: WordEditorProps) {
+  const conlang = useStoreState((s) => s.conlang);
+  const word = conlang.lexicon.find((x) => x.id === currentWord);
+  return (
+    <div
+      style={{
+        border: '1px solid black',
+        margin: '1em',
+        padding: '0.7em',
+        flex: '1',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'scroll'
+      }}>
+      {currentWord && (
+        <>
+          <div
+            style={{
+              marginBottom: '1em'
+            }}>
+            <label>
+              Romanization:&nbsp;
+              <input
+                size={40}
+                value={word!.romanization}
+                onChange={(event) => {
+                  changeWord('romanization', event.currentTarget.value);
+                  changeWord(
+                    'ipa',
+                    romanizationToIpa(
+                      event.currentTarget.value,
+                      createRomanizationMap()
+                    )
+                  );
+                }}
+              />
+            </label>
+          </div>
+          <div
+            style={{
+              marginBottom: '1em'
+            }}>
+            <label>
+              IPA:&nbsp;
+              <input
+                size={40}
+                value={word!.ipa}
+                disabled={!word!.ipaOverride}
+                onInput={(event) => {
+                  changeWord('ipa', event.currentTarget.value);
+                }}
+              />
+            </label>
+            <div
+              style={{
+                fontSize: '0.8em'
+              }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={word!.ipaOverride}
+                  onChange={(event) => {
+                    changeWord('ipaOverride', event.currentTarget.checked);
+                    if (!event.currentTarget.checked) {
+                      changeWord(
+                        'ipa',
+                        romanizationToIpa(
+                          word!.romanization,
+                          createRomanizationMap()
+                        )
+                      );
+                    }
+                  }}
+                />
+                Override autogeneration
+              </label>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

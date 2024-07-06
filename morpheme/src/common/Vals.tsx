@@ -86,7 +86,7 @@ export const useStoreState = create<StoreState>()((set) => ({
       };
     }),
 
-  windows: ['0-start', '0-start', '0-start', '0-start'],
+  windows: ['start-0', 'start-0', 'start-0', 'start-0'],
   addWindows: (position, screen) =>
     set((s) => {
       const datetime = new Date();

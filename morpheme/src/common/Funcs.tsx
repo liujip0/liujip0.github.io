@@ -252,3 +252,15 @@ export function findArticleChildren(
   }
   return res;
 }
+
+export function romanizationToIpa(
+  romanization: string,
+  mapping: Array<[string, string]>
+): string {
+  console.log(mapping);
+  let ipa = romanization;
+  for (let i = 0; i < mapping.length; i++) {
+    ipa = ipa.replaceAll(mapping[i][0], mapping[i][1]);
+  }
+  return ipa;
+}

@@ -28,6 +28,7 @@ export type Word = {
   id: string;
   romanization: string;
   ipa: string;
+  ipaOverride: boolean;
   definition: Array<string>;
   partOfSpeech: PartOfSpeech;
 };

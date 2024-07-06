@@ -77,12 +77,12 @@ function Screen({ location, position }: ScreenProps) {
         overflow: 'scroll',
         backgroundColor: 'white'
       }}>
-      {windows[position].split('-')[1] === 'start' && <StartScreen />}
-      {windows[position].split('-')[1] === 'home' && <HomeScreen />}
-      {windows[position].split('-')[1] === 'phonology' && <PhonologyScreen />}
-      {windows[position].split('-')[1] === 'articles' && <ArticlesScreen />}
-      {windows[position].split('-')[1] === 'lexicon' && <LexiconScreen />}
-      {windows[position].split('-')[1] === 'settings' && <SettingsScreen />}
+      {windows[position].split('-')[0] === 'start' && <StartScreen />}
+      {windows[position].split('-')[0] === 'home' && <HomeScreen />}
+      {windows[position].split('-')[0] === 'phonology' && <PhonologyScreen />}
+      {windows[position].split('-')[0] === 'articles' && <ArticlesScreen />}
+      {windows[position].split('-')[0] === 'lexicon' && <LexiconScreen />}
+      {windows[position].split('-')[0] === 'settings' && <SettingsScreen />}
     </div>
   );
 }

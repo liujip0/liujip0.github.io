@@ -35,7 +35,7 @@ export default function StartScreen() {
             console.log(value.contents);
             setFileHandle(value.fileHandle);
             replaceConlang(JSON.parse(value.contents));
-            swapAllWindows(['0-home', '0-home', '0-home', '0-home']);
+            swapAllWindows(['home-0', 'home-0', 'home-0', 'home-0']);
             setSaved(true);
           });
         }}>
@@ -85,7 +85,7 @@ export default function StartScreen() {
                 writeFile(value, JSON.stringify(newConlang));
                 replaceConlang(newConlang);
               }
-              swapAllWindows(['0-home', '0-home', '0-home', '0-home']);
+              swapAllWindows(['home-0', 'home-0', 'home-0', 'home-0']);
               setSaved(true);
             });
           }
