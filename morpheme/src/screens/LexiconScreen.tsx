@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MdAdd, MdOutlineDelete } from 'react-icons/md';
-import { IconButton } from '../common/Components.tsx';
+import { Alert, IconButton } from '../common/Components.tsx';
 import { romanizationToIpa } from '../common/Funcs.tsx';
 import { Phoneme, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
@@ -190,6 +190,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                 {item.romanization}
                 &nbsp;|&nbsp;
                 {item.definitions[0]}
+                &nbsp;&#x005b;&#x005d;
               </div>
             );
           })}
@@ -210,6 +211,7 @@ function WordEditor({
   createRomanizationMap
 }: WordEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const [deleteWord, setDeleteWord] = useState<number | null>(null);
   const word = conlang.lexicon.find((x) => x.id === currentWord);
   return (
     <div
@@ -317,49 +319,86 @@ function WordEditor({
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                border: '1px solid black'
+                border: '1px solid black',
+                padding: '1em'
               }}>
-              <div
+              <button
+                onClick={() => {
+                  const newDefinitions = word.definitions;
+                  newDefinitions.push('');
+                  changeWord('definitions', newDefinitions);
+                }}
                 style={{
                   display: 'flex',
-                  padding: '0.3em'
+                  alignItems: 'center',
+                  width: 'max-content'
                 }}>
-                <IconButton
-                  onClick={() => {
-                    const newDefinitions = word.definitions;
-                    newDefinitions.push('');
-                    changeWord('definitions', newDefinitions);
+                <MdAdd size={18} />
+                <div
+                  style={{
+                    height: 'min-content'
                   }}>
-                  <MdAdd size={18} />
-                </IconButton>
-              </div>
-              <ol>
+                  &nbsp;New Definition
+                </div>
+              </button>
+              <ol
+                style={{
+                  margin: '0',
+                  padding: '1em'
+                }}>
                 {word.definitions.map((item, index) => (
                   <li
                     key={index}
                     style={{
                       marginBottom: '1em'
                     }}>
-                    <input
-                      value={item}
-                      onInput={(event) => {
-                        const newDefinitions = word.definitions;
-                        newDefinitions.splice(
-                          index,
-                          1,
-                          event.currentTarget.value
-                        );
-                        changeWord('definitions', newDefinitions);
-                      }}
+                    <div
                       style={{
-                        minWidth: '20em',
-                        width: '70%'
-                      }}
-                    />
-                    &nbsp;
-                    <IconButton onClick={(event) => {}}>
-                      <MdOutlineDelete size={18} />
-                    </IconButton>
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}>
+                      <input
+                        value={item}
+                        onInput={(event) => {
+                          const newDefinitions = word.definitions;
+                          newDefinitions.splice(
+                            index,
+                            1,
+                            event.currentTarget.value
+                          );
+                          changeWord('definitions', newDefinitions);
+                        }}
+                        style={{
+                          minWidth: '20em',
+                          width: '70%'
+                        }}
+                      />
+                      <IconButton
+                        onClick={() => {
+                          setDeleteWord(index);
+                        }}>
+                        <MdOutlineDelete size={18} />
+                      </IconButton>
+                      {deleteWord === index && (
+                        <Alert
+                          title="Confirmation"
+                          description={
+                            'Are you sure you want to delete the definition "' +
+                            item +
+                            '?" This cannot be undone.'
+                          }
+                          onDecline={() => {
+                            setDeleteWord(null);
+                          }}
+                          onAccept={() => {
+                            const newDefinitions = word.definitions;
+                            newDefinitions.splice(index, 1);
+                            changeWord('definitions', newDefinitions);
+                            setDeleteWord(null);
+                          }}
+                        />
+                      )}
+                    </div>
                   </li>
                 ))}
               </ol>
