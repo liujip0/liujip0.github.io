@@ -40,6 +40,8 @@ type PartOfSpeech =
   | 'pronoun'
   | 'proper noun'
   | 'particle'
+  | 'adposition'
+  | 'conjunction'
   | '';
 export type Folder = {
   id: string;

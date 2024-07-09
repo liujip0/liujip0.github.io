@@ -190,7 +190,32 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                 {item.romanization}
                 &nbsp;|&nbsp;
                 {item.definitions[0]}
-                &nbsp;&#x005b;&#x005d;
+                &nbsp;[
+                {(() => {
+                  switch (item.partOfSpeech) {
+                    case 'noun':
+                      return 'N';
+                    case 'verb':
+                      return 'V';
+                    case 'adjective':
+                      return 'Adj';
+                    case 'adverb':
+                      return 'Adv';
+                    case 'pronoun':
+                      return 'Pron';
+                    case 'proper noun':
+                      return 'PropN';
+                    case 'particle':
+                      return 'Ptcl';
+                    case 'adposition':
+                      return 'Adp';
+                    case 'conjunction':
+                      return 'Conj';
+                    case '':
+                      return '';
+                  }
+                })()}
+                ]
               </div>
             );
           })}
@@ -307,6 +332,8 @@ function WordEditor({
                 <option value="pronoun">Pronoun</option>
                 <option value="proper noun">Proper Noun</option>
                 <option value="particle">Particle</option>
+                <option value="adposition">Adposition</option>
+                <option value="conjunction">Conjunction</option>
               </select>
             </label>
           </div>
@@ -350,7 +377,7 @@ function WordEditor({
                   <li
                     key={index}
                     style={{
-                      marginBottom: '1em'
+                      marginBottom: '0.5em'
                     }}>
                     <div
                       style={{
@@ -373,6 +400,17 @@ function WordEditor({
                           width: '70%'
                         }}
                       />
+                      <IconButton
+                        onClick={() => {
+                          if (index > 0) {
+                            const newDefinitions = word.definitions;
+                            newDefinitions.splice(index, 1);
+                            newDefinitions.splice(index - 1, 0, item);
+                            changeWord('definitions', newDefinitions);
+                          }
+                        }}>
+                        ^
+                      </IconButton>
                       <IconButton
                         onClick={() => {
                           setDeleteWord(index);
