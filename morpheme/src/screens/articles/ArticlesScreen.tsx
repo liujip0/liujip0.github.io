@@ -265,7 +265,8 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                   paddingLeft:
                     Math.max(0, depth - 1) * 0.3 +
                     Math.max(0, depth - 2) * 0.8 +
-                    'em'
+                    'em',
+                  cursor: 'pointer'
                 }}>
                 {depth > 1 ?
                   index === list.length - 1 ?

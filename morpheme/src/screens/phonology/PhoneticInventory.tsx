@@ -547,21 +547,6 @@ function Phono({ colSpan, vowel = false, children }: PhonoProps) {
             allophones: [],
             allophoneOf: ''
           });
-          newInventory.sort((a, b) => {
-            if (a.type === 'consonant') {
-              if (b.type === 'consonant') {
-                return a.ipa < b.ipa ? -1 : 1;
-              } else {
-                return -1;
-              }
-            } else {
-              if (b.type === 'consonant') {
-                return 1;
-              } else {
-                return a.ipa < b.ipa ? -1 : 1;
-              }
-            }
-          });
         }
         changeConlang(['phonology', 'inventory'], newInventory);
       }}

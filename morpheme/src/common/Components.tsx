@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 type NavBarProps = {
   sections: Array<{
     label: string;
@@ -123,7 +125,7 @@ export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
 }
 
 type IconButtonProps = {
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 };
 export function IconButton({ onClick, children }: IconButtonProps) {

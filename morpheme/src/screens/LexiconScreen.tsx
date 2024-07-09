@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdOutlineDelete } from 'react-icons/md';
 import { IconButton } from '../common/Components.tsx';
 import { romanizationToIpa } from '../common/Funcs.tsx';
 import { Phoneme, Word } from '../common/Types.tsx';
@@ -153,11 +153,11 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
               romanization: '',
               ipa: '',
               ipaOverride: false,
-              definition: [''],
+              definitions: [''],
               partOfSpeech: ''
             });
           }}>
-          <MdAdd />
+          <MdAdd size={20} />
         </IconButton>
       </div>
       <div
@@ -181,14 +181,15 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                 style={{
                   backgroundColor:
                     item.id === currentWord ? 'darkgray' : 'white',
-                  paddingLeft: '0.3em'
+                  paddingLeft: '0.3em',
+                  cursor: 'pointer'
                 }}
                 onClick={() => {
                   setCurrentWord(item.id);
                 }}>
                 {item.romanization}
                 &nbsp;|&nbsp;
-                {item.definition[0]}
+                {item.definitions[0]}
               </div>
             );
           })}
@@ -221,7 +222,7 @@ function WordEditor({
         flexDirection: 'column',
         overflowY: 'scroll'
       }}>
-      {currentWord && (
+      {word && (
         <>
           <div
             style={{
@@ -231,7 +232,7 @@ function WordEditor({
               Romanization:&nbsp;
               <input
                 size={40}
-                value={word!.romanization}
+                value={word.romanization}
                 onChange={(event) => {
                   changeWord('romanization', event.currentTarget.value);
                   changeWord(
@@ -253,8 +254,8 @@ function WordEditor({
               IPA:&nbsp;
               <input
                 size={40}
-                value={word!.ipa}
-                disabled={!word!.ipaOverride}
+                value={word.ipa}
+                disabled={!word.ipaOverride}
                 onInput={(event) => {
                   changeWord('ipa', event.currentTarget.value);
                 }}
@@ -267,14 +268,14 @@ function WordEditor({
               <label>
                 <input
                   type="checkbox"
-                  checked={word!.ipaOverride}
+                  checked={word.ipaOverride}
                   onChange={(event) => {
                     changeWord('ipaOverride', event.currentTarget.checked);
                     if (!event.currentTarget.checked) {
                       changeWord(
                         'ipa',
                         romanizationToIpa(
-                          word!.romanization,
+                          word.romanization,
                           createRomanizationMap()
                         )
                       );
@@ -283,6 +284,85 @@ function WordEditor({
                 />
                 Override autogeneration
               </label>
+            </div>
+          </div>
+          <div
+            style={{
+              marginBottom: '1em'
+            }}>
+            <label>
+              Part of Speech:&nbsp;
+              <select
+                value={word.partOfSpeech}
+                onChange={(event) => {
+                  changeWord('partOfSpeech', event.currentTarget.value);
+                }}>
+                <option value="">-</option>
+                <option value="noun">Noun</option>
+                <option value="verb">Verb</option>
+                <option value="adjective">Adjective</option>
+                <option value="adverb">Adverb</option>
+                <option value="pronoun">Pronoun</option>
+                <option value="proper noun">Proper Noun</option>
+                <option value="particle">Particle</option>
+              </select>
+            </label>
+          </div>
+          <div
+            style={{
+              marginBottom: '1em'
+            }}>
+            Definitions:
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                border: '1px solid black'
+              }}>
+              <div
+                style={{
+                  display: 'flex',
+                  padding: '0.3em'
+                }}>
+                <IconButton
+                  onClick={() => {
+                    const newDefinitions = word.definitions;
+                    newDefinitions.push('');
+                    changeWord('definitions', newDefinitions);
+                  }}>
+                  <MdAdd size={18} />
+                </IconButton>
+              </div>
+              <ol>
+                {word.definitions.map((item, index) => (
+                  <li
+                    key={index}
+                    style={{
+                      marginBottom: '1em'
+                    }}>
+                    <input
+                      value={item}
+                      onInput={(event) => {
+                        const newDefinitions = word.definitions;
+                        newDefinitions.splice(
+                          index,
+                          1,
+                          event.currentTarget.value
+                        );
+                        changeWord('definitions', newDefinitions);
+                      }}
+                      style={{
+                        minWidth: '20em',
+                        width: '70%'
+                      }}
+                    />
+                    &nbsp;
+                    <IconButton onClick={(event) => {}}>
+                      <MdOutlineDelete size={18} />
+                    </IconButton>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </>

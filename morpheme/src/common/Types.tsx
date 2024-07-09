@@ -29,7 +29,7 @@ export type Word = {
   romanization: string;
   ipa: string;
   ipaOverride: boolean;
-  definition: Array<string>;
+  definitions: Array<string>;
   partOfSpeech: PartOfSpeech;
 };
 type PartOfSpeech =
