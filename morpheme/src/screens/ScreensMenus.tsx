@@ -1,6 +1,4 @@
-import { MdAdd } from 'react-icons/md';
-import * as tb from 'react-icons/tb';
-import { TbSquareAsterisk } from 'react-icons/tb';
+import { TbSquareAsterisk, TbSquareOff, TbSquarePlus } from 'react-icons/tb';
 import { IconButton } from '../common/Components.tsx';
 import { screenPosition, screenStr } from '../common/Types';
 import { useStoreState } from '../common/Vals';
@@ -85,7 +83,12 @@ function MenuButtons({ position }: MenuButtonsProps) {
         onClick={() => {
           removeWindows(position);
         }}>
-        <tb.TbSquareOff size={17} />
+        <TbSquareOff
+          size={17}
+          style={{
+            transform: 'scaleX(-1)'
+          }}
+        />
       </IconButton>
       <IconButton
         onClick={() => {
@@ -105,7 +108,7 @@ function MenuButtons({ position }: MenuButtonsProps) {
             replaceSubmenus(position, '');
           }
         }}>
-        <MdAdd size={17} />
+        <TbSquarePlus size={17} />
       </IconButton>
     </div>
   );

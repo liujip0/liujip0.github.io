@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Alert, NavSection } from '../../common/Components.tsx';
+import {
+  TbCopy,
+  TbTrash,
+  TbTriangle,
+  TbTriangleInverted
+} from 'react-icons/tb';
+import { Alert, IconButton, NavSection } from '../../common/Components.tsx';
 import {
   diacriticToChar,
   sortConsonantsDiacritics,
@@ -327,33 +333,33 @@ function PhonemeTr({
         />
       </td>
       <td>
-        <button
-          onClick={() => {
-            moveUpPhoneme(item.id);
-          }}>
-          Move Up
-        </button>
-        &nbsp;
-        <button
-          onClick={() => {
-            moveDownPhoneme(item.id);
-          }}>
-          Move Down
-        </button>
-        <br />
-        <button
+        <IconButton
           onClick={() => {
             addPhoneme(item);
           }}>
-          Duplicate
-        </button>
+          <TbCopy size={18} />
+        </IconButton>
         &nbsp;
-        <button
+        <IconButton
+          onClick={() => {
+            moveUpPhoneme(item.id);
+          }}>
+          <TbTriangle size={18} />
+        </IconButton>
+        &nbsp;
+        <IconButton
+          onClick={() => {
+            moveDownPhoneme(item.id);
+          }}>
+          <TbTriangleInverted size={18} />
+        </IconButton>
+        &nbsp;
+        <IconButton
           onClick={() => {
             deletePhoneme(item.id);
           }}>
-          Delete
-        </button>
+          <TbTrash size={18} />
+        </IconButton>
       </td>
     </tr>
   );

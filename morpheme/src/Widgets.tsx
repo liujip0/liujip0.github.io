@@ -25,7 +25,8 @@ export default function Widgets() {
               <button
                 key={char}
                 style={{
-                  fontFamily: 'monospace'
+                  fontFamily: 'monospace',
+                  marginRight: '0.2em'
                 }}
                 onClick={() => {
                   if (lastInput) {

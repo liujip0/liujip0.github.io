@@ -1,12 +1,13 @@
 import { EditorState, convertToRaw } from 'draft-js';
 import { Fragment, useState } from 'react';
 import {
-  MdOutlineCreateNewFolder,
-  MdOutlineDelete,
-  MdOutlineFolder,
-  MdOutlineInsertDriveFile,
-  MdOutlineNoteAdd
-} from 'react-icons/md';
+  TbFile,
+  TbFolder,
+  TbPlus,
+  TbTrash,
+  TbTriangle,
+  TbTriangleInverted
+} from 'react-icons/tb';
 import { Alert, IconButton } from '../../common/Components.tsx';
 import { findArticleChildren } from '../../common/Funcs.tsx';
 import { Article, Folder } from '../../common/Types.tsx';
@@ -125,7 +126,8 @@ function Articles({
           backgroundColor: 'white',
           marginBottom: '1em',
           display: 'flex',
-          justifyContent: 'space-around'
+          justifyContent: 'space-around',
+          alignItems: 'center'
         }}>
         <IconButton
           onClick={() => {
@@ -148,7 +150,8 @@ function Articles({
               ]);
             }
           }}>
-          <MdOutlineNoteAdd size={20} />
+          <TbPlus size={12} />
+          <TbFile size={18} />
         </IconButton>
         <IconButton
           onClick={() => {
@@ -169,7 +172,20 @@ function Articles({
               ]);
             }
           }}>
-          <MdOutlineCreateNewFolder size={20} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <TbPlus size={12} />
+            <TbFolder size={18} />
+          </div>
+        </IconButton>
+        <IconButton>
+          <TbTriangle size={18} />
+        </IconButton>
+        <IconButton>
+          <TbTriangleInverted size={18} />
         </IconButton>
         <IconButton
           onClick={() => {
@@ -177,7 +193,7 @@ function Articles({
               setDeleteArticle(true);
             }
           }}>
-          <MdOutlineDelete size={20} />
+          <TbTrash size={18} />
         </IconButton>
         {deleteArticle && (
           <Alert
@@ -266,20 +282,28 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                     Math.max(0, depth - 1) * 0.3 +
                     Math.max(0, depth - 2) * 0.8 +
                     'em',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center'
                 }}>
-                {depth > 1 ?
-                  index === list.length - 1 ?
-                    '└'
-                  : '├'
-                : ''}
-                &nbsp;
+                <div
+                  style={{
+                    marginRight: '0.2em'
+                  }}>
+                  {depth > 1 ?
+                    index === list.length - 1 ?
+                      '└'
+                    : '├'
+                  : ''}
+                </div>
                 {item.id !== 'root' &&
-                  (item.type === 'article' ?
-                    <MdOutlineInsertDriveFile />
-                  : <MdOutlineFolder />)}
-                &nbsp;
-                {item.name}
+                  (item.type === 'article' ? <TbFile /> : <TbFolder />)}
+                <div
+                  style={{
+                    marginLeft: '0.2em'
+                  }}>
+                  {item.name}
+                </div>
               </div>
               {item.type === 'folder' && (
                 <ArticlesList
@@ -331,6 +355,7 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
             onInput={(event) => {
               changeArticle(article.id, 'name', event.currentTarget.value);
             }}
+            disabled={article.id === 'root'}
           />
         </label>
       </div>

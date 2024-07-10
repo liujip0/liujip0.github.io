@@ -9,32 +9,24 @@ import {
   RichUtils,
   convertFromRaw
 } from 'draft-js';
-import React, { ChangeEvent, MouseEventHandler, useRef, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import {
-  MdCode,
-  MdDone,
   MdExpandMore,
-  MdFormatAlignCenter,
-  MdFormatAlignJustify,
-  MdFormatAlignLeft,
-  MdFormatAlignRight,
-  MdFormatBold,
   MdFormatClear,
-  MdFormatItalic,
-  MdFormatListBulleted,
-  MdFormatListNumbered,
-  MdFormatQuote,
-  MdFormatUnderlined,
   MdHorizontalRule,
-  MdOutlineImage,
   MdRedo,
-  MdStrikethroughS,
-  MdSubscript,
-  MdSuperscript,
   MdUndo
 } from 'react-icons/md';
-import { RiFileCodeLine } from 'react-icons/ri';
 import {
+  TbAlignCenter,
+  TbAlignJustified,
+  TbAlignLeft,
+  TbAlignRight,
+  TbBlockquote,
+  TbBold,
+  TbCheck,
+  TbCode,
+  TbFileCode,
   TbH1,
   TbH2,
   TbH3,
@@ -42,7 +34,15 @@ import {
   TbH5,
   TbH6,
   TbHeading,
-  TbHeadingOff
+  TbHeadingOff,
+  TbItalic,
+  TbList,
+  TbListNumbers,
+  TbPhoto,
+  TbStrikethrough,
+  TbSubscript,
+  TbSuperscript,
+  TbUnderline
 } from 'react-icons/tb';
 
 const inlineMap = {
@@ -106,45 +106,6 @@ function Image({ block, contentState }: CustomBlockProps) {
   const entity = contentState.getEntity(block.getEntityAt(0));
   const { src } = entity.getData();
   return <img src={src} />;
-}
-
-function Table({ block, contentState }: CustomBlockProps) {
-  const data = contentState.getEntity(block.getEntityAt(0)).getData();
-  const initialRows = data.rows;
-  const [rows, setRows] = useState<string[][]>(initialRows);
-  const handleCellChange = (
-    rowIndex: number,
-    cellIndex: number,
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const newRows = rows.map((row: string[], rIndex: number) =>
-      row.map((cell: string, cIndex: number) =>
-        rIndex === rowIndex && cIndex === cellIndex ? event.target.value : cell
-      )
-    );
-    setRows(newRows);
-  };
-  return (
-    <table>
-      <tbody>
-        {rows.map((row: string[], rowIndex: number) => (
-          <tr key={rowIndex}>
-            {row.map((cell: string, cellIndex: number) => (
-              <td key={cellIndex}>
-                <input
-                  type="text"
-                  value={cell}
-                  onChange={(event) =>
-                    handleCellChange(rowIndex, cellIndex, event)
-                  }
-                />
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
 }
 
 type WysiwygProps = {
@@ -212,11 +173,6 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               component: Image,
               editable: false
             };
-          case 'table':
-            return {
-              component: Table,
-              editable: true
-            };
           default:
             return null;
         }
@@ -268,9 +224,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
   return (
     <div
       style={{
-        border: '1px solid black',
         margin: '1em',
-        padding: '0.7em',
         flex: '1',
         display: 'flex',
         flexDirection: 'column',
@@ -288,42 +242,42 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               event.preventDefault();
               toggleInlineStyle('BOLD');
             }}>
-            <MdFormatBold />
+            <TbBold />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleInlineStyle('ITALIC');
             }}>
-            <MdFormatItalic />
+            <TbItalic />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleInlineStyle('UNDERLINE');
             }}>
-            <MdFormatUnderlined />
+            <TbUnderline />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleInlineStyle('STRIKETHROUGH');
             }}>
-            <MdStrikethroughS />
+            <TbStrikethrough />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleInlineStyle('SUPERSCRIPT');
             }}>
-            <MdSuperscript />
+            <TbSuperscript />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleInlineStyle('SUBSCRIPT');
             }}>
-            <MdSubscript />
+            <TbSubscript />
           </WysiwygIcon>
         </WysiwygSection>
 
@@ -333,21 +287,21 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               event.preventDefault();
               toggleInlineStyle('CODE');
             }}>
-            <MdCode />
+            <TbCode />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleBlockType('code-block');
             }}>
-            <RiFileCodeLine />
+            <TbFileCode />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleBlockType('blockquote');
             }}>
-            <MdFormatQuote />
+            <TbBlockquote />
           </WysiwygIcon>
         </WysiwygSection>
 
@@ -413,35 +367,35 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         </WysiwygSection>
 
         <WysiwygSection>
-          <WysiwygSubmenu icon={<MdFormatAlignLeft />}>
+          <WysiwygSubmenu icon={<TbAlignLeft />}>
             <WysiwygSection>
               <WysiwygIcon
                 onClick={(event) => {
                   event.preventDefault();
                   toggleBlockType('align-left');
                 }}>
-                <MdFormatAlignLeft />
+                <TbAlignLeft />
               </WysiwygIcon>
               <WysiwygIcon
                 onClick={(event) => {
                   event.preventDefault();
                   toggleBlockType('align-center');
                 }}>
-                <MdFormatAlignCenter />
+                <TbAlignCenter />
               </WysiwygIcon>
               <WysiwygIcon
                 onClick={(event) => {
                   event.preventDefault();
                   toggleBlockType('align-right');
                 }}>
-                <MdFormatAlignRight />
+                <TbAlignRight />
               </WysiwygIcon>
               <WysiwygIcon
                 onClick={(event) => {
                   event.preventDefault();
                   toggleBlockType('align-justify');
                 }}>
-                <MdFormatAlignJustify />
+                <TbAlignJustified />
               </WysiwygIcon>
             </WysiwygSection>
           </WysiwygSubmenu>
@@ -450,19 +404,19 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               event.preventDefault();
               toggleBlockType('unordered-list-item');
             }}>
-            <MdFormatListBulleted />
+            <TbList />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               toggleBlockType('ordered-list-item');
             }}>
-            <MdFormatListNumbered />
+            <TbListNumbers />
           </WysiwygIcon>
         </WysiwygSection>
 
         <WysiwygSection>
-          <WysiwygSubmenu icon={<MdOutlineImage />}>
+          <WysiwygSubmenu icon={<TbPhoto />}>
             <WysiwygSection>
               <input
                 ref={imageSrcInput}
@@ -490,7 +444,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
                     });
                   }
                 }}>
-                <MdDone />
+                <TbCheck />
               </WysiwygIcon>
             </WysiwygSection>
           </WysiwygSubmenu>
@@ -546,7 +500,9 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
       <div
         style={{
           overflowY: 'scroll',
-          flex: '1'
+          flex: '1',
+          border: '1px solid black',
+          padding: '1em'
         }}>
         <Editor
           customStyleMap={inlineMap}
