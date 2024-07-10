@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { CSSProperties, MutableRefObject, useRef, useState } from 'react';
 import {
   TbChevronDown,
   TbChevronUp,
@@ -11,6 +11,21 @@ import { PartOfSpeech } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
 import { PartOfSpeechSelect } from './screens/LexiconScreen.tsx';
 
+type DictFilter = {
+  partOfSpeech: PartOfSpeech;
+  definitionCount: number;
+  romanization: string;
+  ipa: string;
+  definitions: string;
+};
+const dictFilterInit = {
+  partOfSpeech: '' as PartOfSpeech,
+  definitionCount: 0,
+  romanization: '',
+  ipa: '',
+  definitions: ''
+};
+
 export default function Widgets() {
   const conlang = useStoreState((s) => s.conlang);
   const lastInput = useStoreState((s) => s.lastInput);
@@ -20,19 +35,7 @@ export default function Widgets() {
   const cxsoutRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const [dictSearchExpanded, setDictSearchExpanded] = useState(false);
   const [dictFilterExpanded, setDictFilterExpanded] = useState(false);
-  const [dictFilter, setDictFilter] = useState<{
-    partOfSpeech: PartOfSpeech;
-    definitionCount: number;
-    romanization: string;
-    ipa: string;
-    definitions: string;
-  }>({
-    partOfSpeech: '',
-    definitionCount: 0,
-    romanization: '',
-    ipa: '',
-    definitions: ''
-  });
+  const [dictFilter, setDictFilter] = useState<DictFilter>(dictFilterInit);
   const dictSearchRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   return (
     <div
@@ -40,7 +43,8 @@ export default function Widgets() {
       style={{
         display: 'flex',
         position: 'absolute',
-        gridArea: 'b'
+        gridArea: 'b',
+        width: '100%'
       }}>
       {conlang.widgets.charInsert.enabled && (
         <Widget>
@@ -188,6 +192,9 @@ export default function Widgets() {
       )}
       {conlang.widgets.dictSearch.enabled && (
         <Widget
+          style={{
+            flex: dictFilterExpanded || dictSearchExpanded ? '1' : 'initial'
+          }}
           onClick={() => {
             setDictSearchExpanded(true);
           }}>
@@ -247,8 +254,14 @@ export default function Widgets() {
                   partOfSpeech: event.currentTarget.value as PartOfSpeech
                 });
               }}
+              style={{
+                marginRight: '0.5em'
+              }}
             />
-            <button>
+            <button
+              onClick={() => {
+                setDictFilter(dictFilterInit);
+              }}>
               <TbFilterX size={16} />
             </button>
           </div>
@@ -261,14 +274,16 @@ export default function Widgets() {
 type WidgetProps = {
   id?: string;
   onClick?: () => void;
+  style?: CSSProperties;
   children: React.ReactNode;
 };
-function Widget({ id, onClick, children }: WidgetProps) {
+function Widget({ id, onClick, style, children }: WidgetProps) {
   return (
     <div
       id={id}
       onClick={onClick}
       style={{
+        ...style,
         backgroundColor: 'darkgray',
         padding: '0.5em',
         border: '1px solid black',
