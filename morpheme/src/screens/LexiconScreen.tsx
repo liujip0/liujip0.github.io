@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { MdAdd, MdOutlineDelete } from 'react-icons/md';
+import {
+  TbCopy,
+  TbPlus,
+  TbTrash,
+  TbTriangle,
+  TbTriangleInverted
+} from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
 import { romanizationToIpa } from '../common/Funcs.tsx';
 import { Phoneme, Word } from '../common/Types.tsx';
@@ -157,7 +163,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
               partOfSpeech: ''
             });
           }}>
-          <MdAdd size={20} />
+          <TbPlus size={20} />
         </IconButton>
       </div>
       <div
@@ -360,7 +366,7 @@ function WordEditor({
                   alignItems: 'center',
                   width: 'max-content'
                 }}>
-                <MdAdd size={18} />
+                <TbPlus size={18} />
                 <div
                   style={{
                     height: 'min-content'
@@ -397,9 +403,18 @@ function WordEditor({
                         }}
                         style={{
                           minWidth: '20em',
-                          width: '70%'
+                          width: '70%',
+                          marginRight: '0.5em'
                         }}
                       />
+                      <IconButton
+                        onClick={() => {
+                          const newDefinitions = word.definitions;
+                          newDefinitions.splice(index, 0, item);
+                          changeWord('definitions', newDefinitions);
+                        }}>
+                        <TbCopy size={18} />
+                      </IconButton>
                       <IconButton
                         onClick={() => {
                           if (index > 0) {
@@ -409,13 +424,24 @@ function WordEditor({
                             changeWord('definitions', newDefinitions);
                           }
                         }}>
-                        ^
+                        <TbTriangle size={18} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          if (index < word.definitions.length - 1) {
+                            const newDefinitions = word.definitions;
+                            newDefinitions.splice(index, 1);
+                            newDefinitions.splice(index + 1, 0, item);
+                            changeWord('definitions', newDefinitions);
+                          }
+                        }}>
+                        <TbTriangleInverted size={18} />
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           setDeleteWord(index);
                         }}>
-                        <MdOutlineDelete size={18} />
+                        <TbTrash size={18} />
                       </IconButton>
                       {deleteWord === index && (
                         <Alert
@@ -423,7 +449,7 @@ function WordEditor({
                           description={
                             'Are you sure you want to delete the definition "' +
                             item +
-                            '?" This cannot be undone.'
+                            '"? This cannot be undone.'
                           }
                           onDecline={() => {
                             setDeleteWord(null);

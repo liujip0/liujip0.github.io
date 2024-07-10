@@ -1,4 +1,6 @@
-import { MdAdd, MdClose, MdOutlineSwapHoriz } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
+import * as tb from 'react-icons/tb';
+import { TbSquareAsterisk } from 'react-icons/tb';
 import { IconButton } from '../common/Components.tsx';
 import { screenPosition, screenStr } from '../common/Types';
 import { useStoreState } from '../common/Vals';
@@ -71,6 +73,7 @@ type MenuButtonsProps = {
 };
 function MenuButtons({ position }: MenuButtonsProps) {
   const removeWindows = useStoreState((s) => s.removeWindows);
+  const submenus = useStoreState((s) => s.submenus);
   const replaceSubmenus = useStoreState((s) => s.replaceSubmenus);
   return (
     <div
@@ -82,17 +85,25 @@ function MenuButtons({ position }: MenuButtonsProps) {
         onClick={() => {
           removeWindows(position);
         }}>
-        <MdClose size={17} />
+        <tb.TbSquareOff size={17} />
       </IconButton>
       <IconButton
         onClick={() => {
-          replaceSubmenus(position, 'swap');
+          if (submenus[position] !== 'swap') {
+            replaceSubmenus(position, 'swap');
+          } else {
+            replaceSubmenus(position, '');
+          }
         }}>
-        <MdOutlineSwapHoriz size={17} />
+        <TbSquareAsterisk size={17} />
       </IconButton>
       <IconButton
         onClick={() => {
-          replaceSubmenus(position, 'add');
+          if (submenus[position] !== 'add') {
+            replaceSubmenus(position, 'add');
+          } else {
+            replaceSubmenus(position, '');
+          }
         }}>
         <MdAdd size={17} />
       </IconButton>
