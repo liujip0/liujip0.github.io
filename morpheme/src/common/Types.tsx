@@ -32,7 +32,7 @@ export type Word = {
   definitions: Array<string>;
   partOfSpeech: PartOfSpeech;
 };
-type PartOfSpeech =
+export type PartOfSpeech =
   | 'noun'
   | 'verb'
   | 'adjective'

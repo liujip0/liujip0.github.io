@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEventHandler, CSSProperties, useState } from 'react';
 import {
   TbCopy,
   TbPlus,
@@ -8,7 +8,7 @@ import {
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
 import { createId, romanizationToIpa } from '../common/Funcs.tsx';
-import { Phoneme, Word } from '../common/Types.tsx';
+import { PartOfSpeech, Phoneme, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function LexiconScreen() {
@@ -232,8 +232,10 @@ function WordEditor({
   createRomanizationMap
 }: WordEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const setLastInput = useStoreState((s) => s.setLastInput);
   const [deleteWord, setDeleteWord] = useState<number | null>(null);
   const word = conlang.lexicon.find((x) => x.id === currentWord);
+  const id = createId('');
   return (
     <div
       style={{
@@ -266,6 +268,10 @@ function WordEditor({
                     )
                   );
                 }}
+                id={'wordRomanization' + id}
+                onFocus={() => {
+                  setLastInput('wordRomanization' + id);
+                }}
               />
             </label>
           </div>
@@ -281,6 +287,10 @@ function WordEditor({
                 disabled={!word.ipaOverride}
                 onInput={(event) => {
                   changeWord('ipa', event.currentTarget.value);
+                }}
+                id={'wordIpa' + id}
+                onFocus={() => {
+                  setLastInput('wordIpa' + id);
                 }}
               />
             </label>
@@ -315,22 +325,12 @@ function WordEditor({
             }}>
             <label>
               Part of Speech:&nbsp;
-              <select
+              <PartOfSpeechSelect
                 value={word.partOfSpeech}
                 onChange={(event) => {
                   changeWord('partOfSpeech', event.currentTarget.value);
-                }}>
-                <option value="">-</option>
-                <option value="noun">Noun</option>
-                <option value="verb">Verb</option>
-                <option value="adjective">Adjective</option>
-                <option value="adverb">Adverb</option>
-                <option value="pronoun">Pronoun</option>
-                <option value="proper noun">Proper Noun</option>
-                <option value="particle">Particle</option>
-                <option value="adposition">Adposition</option>
-                <option value="conjunction">Conjunction</option>
-              </select>
+                }}
+              />
             </label>
           </div>
           <div
@@ -395,6 +395,10 @@ function WordEditor({
                           minWidth: '20em',
                           width: '70%',
                           marginRight: '0.5em'
+                        }}
+                        id={'wordDefinition-' + index + id}
+                        onFocus={() => {
+                          setLastInput('wordDefinition-' + index + id);
                         }}
                       />
                       <IconButton
@@ -461,5 +465,34 @@ function WordEditor({
         </>
       )}
     </div>
+  );
+}
+
+type PartOfSpeechSelectProps = {
+  value: PartOfSpeech;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  style?: CSSProperties;
+};
+export function PartOfSpeechSelect({
+  value,
+  onChange,
+  style
+}: PartOfSpeechSelectProps) {
+  return (
+    <select
+      value={value}
+      onChange={onChange}
+      style={style}>
+      <option value="">-</option>
+      <option value="noun">Noun</option>
+      <option value="verb">Verb</option>
+      <option value="adjective">Adjective</option>
+      <option value="adverb">Adverb</option>
+      <option value="pronoun">Pronoun</option>
+      <option value="proper noun">Proper Noun</option>
+      <option value="particle">Particle</option>
+      <option value="adposition">Adposition</option>
+      <option value="conjunction">Conjunction</option>
+    </select>
   );
 }

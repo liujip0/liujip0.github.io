@@ -320,10 +320,12 @@ type ArticleEditorProps = {
 };
 function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const setLastInput = useStoreState((s) => s.setLastInput);
   const article = conlang.articles.list.find((x) => x.id === currentArticle)!;
   if (!article) {
     return null;
   }
+  const id = createId('articleTitle');
   return (
     <div
       style={{
@@ -347,6 +349,10 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
               changeArticle(article.id, 'name', event.currentTarget.value);
             }}
             disabled={article.id === 'root'}
+            id={id}
+            onFocus={() => {
+              setLastInput(id);
+            }}
           />
         </label>
       </div>

@@ -1,7 +1,15 @@
 import { MutableRefObject, useRef, useState } from 'react';
-import { TbChevronDown, TbChevronUp, TbCopy, TbFilter } from 'react-icons/tb';
+import {
+  TbChevronDown,
+  TbChevronUp,
+  TbCopy,
+  TbFilter,
+  TbFilterX
+} from 'react-icons/tb';
 import { parseCxs, unparseCxs } from './common/Funcs.tsx';
+import { PartOfSpeech } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
+import { PartOfSpeechSelect } from './screens/LexiconScreen.tsx';
 
 export default function Widgets() {
   const conlang = useStoreState((s) => s.conlang);
@@ -10,6 +18,21 @@ export default function Widgets() {
   const [cxsExpanded, setCxsExpanded] = useState(false);
   const cxsinRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const cxsoutRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const [dictSearchExpanded, setDictSearchExpanded] = useState(false);
+  const [dictFilterExpanded, setDictFilterExpanded] = useState(false);
+  const [dictFilter, setDictFilter] = useState<{
+    partOfSpeech: PartOfSpeech;
+    definitionCount: number;
+    romanization: string;
+    ipa: string;
+    definitions: string;
+  }>({
+    partOfSpeech: '',
+    definitionCount: 0,
+    romanization: '',
+    ipa: '',
+    definitions: ''
+  });
   const dictSearchRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   return (
     <div
@@ -118,8 +141,8 @@ export default function Widgets() {
                 width: 'min-content'
               }}>
               {cxsExpanded ?
-                <TbChevronUp />
-              : <TbChevronDown />}
+                <TbChevronUp size={16} />
+              : <TbChevronDown size={16} />}
             </button>
           </div>
           <div
@@ -164,7 +187,10 @@ export default function Widgets() {
         </Widget>
       )}
       {conlang.widgets.dictSearch.enabled && (
-        <Widget>
+        <Widget
+          onClick={() => {
+            setDictSearchExpanded(true);
+          }}>
           <div
             style={{
               display: 'flex',
@@ -182,11 +208,50 @@ export default function Widgets() {
                 marginRight: '0.5em'
               }}
             />
-            <button>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                setDictFilterExpanded(dictFilterExpanded ? false : true);
+              }}
+              style={{
+                marginRight: '0.5em'
+              }}>
               <TbFilter size={16} />
             </button>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                setDictSearchExpanded(dictSearchExpanded ? false : true);
+              }}
+              style={{
+                height: 'min-content',
+                width: 'min-content'
+              }}>
+              {dictSearchExpanded ?
+                <TbChevronUp size={16} />
+              : <TbChevronDown size={16} />}
+            </button>
           </div>
-          {dictSearchRef.current?.value && <div></div>}
+          <div
+            style={{
+              marginTop: '0.3em',
+              display: dictFilterExpanded ? 'flex' : 'none',
+              alignItems: 'center',
+              flexWrap: 'wrap'
+            }}>
+            <PartOfSpeechSelect
+              value={dictFilter.partOfSpeech}
+              onChange={(event) => {
+                setDictFilter({
+                  ...dictFilter,
+                  partOfSpeech: event.currentTarget.value as PartOfSpeech
+                });
+              }}
+            />
+            <button>
+              <TbFilterX size={16} />
+            </button>
+          </div>
         </Widget>
       )}
     </div>

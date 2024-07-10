@@ -1,7 +1,6 @@
 import {
   AtomicBlockUtils,
   ContentBlock,
-  ContentState,
   Editor,
   EditorState,
   Modifier,
@@ -42,6 +41,7 @@ import {
   TbSuperscript,
   TbUnderline
 } from 'react-icons/tb';
+import { CodeBlock, HorizontalRule, TextAlign } from './WysiwygComponents.tsx';
 
 const inlineMap = {
   CODE: {
@@ -59,52 +59,6 @@ const inlineMap = {
     verticalAlign: 'sub'
   }
 };
-
-type CustomBlockProps = {
-  block: ContentBlock;
-  contentState: ContentState;
-};
-
-function CodeBlock({ block }: CustomBlockProps) {
-  return (
-    <pre
-      style={{
-        backgroundColor: 'lightgray',
-        padding: '4px 6px',
-        borderRadius: '4px'
-      }}>
-      <code className="monospace">{block.getText()}</code>
-    </pre>
-  );
-}
-
-type TextAlignProps = {
-  blockProps: {
-    align: 'left' | 'center' | 'right' | 'justify';
-  };
-};
-function TextAlign({ block, blockProps }: CustomBlockProps & TextAlignProps) {
-  const { align } = blockProps;
-  return (
-    <div
-      style={{
-        textAlign: align
-      }}>
-      {block.getText()}
-    </div>
-  );
-}
-
-function HorizontalRule() {
-  console.log('hr');
-  return <hr />;
-}
-
-function Image({ block, contentState }: CustomBlockProps) {
-  const entity = contentState.getEntity(block.getEntityAt(0));
-  const { src } = entity.getData();
-  return <img src={src} />;
-}
 
 type WysiwygProps = {
   value: RawDraftContentState;
