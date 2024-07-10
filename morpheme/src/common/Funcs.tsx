@@ -264,3 +264,18 @@ export function romanizationToIpa(
   }
   return ipa;
 }
+
+export function createId(type: string): string {
+  const datetime = new Date();
+  return (
+    type +
+    '-' +
+    datetime.getHours() +
+    '-' +
+    datetime.getMinutes() +
+    '-' +
+    datetime.getSeconds() +
+    '-' +
+    datetime.getMilliseconds()
+  );
+}

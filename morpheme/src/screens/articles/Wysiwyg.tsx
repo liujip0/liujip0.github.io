@@ -11,20 +11,17 @@ import {
 } from 'draft-js';
 import React, { MouseEventHandler, useRef, useState } from 'react';
 import {
-  MdExpandMore,
-  MdFormatClear,
-  MdHorizontalRule,
-  MdRedo,
-  MdUndo
-} from 'react-icons/md';
-import {
   TbAlignCenter,
   TbAlignJustified,
   TbAlignLeft,
   TbAlignRight,
+  TbArrowBackUp,
+  TbArrowForwardUp,
   TbBlockquote,
   TbBold,
   TbCheck,
+  TbChevronDown,
+  TbClearFormatting,
   TbCode,
   TbFileCode,
   TbH1,
@@ -39,6 +36,7 @@ import {
   TbList,
   TbListNumbers,
   TbPhoto,
+  TbSeparator,
   TbStrikethrough,
   TbSubscript,
   TbSuperscript,
@@ -453,7 +451,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               event.preventDefault();
               insertComponent('horizontal-rule');
             }}>
-            <MdHorizontalRule />
+            <TbSeparator />
           </WysiwygIcon>
         </WysiwygSection>
 
@@ -463,14 +461,14 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
               event.preventDefault();
               handleEditorChange(EditorState.undo(editorState));
             }}>
-            <MdUndo />
+            <TbArrowBackUp />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
               event.preventDefault();
               handleEditorChange(EditorState.redo(editorState));
             }}>
-            <MdRedo />
+            <TbArrowForwardUp />
           </WysiwygIcon>
           <WysiwygIcon
             onClick={(event) => {
@@ -493,7 +491,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
                 )
               );
             }}>
-            <MdFormatClear />
+            <TbClearFormatting />
           </WysiwygIcon>
         </WysiwygSection>
       </div>
@@ -594,7 +592,7 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
           fontSize: '18px'
         }}>
         {icon}
-        <MdExpandMore />
+        <TbChevronDown />
       </button>
       {open && (
         <div

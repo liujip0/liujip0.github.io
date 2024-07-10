@@ -1,10 +1,8 @@
-import { useStoreState } from './common/Vals.tsx';
 import ScreensLayout from './screens/ScreensLayout.tsx';
 import TopBar from './TopBar';
 import Widgets from './Widgets';
 
 export default function AppLayout() {
-  const setCxsExpanded = useStoreState((s) => s.setCxsExpanded);
   return (
     <div
       style={{
@@ -20,16 +18,6 @@ export default function AppLayout() {
         gridTemplateAreas: `'a a a' 'b b b' 'a0 c a1' 'd d d' 'a2 e a3'`,
         overflow: 'scroll',
         backgroundColor: 'lightgray'
-      }}
-      onClick={(e) => {
-        if (
-          !document.getElementById('cxswidget')!.contains(e.target as Node) &&
-          !document
-            .getElementById('charinsertwidget')!
-            .contains(e.target as Node)
-        ) {
-          setCxsExpanded(false);
-        }
       }}>
       <TopBar />
       <Widgets />

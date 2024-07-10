@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { create } from 'zustand';
-import { deepUpdate } from './Funcs';
+import { createId, deepUpdate } from './Funcs';
 import {
   Conlang,
   screenPosition,
@@ -65,9 +65,6 @@ interface StoreState {
 
   lastInput: string;
   setLastInput: (value: string) => void;
-
-  cxsExpanded: boolean;
-  setCxsExpanded: (value: boolean) => void;
 }
 export const useStoreState = create<StoreState>()((set) => ({
   saved: true,
@@ -89,17 +86,7 @@ export const useStoreState = create<StoreState>()((set) => ({
   windows: ['start-0', 'start-0', 'start-0', 'start-0'],
   addWindows: (position, screen) =>
     set((s) => {
-      const datetime = new Date();
-      const id =
-        screen +
-        '-' +
-        datetime.getHours() +
-        '-' +
-        datetime.getMinutes() +
-        '-' +
-        datetime.getSeconds() +
-        '-' +
-        datetime.getMilliseconds();
+      const id = createId(screen);
       switch (position) {
         case 0: {
           if (
@@ -189,17 +176,7 @@ export const useStoreState = create<StoreState>()((set) => ({
     }),
   swapWindows: (position, screen) =>
     set((s) => {
-      const datetime = new Date();
-      const id =
-        screen +
-        '-' +
-        datetime.getHours() +
-        '-' +
-        datetime.getMinutes() +
-        '-' +
-        datetime.getSeconds() +
-        '-' +
-        datetime.getMilliseconds();
+      const id = createId(screen);
       if (
         s.windows[0] === s.windows[1] &&
         s.windows[1] === s.windows[2] &&
@@ -388,8 +365,5 @@ export const useStoreState = create<StoreState>()((set) => ({
   replaceConlang: (value) => set(() => ({ conlang: value, saved: false })),
 
   lastInput: '',
-  setLastInput: (value) => set(() => ({ lastInput: value })),
-
-  cxsExpanded: false,
-  setCxsExpanded: (value) => set(() => ({ cxsExpanded: value }))
+  setLastInput: (value) => set(() => ({ lastInput: value }))
 }));

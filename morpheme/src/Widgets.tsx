@@ -1,4 +1,5 @@
-import { MutableRefObject, useRef } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
+import { TbChevronDown, TbChevronUp, TbCopy, TbFilter } from 'react-icons/tb';
 import { parseCxs, unparseCxs } from './common/Funcs.tsx';
 import { useStoreState } from './common/Vals.tsx';
 
@@ -6,10 +7,10 @@ export default function Widgets() {
   const conlang = useStoreState((s) => s.conlang);
   const lastInput = useStoreState((s) => s.lastInput);
   const setLastInput = useStoreState((s) => s.setLastInput);
-  const cxsExpanded = useStoreState((s) => s.cxsExpanded);
-  const setCxsExpanded = useStoreState((s) => s.setCxsExpanded);
+  const [cxsExpanded, setCxsExpanded] = useState(false);
   const cxsinRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const cxsoutRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const dictSearchRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   return (
     <div
       id="charinsertwidget"
@@ -62,48 +63,70 @@ export default function Widgets() {
           })}
         </Widget>
       )}
-      {
-        //TODO dictSearch
-      }
       {conlang.widgets.cxs.enabled && (
         <Widget
           id="cxswidget"
           onClick={() => {
             setCxsExpanded(true);
           }}>
-          <input
-            className="charis"
-            ref={cxsinRef}
-            id="cxsin"
-            onFocus={() => {
-              setCxsExpanded(true);
-              setLastInput('cxsin');
-            }}
-            placeholder="Conlang X-SAMPA"
-            onInput={() => {
-              if (cxsoutRef.current && cxsinRef.current) {
-                cxsoutRef.current.value = parseCxs(cxsinRef.current.value);
-              }
-            }}
-          />
-          &nbsp;
-          <button
-            onClick={async () => {
-              if (cxsinRef.current) {
-                if (navigator.clipboard) {
-                  await navigator.clipboard.writeText(cxsinRef.current.value);
-                } else {
-                  cxsinRef.current.select();
-                  document.execCommand('copy');
-                }
-              }
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center'
             }}>
-            Copy
-          </button>
+            <input
+              className="charis"
+              ref={cxsinRef}
+              id="cxsin"
+              onFocus={() => {
+                setCxsExpanded(true);
+                setLastInput('cxsin');
+              }}
+              placeholder="Conlang X-SAMPA"
+              onInput={() => {
+                if (cxsoutRef.current && cxsinRef.current) {
+                  cxsoutRef.current.value = parseCxs(cxsinRef.current.value);
+                }
+              }}
+              style={{
+                marginRight: '0.5em'
+              }}
+            />
+            <button
+              onClick={async () => {
+                if (cxsinRef.current) {
+                  if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(cxsinRef.current.value);
+                  } else {
+                    cxsinRef.current.select();
+                    document.execCommand('copy');
+                  }
+                }
+              }}
+              style={{
+                marginRight: '0.5em'
+              }}>
+              <TbCopy size={16} />
+            </button>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                setCxsExpanded(cxsExpanded ? false : true);
+              }}
+              style={{
+                height: 'min-content',
+                width: 'min-content'
+              }}>
+              {cxsExpanded ?
+                <TbChevronUp />
+              : <TbChevronDown />}
+            </button>
+          </div>
           <div
             style={{
               marginTop: '0.3em',
-              display: cxsExpanded ? 'block' : 'none'
+              display: cxsExpanded ? 'flex' : 'none',
+              alignItems: 'center'
             }}>
             <input
               className="charis"
@@ -118,8 +141,10 @@ export default function Widgets() {
                   cxsinRef.current.value = unparseCxs(cxsoutRef.current.value);
                 }
               }}
+              style={{
+                marginRight: '0.5em'
+              }}
             />
-            &nbsp;
             <button
               onClick={async () => {
                 if (cxsoutRef.current) {
@@ -133,9 +158,35 @@ export default function Widgets() {
                   }
                 }
               }}>
-              Copy
+              <TbCopy size={16} />
             </button>
           </div>
+        </Widget>
+      )}
+      {conlang.widgets.dictSearch.enabled && (
+        <Widget>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <input
+              id="dictsearch"
+              onFocus={() => {
+                setLastInput('dictsearch');
+              }}
+              className="charis"
+              placeholder="Lexicon Search"
+              ref={dictSearchRef}
+              style={{
+                marginRight: '0.5em'
+              }}
+            />
+            <button>
+              <TbFilter size={16} />
+            </button>
+          </div>
+          {dictSearchRef.current?.value && <div></div>}
         </Widget>
       )}
     </div>
@@ -157,7 +208,8 @@ function Widget({ id, onClick, children }: WidgetProps) {
         padding: '0.5em',
         border: '1px solid black',
         height: 'min-content',
-        zIndex: '2'
+        zIndex: '2',
+        position: 'relative'
       }}>
       {children}
     </div>

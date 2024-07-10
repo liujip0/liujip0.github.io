@@ -9,7 +9,7 @@ import {
   TbTriangleInverted
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../../common/Components.tsx';
-import { findArticleChildren } from '../../common/Funcs.tsx';
+import { createId, findArticleChildren } from '../../common/Funcs.tsx';
 import { Article, Folder } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 import Wysiwyg from './Wysiwyg.tsx';
@@ -89,16 +89,7 @@ function Articles({
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [deleteArticle, setDeleteArticle] = useState(false);
   const addArticle = (article: Folder | Article) => {
-    const datetime = new Date();
-    const id =
-      article.type +
-      datetime.getHours() +
-      '-' +
-      datetime.getMinutes() +
-      '-' +
-      datetime.getSeconds() +
-      '-' +
-      datetime.getMilliseconds();
+    const id = createId(article.type);
     const newArticles = conlang.articles.list;
     newArticles.push({
       ...article,

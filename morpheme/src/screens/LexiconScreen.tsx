@@ -7,7 +7,7 @@ import {
   TbTriangleInverted
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
-import { romanizationToIpa } from '../common/Funcs.tsx';
+import { createId, romanizationToIpa } from '../common/Funcs.tsx';
 import { Phoneme, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
@@ -116,17 +116,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const addWord = (word: Word) => {
-    const datetime = new Date();
-    const id =
-      word.romanization +
-      '-' +
-      datetime.getHours() +
-      '-' +
-      datetime.getMinutes() +
-      '-' +
-      datetime.getSeconds() +
-      '-' +
-      datetime.getMilliseconds();
+    const id = createId(word.romanization);
     const newLexicon = conlang.lexicon;
     newLexicon.push({
       ...word,

@@ -7,6 +7,7 @@ import {
 } from 'react-icons/tb';
 import { Alert, IconButton, NavSection } from '../../common/Components.tsx';
 import {
+  createId,
   diacriticToChar,
   sortConsonantsDiacritics,
   sortVowelDiacritics
@@ -49,20 +50,10 @@ function PhonemesTable() {
     }
   };
   const addPhoneme = (phoneme: Phoneme) => {
-    const datetime = new Date();
     const newInventory = conlang.phonology.inventory;
     newInventory.push({
       ...phoneme,
-      id:
-        phoneme.base +
-        '-' +
-        datetime.getHours() +
-        '-' +
-        datetime.getMinutes() +
-        '-' +
-        datetime.getSeconds() +
-        '-' +
-        datetime.getMilliseconds()
+      id: createId(phoneme.base)
     });
     changeConlang(['phoology', 'inventory'], newInventory);
   };
@@ -224,6 +215,8 @@ function PhonemeTr({
   getPhoneme
 }: PhonemeTrProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const setLastInput = useStoreState((s) => s.setLastInput);
+  const id = createId('phonemeInput');
   const diacriticOnChange = (
     diacritic: IpaConsonantDiacritic | IpaVowelDiacritic,
     index: 0 | 1
@@ -329,6 +322,10 @@ function PhonemeTr({
           value={item.romanization}
           onInput={(event) => {
             changePhoneme(item.id, 'romanization', event.currentTarget.value);
+          }}
+          id={id}
+          onFocus={() => {
+            setLastInput(id);
           }}
         />
       </td>
