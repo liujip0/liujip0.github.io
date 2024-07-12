@@ -32,17 +32,19 @@ export type Word = {
   definitions: Array<string>;
   partOfSpeech: PartOfSpeech;
 };
-export type PartOfSpeech =
-  | 'noun'
-  | 'verb'
-  | 'adjective'
-  | 'adverb'
-  | 'pronoun'
-  | 'proper noun'
-  | 'particle'
-  | 'adposition'
-  | 'conjunction'
-  | '';
+export const PartOfSpeech_Arr = [
+  'noun',
+  'verb',
+  'adjective',
+  'adverb',
+  'pronoun',
+  'proper noun',
+  'particle',
+  'adposition',
+  'conjunction',
+  ''
+];
+export type PartOfSpeech = (typeof PartOfSpeech_Arr)[number];
 export type Folder = {
   id: string;
   name: string;
