@@ -104,7 +104,12 @@ function DictSearchWidget() {
         <button
           onClick={(event) => {
             event.stopPropagation();
-            setDictSearchExpanded(dictSearchExpanded ? false : true);
+            if (dictSearchExpanded) {
+              setDictSearchExpanded(false);
+              setDictFilterExpanded(false);
+            } else {
+              setDictSearchExpanded(true);
+            }
           }}
           style={{
             height: 'min-content',
@@ -201,7 +206,7 @@ function DictSearchWidget() {
       <div
         style={{
           marginTop: '0.3em',
-          display: dictFilterExpanded ? 'flex' : 'none'
+          display: dictSearchExpanded ? 'flex' : 'none'
         }}>
         {(() => {
           if (
@@ -258,26 +263,30 @@ function DictSearchWidget() {
                 item.definitions.some((x) => x.includes(dictFilter.definitions))
               );
             }
-            return (
-              <table>
-                {filteredLexicon.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.romanization}</td>
-                    <td>{item.ipa}</td>
-                    <td>{item.partOfSpeech}</td>
-                    <td>
-                      <ol>
-                        {item.definitions.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ol>
-                    </td>
-                  </tr>
-                ))}
-              </table>
-            );
+            return filteredLexicon.length ?
+                <table>
+                  {filteredLexicon.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.romanization}</td>
+                      <td>{item.ipa}</td>
+                      <td>{item.partOfSpeech}</td>
+                      <td>
+                        <ol
+                          style={{
+                            margin: '0',
+                            paddingLeft: '1em'
+                          }}>
+                          {item.definitions.map((x) => (
+                            <li>{x}</li>
+                          ))}
+                        </ol>
+                      </td>
+                    </tr>
+                  ))}
+                </table>
+              : <i>No words match your search</i>;
           } else {
-            return <i>No words match your search</i>;
+            return <i>Start typing to search</i>;
           }
         })()}
       </div>
