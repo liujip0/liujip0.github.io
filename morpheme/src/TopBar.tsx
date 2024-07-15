@@ -1,3 +1,4 @@
+import jsPDF from 'jspdf';
 import { FormEventHandler, useEffect, useState } from 'react';
 import {
   TbChevronDown,
@@ -8,6 +9,7 @@ import {
 import { IconButton, Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
 import { useStoreState } from './common/Vals';
+import raw from './fonts/charis/CharisSIL-Regular.ttf';
 
 export default function TopBar() {
   const conlang = useStoreState((s) => s.conlang);
@@ -79,12 +81,15 @@ type PdfOptions = {
   author: string;
   enabledSections: Record<string, boolean>;
   orderedSections: Array<string>;
+  pageNumbers: boolean;
+  pageNumsIncludeTitle: boolean;
+  paperSize: 'letter' | 'a4';
 };
 function ExportConlang() {
   const conlang = useStoreState((s) => s.conlang);
   const [exportMenu, setExportMenu] = useState(false);
   const [pdfPopup, setPdfPopup] = useState(false);
-  const pdfOptionsInit = {
+  const pdfOptionsInit: PdfOptions = {
     title: conlang.name,
     author: '',
     enabledSections: {
@@ -92,7 +97,10 @@ function ExportConlang() {
       contents: true,
       phonology: true
     },
-    orderedSections: ['title', 'contents', 'phonology']
+    orderedSections: ['title', 'contents', 'phonology'],
+    pageNumbers: true,
+    pageNumsIncludeTitle: false,
+    paperSize: 'letter'
   };
   const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
@@ -118,7 +126,9 @@ function ExportConlang() {
                 border: '1px solid black',
                 zIndex: '90',
                 backgroundColor: 'white',
-                fontSize: '0.7em'
+                fontSize: '0.7em',
+                width: 'max-content',
+                padding: '0.2em'
               }}>
               <div
                 onClick={() => {
@@ -169,6 +179,24 @@ function ExportConlang() {
                 });
               }}
             />
+            <label
+              style={{
+                fontSize: '0.7em',
+                marginBottom: '0.5em'
+              }}>
+              <b>Paper Size:&nbsp;</b>
+              <select
+                value={pdfOptions.paperSize}
+                onChange={(event) => {
+                  setPdfOptions({
+                    ...pdfOptions,
+                    paperSize: event.currentTarget.value
+                  } as PdfOptions);
+                }}>
+                <option value="letter">Letter</option>
+                <option value="a4">A4</option>
+              </select>
+            </label>
             <div
               style={{
                 fontSize: '0.7em',
@@ -176,7 +204,7 @@ function ExportConlang() {
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-              Sections to include
+              <b>Sections to Include</b>
               {pdfOptions.orderedSections.map((item) => (
                 <label>
                   <input
@@ -219,12 +247,53 @@ function ExportConlang() {
                       const index = pdfOptions.orderedSections.indexOf(item);
                       if (index < pdfOptions.orderedSections.length - 1) {
                         const newOrderedSections = pdfOptions.orderedSections;
+                        newOrderedSections.splice(index, 1);
+                        newOrderedSections.splice(index + 1, 0, item);
+                        setPdfOptions({
+                          ...pdfOptions,
+                          orderedSections: newOrderedSections
+                        });
                       }
                     }}>
                     <TbTriangleInverted />
                   </IconButton>
                 </label>
               ))}
+            </div>
+            <div
+              style={{
+                fontSize: '0.7em',
+                marginBottom: '0.5em',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+              <b>Other Settings</b>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={pdfOptions.pageNumbers}
+                  onChange={(event) => {
+                    setPdfOptions({
+                      ...pdfOptions,
+                      pageNumbers: event.currentTarget.checked
+                    });
+                  }}
+                />
+                Page Numbers
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={pdfOptions.pageNumsIncludeTitle}
+                  onChange={(event) => {
+                    setPdfOptions({
+                      ...pdfOptions,
+                      pageNumsIncludeTitle: event.currentTarget.checked
+                    });
+                  }}
+                />
+                Include Title Page
+              </label>
             </div>
           </div>
           <div
@@ -241,8 +310,16 @@ function ExportConlang() {
             </button>
             &nbsp;
             <button
-              onClick={() => {
+              onClick={async () => {
                 setPdfPopup(false);
+                const doc = new jsPDF({
+                  unit: {
+                    letter: 'in',
+                    a4: 'mm'
+                  }[pdfOptions.paperSize],
+                  format: pdfOptions.paperSize
+                });
+                const charis = await (await fetch(raw)).blob();
               }}>
               Finish
             </button>
@@ -267,7 +344,7 @@ function TextInput({ id, label, value, onInput }: TextInputProps) {
         fontSize: '0.7em',
         marginBottom: '0.5em'
       }}>
-      {label}:&nbsp;
+      <b>{label}:&nbsp;</b>
       <input
         type="text"
         id={id}

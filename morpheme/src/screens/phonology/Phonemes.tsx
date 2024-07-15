@@ -64,8 +64,8 @@ function PhonemesTable() {
   };
   const moveUpPhoneme = (id: string) => {
     const index = conlang.phonology.inventory.findIndex((x) => x.id === id);
-    const phoneme = conlang.phonology.inventory[index];
     if (index > 0) {
+      const phoneme = conlang.phonology.inventory[index];
       const newInventory = conlang.phonology.inventory;
       newInventory.splice(index, 1);
       newInventory.splice(index - 1, 0, phoneme);
@@ -74,8 +74,8 @@ function PhonemesTable() {
   };
   const moveDownPhoneme = (id: string) => {
     const index = conlang.phonology.inventory.findIndex((x) => x.id === id);
-    const phoneme = conlang.phonology.inventory[index];
     if (index < conlang.phonology.inventory.length - 1) {
+      const phoneme = conlang.phonology.inventory[index];
       const newInventory = conlang.phonology.inventory;
       newInventory.splice(index, 1);
       newInventory.splice(index + 1, 0, phoneme);

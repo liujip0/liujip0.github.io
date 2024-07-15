@@ -18,29 +18,6 @@ export function ArticlesScreen() {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [currentArticle, setCurrentArticle] = useState('root');
-  const sortArticles = () => {
-    const newArticles = conlang.articles.list;
-    newArticles.sort((a, b) => {
-      if (conlang.articles.foldersOnTop) {
-        if (a.type === 'folder') {
-          if (b.type === 'folder') {
-            return a.name < b.name ? -1 : 1;
-          } else {
-            return -1;
-          }
-        } else {
-          if (b.type === 'folder') {
-            return 1;
-          } else {
-            return a.name < b.name ? -1 : 1;
-          }
-        }
-      } else {
-        return a.name < b.name ? -1 : 1;
-      }
-    });
-    changeConlang(['articles', 'list'], newArticles);
-  };
   const changeArticle = (id: string, property: string, newValue: unknown) => {
     const index = conlang.articles.list.findIndex((value) => value.id === id);
     const newArticles = conlang.articles.list;
@@ -50,7 +27,6 @@ export function ArticlesScreen() {
         [property]: newValue
       });
       changeConlang(['articles', 'list'], newArticles);
-      sortArticles();
     }
   };
   return (
@@ -63,7 +39,6 @@ export function ArticlesScreen() {
         currentArticle={currentArticle}
         setCurrentArticle={setCurrentArticle}
         changeArticle={changeArticle}
-        sortArticles={sortArticles}
       />
       <ArticleEditor
         currentArticle={currentArticle}
@@ -77,13 +52,11 @@ type ArticlesProps = {
   currentArticle: string;
   setCurrentArticle: (value: string) => void;
   changeArticle: (id: string, property: string, newValue: unknown) => void;
-  sortArticles: () => void;
 };
 function Articles({
   currentArticle,
   setCurrentArticle,
-  changeArticle,
-  sortArticles
+  changeArticle
 }: ArticlesProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
@@ -96,12 +69,31 @@ function Articles({
       id: id
     });
     changeConlang(['articles', 'list'], newArticles);
-    sortArticles();
     return id;
   };
   const getArticle = (id: string) => {
     const index = conlang.articles.list.findIndex((value) => value.id === id);
     return conlang.articles.list[index];
+  };
+  const moveUpArticle = (id: string) => {
+    const index = conlang.articles.list.findIndex((value) => value.id === id);
+    if (index > 0) {
+      const article = conlang.articles.list[index];
+      const newArticles = conlang.articles.list;
+      newArticles.splice(index, 1);
+      newArticles.splice(index - 1, 0, article);
+      changeConlang(['articles', 'list'], newArticles);
+    }
+  };
+  const moveDownArticle = (id: string) => {
+    const index = conlang.articles.list.findIndex((value) => value.id === id);
+    if (index < conlang.articles.list.length - 1) {
+      const article = conlang.articles.list[index];
+      const newArticles = conlang.articles.list;
+      newArticles.splice(index, 1);
+      newArticles.splice(index + 1, 0, article);
+      changeConlang(['articles', 'list'], newArticles);
+    }
   };
   return (
     <div
@@ -172,10 +164,16 @@ function Articles({
             <TbFolder size={18} />
           </div>
         </IconButton>
-        <IconButton>
+        <IconButton
+          onClick={() => {
+            moveUpArticle(currentArticle);
+          }}>
           <TbTriangle size={18} />
         </IconButton>
-        <IconButton>
+        <IconButton
+          onClick={() => {
+            moveDownArticle(currentArticle);
+          }}>
           <TbTriangleInverted size={18} />
         </IconButton>
         <IconButton
