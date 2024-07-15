@@ -202,10 +202,25 @@ function ExportConlang() {
                   <IconButton
                     onClick={() => {
                       const index = pdfOptions.orderedSections.indexOf(item);
+                      if (index > 0) {
+                        const newOrderedSections = pdfOptions.orderedSections;
+                        newOrderedSections.splice(index, 1);
+                        newOrderedSections.splice(index - 1, 0, item);
+                        setPdfOptions({
+                          ...pdfOptions,
+                          orderedSections: newOrderedSections
+                        });
+                      }
                     }}>
                     <TbTriangle />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      const index = pdfOptions.orderedSections.indexOf(item);
+                      if (index < pdfOptions.orderedSections.length - 1) {
+                        const newOrderedSections = pdfOptions.orderedSections;
+                      }
+                    }}>
                     <TbTriangleInverted />
                   </IconButton>
                 </label>
