@@ -1,4 +1,5 @@
 import { createRef, useRef, useState } from 'react';
+import { createId } from '../common/Funcs.tsx';
 import { DimenRes } from '../common/Resources';
 import { useStoreState } from '../common/Vals';
 
@@ -11,7 +12,7 @@ export default function SettingsScreen() {
       <h2>General</h2>
       <TextInput
         id="settingsconlangname"
-        label="Conlang Name:"
+        label="Conlang Name"
         description="This will not change the file name."
         defaultValue={conlang.name}
         onSave={(value) => {
@@ -116,7 +117,7 @@ function TextInput({
   const setLastInput = useStoreState((s) => s.setLastInput);
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const time = new Date().getMilliseconds();
+  const timeId = createId(id);
   return (
     <label
       style={{
@@ -128,7 +129,7 @@ function TextInput({
       {label}
       <div>
         <input
-          id={time + id}
+          id={timeId}
           ref={inputRef}
           defaultValue={defaultValue ? defaultValue : ''}
           onKeyDown={(event) => {
@@ -137,7 +138,7 @@ function TextInput({
             }
           }}
           onFocus={() => {
-            setLastInput(time + id);
+            setLastInput(timeId);
           }}
           type="text"
           style={{
@@ -172,14 +173,14 @@ function TextInput({
   );
 }
 
-type radioInputOption = {
+type RadioInputOption = {
   label: string;
   value: string;
   description?: string;
 };
 type RadioInputProps = {
   label: string;
-  options: Array<radioInputOption>;
+  options: Array<RadioInputOption>;
   defaultValue?: string;
   description?: string;
   onSave: (value: string) => void;
@@ -221,7 +222,7 @@ function RadioInput({
         fontWeight: 'bold'
       }}>
       {label}
-      {options.map((x: radioInputOption, i: number) => {
+      {options.map((x: RadioInputOption, i: number) => {
         return (
           <div
             key={i}
@@ -309,6 +310,15 @@ function RadioInput({
           </label>
         </div>
       )}
+      {description && (
+        <div
+          style={{
+            fontSize: DimenRes.input.description,
+            fontWeight: 'normal'
+          }}>
+          {description}
+        </div>
+      )}
       <button
         onClick={() => {
           onSave(currentValue);
@@ -320,15 +330,6 @@ function RadioInput({
         }}>
         Save
       </button>
-      {description && (
-        <div
-          style={{
-            fontSize: DimenRes.input.description,
-            fontWeight: 'normal'
-          }}>
-          {description}
-        </div>
-      )}
     </label>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { TbChevronDown, TbChevronUp } from 'react-icons/tb';
 import { Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
@@ -69,11 +69,18 @@ export default function TopBar() {
   );
 }
 
-type PdfOptions = {};
-const pdfOptionsInit = {};
+type PdfOptions = {
+  title: string;
+  author: string;
+};
 function ExportConlang() {
+  const conlang = useStoreState((s) => s.conlang);
   const [exportMenu, setExportMenu] = useState(false);
   const [pdfPopup, setPdfPopup] = useState(false);
+  const pdfOptionsInit = {
+    title: conlang.name,
+    author: ''
+  };
   const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
     <>
@@ -116,14 +123,62 @@ function ExportConlang() {
             style={{
               textAlign: 'left',
               margin: '0',
-              fontSize: '1.6em'
+              fontSize: '1.3em',
+              marginBottom: '0.3em'
             }}>
             Export to PDF
           </h1>
           <div
             style={{
+              overflowY: 'scroll',
               display: 'flex',
-              justifyContent: 'flex-end'
+              flexDirection: 'column'
+            }}>
+            <TextInput
+              id="pdftitle"
+              label="Conlang Title"
+              value={pdfOptions.title}
+              onInput={(event) => {
+                setPdfOptions({
+                  ...pdfOptions,
+                  title: event.currentTarget.value
+                });
+              }}
+            />
+            <TextInput
+              id="pdfauthor"
+              label="Conlang Author"
+              value={pdfOptions.author}
+              onInput={(event) => {
+                setPdfOptions({
+                  ...pdfOptions,
+                  author: event.currentTarget.value
+                });
+              }}
+            />
+            <div
+              style={{
+                fontSize: '0.7em',
+                marginBottom: '0.5em',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+              Sections to include
+              <label>
+                <input type="checkbox" />
+                Title Page
+              </label>
+              <label>
+                <input type="checkbox" />
+                Phonology
+              </label>
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginTop: '0.3em'
             }}>
             <button
               onClick={() => {
@@ -142,6 +197,34 @@ function ExportConlang() {
         </Popup>
       )}
     </>
+  );
+}
+
+type TextInputProps = {
+  id: string;
+  label: string;
+  value: string;
+  onInput: FormEventHandler<HTMLInputElement>;
+};
+function TextInput({ id, label, value, onInput }: TextInputProps) {
+  const setLastInput = useStoreState((s) => s.setLastInput);
+  return (
+    <label
+      style={{
+        fontSize: '0.7em',
+        marginBottom: '0.5em'
+      }}>
+      {label}:&nbsp;
+      <input
+        type="text"
+        id={id}
+        onFocus={() => {
+          setLastInput('pdftitle');
+        }}
+        value={value}
+        onInput={onInput}
+      />
+    </label>
   );
 }
 
