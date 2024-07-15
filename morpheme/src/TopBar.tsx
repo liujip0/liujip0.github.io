@@ -1,6 +1,11 @@
 import { FormEventHandler, useEffect, useState } from 'react';
-import { TbChevronDown, TbChevronUp } from 'react-icons/tb';
-import { Popup } from './common/Components.tsx';
+import {
+  TbChevronDown,
+  TbChevronUp,
+  TbTriangle,
+  TbTriangleInverted
+} from 'react-icons/tb';
+import { IconButton, Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
 import { useStoreState } from './common/Vals';
 
@@ -72,6 +77,8 @@ export default function TopBar() {
 type PdfOptions = {
   title: string;
   author: string;
+  enabledSections: Record<string, boolean>;
+  orderedSections: Array<string>;
 };
 function ExportConlang() {
   const conlang = useStoreState((s) => s.conlang);
@@ -79,7 +86,13 @@ function ExportConlang() {
   const [pdfPopup, setPdfPopup] = useState(false);
   const pdfOptionsInit = {
     title: conlang.name,
-    author: ''
+    author: '',
+    enabledSections: {
+      title: true,
+      contents: true,
+      phonology: true
+    },
+    orderedSections: ['title', 'contents', 'phonology']
   };
   const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
@@ -164,14 +177,39 @@ function ExportConlang() {
                 flexDirection: 'column'
               }}>
               Sections to include
-              <label>
-                <input type="checkbox" />
-                Title Page
-              </label>
-              <label>
-                <input type="checkbox" />
-                Phonology
-              </label>
+              {pdfOptions.orderedSections.map((item) => (
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={pdfOptions.enabledSections[item]}
+                    onChange={(event) => {
+                      setPdfOptions({
+                        ...pdfOptions,
+                        enabledSections: {
+                          ...pdfOptions.enabledSections,
+                          [item]: event.currentTarget.checked
+                        }
+                      });
+                    }}
+                  />
+                  {
+                    {
+                      title: 'Title Page',
+                      contents: 'Table of Contents',
+                      phonology: 'Phonology'
+                    }[item]
+                  }
+                  <IconButton
+                    onClick={() => {
+                      const index = pdfOptions.orderedSections.indexOf(item);
+                    }}>
+                    <TbTriangle />
+                  </IconButton>
+                  <IconButton>
+                    <TbTriangleInverted />
+                  </IconButton>
+                </label>
+              ))}
             </div>
           </div>
           <div
