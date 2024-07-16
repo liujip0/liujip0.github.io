@@ -9,6 +9,10 @@ import {
 import { IconButton, Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
 import { useStoreState } from './common/Vals';
+import { charisBold } from './fonts/charis/CharisSIL-Bold-bold.ts';
+import { charisBoldItalic } from './fonts/charis/CharisSIL-BoldItalic-bolditalic.ts';
+import { charisItalic } from './fonts/charis/CharisSIL-Italic.ts';
+import { charisRegular } from './fonts/charis/CharisSIL-Regular.ts';
 
 export default function TopBar() {
   const conlang = useStoreState((s) => s.conlang);
@@ -319,17 +323,33 @@ function ExportConlang() {
                   unit: unit,
                   format: pdfOptions.paperSize
                 } as jsPDFOptions);
+                doc.addFileToVFS('CharisSIL-Regular.ttf', charisRegular);
+                doc.addFont('CharisSIL-Regular.ttf', 'CharisSIL', 'normal');
+                doc.addFileToVFS('CharisSIL-Italic.ttf', charisItalic);
+                doc.addFont('CharisSIL-Italic.ttf', 'CharisSIL', 'italic');
+                doc.addFileToVFS('CharisSIL-BoldItalic.ttf', charisBoldItalic);
+                doc.addFont(
+                  'CharisSIL-BoldItalic.ttf',
+                  'CharisSIL',
+                  'bolditalic'
+                );
+                doc.addFileToVFS('CharisSIL-Bold.ttf', charisBold);
+                doc.addFont('CharisSIL-Bold.ttf', 'CharisSIL', 'bold');
                 let tocPage = -1;
-                const toc = [];
+                const toc: Array<{
+                  section: string;
+                  page: number;
+                }> = [];
                 pdfOptions.orderedSections.map((item) => {
                   if (pdfOptions.enabledSections[item]) {
                     switch (item) {
                       case 'title': {
-                        toc.push(
-                          'Title Page',
-                          doc.getCurrentPageInfo().pageNumber
-                        );
+                        toc.push({
+                          section: 'Title Page',
+                          page: doc.getCurrentPageInfo().pageNumber
+                        });
                         doc.setFontSize(25);
+                        console.log(doc.getFontList());
                         doc.setFont('CharisSIL', 'bold');
                         doc.text(
                           pdfOptions.title,
@@ -355,11 +375,26 @@ function ExportConlang() {
                         break;
                       }
                       case 'contents': {
+                        toc.push({
+                          section: 'Table of Contents',
+                          page: doc.getCurrentPageInfo().pageNumber
+                        });
                         tocPage = doc.getCurrentPageInfo().pageNumber;
                         doc.addPage(pdfOptions.paperSize);
                         break;
                       }
                       case 'phonology': {
+                        toc.push({
+                          section: 'Phonology',
+                          page: doc.getCurrentPageInfo().pageNumber
+                        });
+                        doc.setFontSize(20);
+                        doc.setFont('CharisSIL', 'bold');
+                        doc.text(
+                          'Phonology',
+                          unit === 'in' ? 1 : 25,
+                          unit === 'in' ? 1 : 25
+                        );
                         doc.setFontSize(10);
                         doc.setFont('CharisSIL', 'normal');
                         doc.text(
