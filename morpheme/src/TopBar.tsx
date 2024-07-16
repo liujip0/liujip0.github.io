@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+import jsPDF, { jsPDFOptions } from 'jspdf';
 import { FormEventHandler, useEffect, useState } from 'react';
 import {
   TbChevronDown,
@@ -9,7 +9,6 @@ import {
 import { IconButton, Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
 import { useStoreState } from './common/Vals';
-import raw from './fonts/charis/CharisSIL-Regular.ttf';
 
 export default function TopBar() {
   const conlang = useStoreState((s) => s.conlang);
@@ -312,14 +311,31 @@ function ExportConlang() {
             <button
               onClick={async () => {
                 setPdfPopup(false);
+                const unit = {
+                  letter: 'in',
+                  a4: 'mm'
+                }[pdfOptions.paperSize];
                 const doc = new jsPDF({
-                  unit: {
-                    letter: 'in',
-                    a4: 'mm'
-                  }[pdfOptions.paperSize],
+                  unit: unit,
                   format: pdfOptions.paperSize
-                });
-                const charis = await (await fetch(raw)).blob();
+                } as jsPDFOptions);
+                doc.setFont('CharisSIL', 'normal');
+                if (pdfOptions.enabledSections.title) {
+                  doc.setFontSize(25);
+                  doc.setFont('CharisSIL', 'bold');
+                  doc.text(
+                    pdfOptions.title,
+                    unit === 'in' ? 1 : 25,
+                    unit === 'in' ? 3 : 75,
+                    {
+                      align: 'left',
+                      maxWidth: unit === 'in' ? 6.5 : 160
+                    }
+                  );
+                  if (pdfOptions.author) {
+                  }
+                }
+                doc.save(conlang.name + '.pdf');
               }}>
               Finish
             </button>
