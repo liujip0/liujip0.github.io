@@ -319,21 +319,73 @@ function ExportConlang() {
                   unit: unit,
                   format: pdfOptions.paperSize
                 } as jsPDFOptions);
-                doc.setFont('CharisSIL', 'normal');
-                if (pdfOptions.enabledSections.title) {
-                  doc.setFontSize(25);
-                  doc.setFont('CharisSIL', 'bold');
-                  doc.text(
-                    pdfOptions.title,
-                    unit === 'in' ? 1 : 25,
-                    unit === 'in' ? 3 : 75,
-                    {
-                      align: 'left',
-                      maxWidth: unit === 'in' ? 6.5 : 160
+                let tocPage = -1;
+                const toc = [];
+                pdfOptions.orderedSections.map((item) => {
+                  if (pdfOptions.enabledSections[item]) {
+                    switch (item) {
+                      case 'title': {
+                        toc.push(
+                          'Title Page',
+                          doc.getCurrentPageInfo().pageNumber
+                        );
+                        doc.setFontSize(25);
+                        doc.setFont('CharisSIL', 'bold');
+                        doc.text(
+                          pdfOptions.title,
+                          unit === 'in' ? 1 : 25,
+                          unit === 'in' ? 3 : 75,
+                          {
+                            maxWidth: unit === 'in' ? 6.5 : 160
+                          }
+                        );
+                        if (pdfOptions.author) {
+                          doc.setFontSize(16);
+                          doc.setFont('CharisSIL', 'normal');
+                          doc.text(
+                            pdfOptions.author,
+                            unit === 'in' ? 1 : 25,
+                            unit === 'in' ? 5 : 125,
+                            {
+                              maxWidth: unit === 'in' ? 6.5 : 160
+                            }
+                          );
+                        }
+                        doc.addPage(pdfOptions.paperSize);
+                        break;
+                      }
+                      case 'contents': {
+                        tocPage = doc.getCurrentPageInfo().pageNumber;
+                        doc.addPage(pdfOptions.paperSize);
+                        break;
+                      }
+                      case 'phonology': {
+                        doc.setFontSize(10);
+                        doc.setFont('CharisSIL', 'normal');
+                        doc.text(
+                          'Created with Morpheme',
+                          unit === 'in' ? 1 : 25,
+                          unit === 'in' ? 10.5 : 284
+                        );
+                        doc.setTextColor(0, 0, 255);
+                        doc.textWithLink(
+                          'https://liujip0.github.io/morpheme',
+                          unit === 'in' ? 2.5 : 62.5,
+                          unit === 'in' ? 10.5 : 284,
+                          {
+                            url: 'https://liujip0.github.io/morpheme'
+                          }
+                        );
+                        doc.setFontSize(16);
+                        doc.setTextColor(0);
+                        doc.addPage(pdfOptions.paperSize);
+                        break;
+                      }
                     }
-                  );
-                  if (pdfOptions.author) {
                   }
+                });
+                if (pdfOptions.enabledSections['contents']) {
+                  doc.setPage(tocPage);
                 }
                 doc.save(conlang.name + '.pdf');
               }}>
