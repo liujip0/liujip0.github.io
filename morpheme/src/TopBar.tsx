@@ -405,7 +405,7 @@ function ExportConlang() {
                         doc.setTextColor(0, 0, 255);
                         doc.textWithLink(
                           'https://liujip0.github.io/morpheme',
-                          unit === 'in' ? 2.5 : 62.5,
+                          unit === 'in' ? 3 : 75,
                           unit === 'in' ? 10.5 : 284,
                           {
                             url: 'https://liujip0.github.io/morpheme'
@@ -421,6 +421,27 @@ function ExportConlang() {
                 });
                 if (pdfOptions.enabledSections['contents']) {
                   doc.setPage(tocPage);
+                  doc.setFontSize(20);
+                  doc.setFont('CharisSIL', 'bold');
+                  doc.text(
+                    'Table of Contents',
+                    unit === 'in' ? 1 : 25,
+                    unit === 'in' ? 1 : 25
+                  );
+                  doc.setFontSize(16);
+                  doc.setFont('CharisSIL', 'normal');
+                  for (let i = 0; i < toc.length; i++) {
+                    doc.text(
+                      toc[i].section,
+                      unit === 'in' ? 1 : 25,
+                      unit === 'in' ? 2 + 0.5 * i : 50 + 12 * i
+                    );
+                    doc.text(
+                      toc[i].page.toString(),
+                      unit === 'in' ? 7.5 : 272,
+                      unit === 'in' ? 2 + 0.5 * i : 50 + 12 * i
+                    );
+                  }
                 }
                 doc.save(conlang.name + '.pdf');
               }}>
