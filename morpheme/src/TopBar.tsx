@@ -395,6 +395,30 @@ function ExportConlang() {
                           unit === 'in' ? 1 : 25,
                           unit === 'in' ? 1 : 25
                         );
+                        doc.setFontSize(18);
+                        doc.setFont('CharisSIL', 'bold');
+                        doc.text(
+                          'Consonants',
+                          unit === 'in' ? 1 : 25,
+                          unit === 'in' ? 1.5 : 37
+                        );
+                        const consonantCols = {
+                          bilabial: 0,
+                          labiodental: 0,
+                          dental: 0,
+                          alveolar: 0,
+                          postalveolar: 0,
+                          retroflex: 0,
+                          alveolopalatal: 0,
+                          palatal: 0,
+                          labiovelar: 0,
+                          velar: 0,
+                          uvular: 0,
+                          pharyngeal: 0,
+                          epiglottal: 0,
+                          glottal: 0,
+                          other: 0
+                        };
                         doc.setFontSize(10);
                         doc.setFont('CharisSIL', 'normal');
                         doc.text(

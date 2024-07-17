@@ -1,4 +1,5 @@
 import { NavSection } from '../../common/Components.tsx';
+import { Phoneme } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 
 export default function PhoneticInventory() {
@@ -52,33 +53,122 @@ function ConsonantsTable() {
         <tbody>
           <tr>
             <th>Plosive</th>
-            <Phono>p</Phono>
-            <Phono>b</Phono>
-            <Phono>p̪</Phono>
-            <Phono>b̪</Phono>
-            <Phono>t̪</Phono>
-            <Phono>d̪</Phono>
-            <Phono>t</Phono>
-            <Phono>d</Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="bilabial">
+              p
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="bilabial"
+              voiced>
+              b
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="labiodental">
+              p̪
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="labiodental"
+              voiced>
+              b̪
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="dental">
+              t̪
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="dental"
+              voiced>
+              d̪
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="alveolar">
+              t
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="alveolar"
+              voiced>
+              d
+            </Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>ʈ</Phono>
-            <Phono>ɖ</Phono>
-            <Phono>ȶ</Phono>
-            <Phono>ȡ</Phono>
-            <Phono>c</Phono>
-            <Phono>ɟ</Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="retroflex">
+              ʈ
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="retroflex"
+              voiced>
+              ɖ
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="alveolopalatal">
+              ȶ
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="alveolopalatal"
+              voiced>
+              ȡ
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="palatal">
+              c
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="palatal"
+              voiced>
+              ɟ
+            </Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>k</Phono>
-            <Phono>g</Phono>
-            <Phono>q</Phono>
-            <Phono>ɢ</Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="velar">
+              k
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="velar"
+              voiced>
+              g
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="uvular">
+              q
+            </Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="uvular"
+              voiced>
+              ɢ
+            </Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>ʡ</Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="epiglottal">
+              ʡ
+            </Phono>
             <PhonoX />
-            <Phono>ʔ</Phono>
+            <Phono
+              mannerOfArticulation="plosive"
+              placeOfArticulation="glottal">
+              ʔ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -86,27 +176,67 @@ function ConsonantsTable() {
           <tr>
             <th>Nasal</th>
             <PhonoX />
-            <Phono>m</Phono>
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="bilabial"
+              voiced>
+              m
+            </Phono>
             <PhonoX />
-            <Phono>ɱ</Phono>
-            <PhonoX />
-            <PhonoX />
-            <PhonoX />
-            <Phono>n</Phono>
-            <PhonoX />
-            <PhonoX />
-            <PhonoX />
-            <Phono>ɳ</Phono>
-            <PhonoX />
-            <Phono>ȵ</Phono>
-            <PhonoX />
-            <Phono>ɲ</Phono>
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="labiodental"
+              voiced>
+              ɱ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
-            <Phono>ŋ</Phono>
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="alveolar"
+              voiced>
+              n
+            </Phono>
             <PhonoX />
-            <Phono>ɴ</Phono>
+            <PhonoX />
+            <PhonoX />
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="retroflex"
+              voiced>
+              ɳ
+            </Phono>
+            <PhonoX />
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="alveolopalatal"
+              voiced>
+              ȵ
+            </Phono>
+            <PhonoX />
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="palatal"
+              voiced>
+              ɲ
+            </Phono>
+            <PhonoX />
+            <PhonoX />
+            <PhonoX />
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="velar"
+              voiced>
+              ŋ
+            </Phono>
+            <PhonoX />
+            <Phono
+              mannerOfArticulation="nasal"
+              placeOfArticulation="uvular"
+              voiced>
+              ɴ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -118,14 +248,41 @@ function ConsonantsTable() {
           </tr>
           <tr>
             <th>Trill</th>
-            <Phono>ʙ&#x0325;</Phono>
-            <Phono>ʙ</Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="bilabial">
+              ʙ&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="bilabial"
+              voiced>
+              ʙ
+            </Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>r&#x032a;&#x030a;</Phono>
-            <Phono>r&#x032a;</Phono>
-            <Phono>r&#x0325;</Phono>
-            <Phono>r</Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="dental">
+              r&#x032a;&#x030a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="dental"
+              voiced>
+              r&#x032a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="alveolar">
+              r&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="alveolar"
+              voiced>
+              r
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -138,8 +295,17 @@ function ConsonantsTable() {
             <PhonoX />
             <PhonoX />
             <PhonoX />
-            <Phono>ʀ&#x0325;</Phono>
-            <Phono>ʀ</Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="uvular">
+              ʀ&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="trill"
+              placeOfArticulation="uvular"
+              voiced>
+              ʀ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -151,18 +317,63 @@ function ConsonantsTable() {
           </tr>
           <tr>
             <th>Tap or Flap</th>
-            <Phono>ⱱ&#x031f;&#x030a;</Phono>
-            <Phono>ⱱ&#x031f;</Phono>
-            <Phono>ⱱ&#x0325;</Phono>
-            <Phono>ⱱ</Phono>
-            <Phono>ɾ&#x032a;&#x030a;</Phono>
-            <Phono>ɾ&#x032a;</Phono>
-            <Phono>ɾ&#x0325;</Phono>
-            <Phono>ɾ</Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="bilabial">
+              ⱱ&#x031f;&#x030a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="bilabial"
+              voiced>
+              ⱱ&#x031f;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="labiodental">
+              ⱱ&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="labiodental"
+              voiced>
+              ⱱ
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="dental">
+              ɾ&#x032a;&#x030a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="dental"
+              voiced>
+              ɾ&#x032a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="alveolar">
+              ɾ&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="alveolar"
+              voiced>
+              ɾ
+            </Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>ɽ&#x030a;</Phono>
-            <Phono>ɽ</Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="retroflex">
+              ɽ&#x030a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="retroflex"
+              voiced>
+              ɽ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -171,8 +382,17 @@ function ConsonantsTable() {
             <PhonoX />
             <PhonoX />
             <PhonoX />
-            <Phono>q&#x0306;</Phono>
-            <Phono>ɢ&#x0306;</Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="uvular">
+              q&#x0306;
+            </Phono>
+            <Phono
+              mannerOfArticulation="tapflap"
+              placeOfArticulation="uvular"
+              voiced>
+              ɢ&#x0306;
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -188,10 +408,28 @@ function ConsonantsTable() {
             <PhonoX />
             <PhonoX />
             <PhonoX />
-            <Phono>ɺ&#x032a;&#x030a;</Phono>
-            <Phono>ɺ&#x032a;</Phono>
-            <Phono>ɺ&#x0325;</Phono>
-            <Phono>ɺ</Phono>
+            <Phono
+              mannerOfArticulation="lateralflap"
+              placeOfArticulation="dental">
+              ɺ&#x032a;&#x030a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="lateralflap"
+              placeOfArticulation="dental"
+              voiced>
+              ɺ&#x032a;
+            </Phono>
+            <Phono
+              mannerOfArticulation="lateralflap"
+              placeOfArticulation="alveolar">
+              ɺ&#x0325;
+            </Phono>
+            <Phono
+              mannerOfArticulation="lateralflap"
+              placeOfArticulation="alveolar"
+              voiced>
+              ɺ
+            </Phono>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -217,35 +455,35 @@ function ConsonantsTable() {
           </tr>
           <tr>
             <th>Fricative</th>
-            <Phono>ɸ</Phono>
-            <Phono>β</Phono>
-            <Phono>f</Phono>
-            <Phono>v</Phono>
-            <Phono>θ</Phono>
-            <Phono>ð</Phono>
-            <Phono>s</Phono>
-            <Phono>z</Phono>
-            <Phono>ʃ</Phono>
-            <Phono>ʒ</Phono>
-            <Phono>ʂ</Phono>
-            <Phono>ʐ</Phono>
-            <Phono>ɕ</Phono>
-            <Phono>ʑ</Phono>
-            <Phono>ç</Phono>
-            <Phono>ʝ</Phono>
+            <Phono mannerOfArticulation="fricative">ɸ</Phono>
+            <Phono mannerOfArticulation="fricative">β</Phono>
+            <Phono mannerOfArticulation="fricative">f</Phono>
+            <Phono mannerOfArticulation="fricative">v</Phono>
+            <Phono mannerOfArticulation="fricative">θ</Phono>
+            <Phono mannerOfArticulation="fricative">ð</Phono>
+            <Phono mannerOfArticulation="fricative">s</Phono>
+            <Phono mannerOfArticulation="fricative">z</Phono>
+            <Phono mannerOfArticulation="fricative">ʃ</Phono>
+            <Phono mannerOfArticulation="fricative">ʒ</Phono>
+            <Phono mannerOfArticulation="fricative">ʂ</Phono>
+            <Phono mannerOfArticulation="fricative">ʐ</Phono>
+            <Phono mannerOfArticulation="fricative">ɕ</Phono>
+            <Phono mannerOfArticulation="fricative">ʑ</Phono>
+            <Phono mannerOfArticulation="fricative">ç</Phono>
+            <Phono mannerOfArticulation="fricative">ʝ</Phono>
             <PhonoX />
             <PhonoX />
-            <Phono>x</Phono>
-            <Phono>ɣ</Phono>
-            <Phono>χ</Phono>
-            <Phono>ʁ</Phono>
-            <Phono>ħ</Phono>
-            <Phono>ʕ</Phono>
-            <Phono>ʜ</Phono>
-            <Phono>ʢ</Phono>
-            <Phono>h</Phono>
-            <Phono>ɦ</Phono>
-            <Phono>ɧ</Phono>
+            <Phono mannerOfArticulation="fricative">x</Phono>
+            <Phono mannerOfArticulation="fricative">ɣ</Phono>
+            <Phono mannerOfArticulation="fricative">χ</Phono>
+            <Phono mannerOfArticulation="fricative">ʁ</Phono>
+            <Phono mannerOfArticulation="fricative">ħ</Phono>
+            <Phono mannerOfArticulation="fricative">ʕ</Phono>
+            <Phono mannerOfArticulation="fricative">ʜ</Phono>
+            <Phono mannerOfArticulation="fricative">ʢ</Phono>
+            <Phono mannerOfArticulation="fricative">h</Phono>
+            <Phono mannerOfArticulation="fricative">ɦ</Phono>
+            <Phono mannerOfArticulation="fricative">ɧ</Phono>
             <PhonoX />
           </tr>
           <tr>
@@ -521,12 +759,50 @@ function VowelsTable() {
   );
 }
 
-type PhonoProps = {
+function Phono({
+  colSpan,
+  vowel,
+  height,
+  backness,
+  children
+}: {
   colSpan?: number;
-  vowel?: boolean;
+  vowel: true;
   children: string;
-};
-function Phono({ colSpan, vowel = false, children }: PhonoProps) {
+  height: string;
+  backness: string;
+}): React.ReactNode;
+function Phono({
+  colSpan,
+  mannerOfArticulation,
+  placeOfArticulation,
+  children
+}: {
+  colSpan?: number;
+  children: string;
+  mannerOfArticulation: string;
+  placeOfArticulation: string;
+  voiced?: boolean;
+}): React.ReactNode;
+function Phono({
+  colSpan,
+  vowel = false,
+  height,
+  backness,
+  mannerOfArticulation,
+  placeOfArticulation,
+  voiced = false,
+  children
+}: {
+  colSpan: number;
+  vowel?: boolean;
+  height?: string;
+  backness?: string;
+  mannerOfArticulation?: string;
+  placeOfArticulation?: string;
+  voiced?: boolean;
+  children?: string;
+}) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const time = new Date().getMilliseconds();
@@ -537,16 +813,34 @@ function Phono({ colSpan, vowel = false, children }: PhonoProps) {
         if (newInventory.some((item) => item.base === children)) {
           newInventory = newInventory.filter((item) => item.base !== children);
         } else {
-          newInventory.push({
-            id: time + '-' + children,
-            ipa: children,
-            base: children,
-            romanization: '',
-            type: vowel ? 'vowel' : 'consonant',
-            diacritics: ['', ''],
-            allophones: [],
-            allophoneOf: ''
-          });
+          newInventory.push(
+            (vowel ?
+              {
+                id: time + '-' + children,
+                ipa: children,
+                base: children,
+                romanization: '',
+                type: 'vowel',
+                diacritics: ['', ''],
+                allophones: [],
+                allophoneOf: '',
+                height: height,
+                backness: backness
+              }
+            : {
+                id: time + '-' + children,
+                ipa: children,
+                base: children,
+                romanization: '',
+                type: 'consonant',
+                diacritics: ['', ''],
+                allophones: [],
+                allophoneOf: '',
+                mannerOfArticulation: mannerOfArticulation,
+                placeOfArticulation: placeOfArticulation,
+                voiced: voiced
+              }) as Phoneme
+          );
         }
         changeConlang(['phonology', 'inventory'], newInventory);
       }}

@@ -112,6 +112,8 @@ export type Phoneme =
       diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
       allophones: Array<string>;
       allophoneOf: string;
+      height: string;
+      backness: string;
     }
   | {
       id: string;
@@ -122,6 +124,9 @@ export type Phoneme =
       diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
       allophones: Array<string>;
       allophoneOf: string;
+      mannerOfArticulation: string;
+      placeOfArticulation: string;
+      voiced: boolean;
     };
 
 export type screenPosition = 0 | 1 | 2 | 3;
