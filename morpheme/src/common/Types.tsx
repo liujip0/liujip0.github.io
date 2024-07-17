@@ -114,6 +114,7 @@ export type Phoneme =
       allophoneOf: string;
       height: string;
       backness: string;
+      rounded: boolean;
     }
   | {
       id: string;
