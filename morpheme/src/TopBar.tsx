@@ -8,6 +8,7 @@ import {
 } from 'react-icons/tb';
 import { IconButton, Popup } from './common/Components.tsx';
 import { writeFile } from './common/Funcs';
+import { Consonant, Vowel } from './common/Types.tsx';
 import { useStoreState } from './common/Vals';
 import { charisBold } from './fonts/charis/CharisSIL-Bold-bold.ts';
 import { charisBoldItalic } from './fonts/charis/CharisSIL-BoldItalic-bolditalic.ts';
@@ -395,13 +396,6 @@ function ExportConlang() {
                           unit === 'in' ? 1 : 25,
                           unit === 'in' ? 1 : 25
                         );
-                        doc.setFontSize(18);
-                        doc.setFont('CharisSIL', 'bold');
-                        doc.text(
-                          'Consonants',
-                          unit === 'in' ? 1 : 25,
-                          unit === 'in' ? 1.5 : 37
-                        );
                         const consonantCols = {
                           bilabial: 0,
                           labiodental: 0,
@@ -419,6 +413,69 @@ function ExportConlang() {
                           glottal: 0,
                           other: 0
                         };
+                        const consonantRows = {
+                          plosive: 0,
+                          nasal: 0,
+                          trill: 0,
+                          tapflap: 0,
+                          lateralflap: 0,
+                          fricative: 0,
+                          lateralfricative: 0,
+                          approximant: 0,
+                          lateralapproximant: 0,
+                          click: 0,
+                          implosive: 0
+                        };
+                        const vowelCols = {
+                          front: 0,
+                          frontcentral: 0,
+                          central: 0,
+                          centralback: 0,
+                          back: 0
+                        };
+                        const vowelRows = {
+                          close: 0,
+                          highclosemid: 0,
+                          closemid: 0,
+                          mid: 0,
+                          openmid: 0,
+                          lowopenmid: 0,
+                          open: 0
+                        };
+                        for (
+                          let i = 0;
+                          i < conlang.phonology.inventory.length;
+                          i++
+                        ) {
+                          if (
+                            conlang.phonology.inventory[i].type === 'consonant'
+                          ) {
+                            consonantCols[
+                              (
+                                conlang.phonology.inventory[i] as Consonant
+                              ).placeOfArticulation
+                            ] += 1;
+                            consonantRows[
+                              (
+                                conlang.phonology.inventory[i] as Consonant
+                              ).mannerOfArticulation
+                            ] += 1;
+                          } else {
+                            vowelCols[
+                              (conlang.phonology.inventory[i] as Vowel).backness
+                            ] += 1;
+                            vowelRows[
+                              (conlang.phonology.inventory[i] as Vowel).height
+                            ] += 1;
+                          }
+                        }
+                        doc.setFontSize(18);
+                        doc.setFont('CharisSIL', 'bold');
+                        doc.text(
+                          'Consonants',
+                          unit === 'in' ? 1 : 25,
+                          unit === 'in' ? 1.5 : 37
+                        );
                         doc.setFontSize(10);
                         doc.setFont('CharisSIL', 'normal');
                         doc.text(

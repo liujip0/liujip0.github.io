@@ -16,7 +16,7 @@ export interface Conlang {
     };
   };
   phonology: {
-    inventory: Array<Phoneme>;
+    inventory: Array<Consonant | Vowel>;
   };
   articles: {
     list: Array<Folder | Article>;
@@ -79,7 +79,6 @@ export type IpaVowelDiacritic =
   | 'long'
   | 'half-long'
   | 'extra-short';
-
 export type IpaConsonantDiacritic =
   | ''
   | 'voiceless'
@@ -102,33 +101,65 @@ export type IpaConsonantDiacritic =
   | 'nasal release'
   | 'dental release'
   | 'no audible release';
-export type Phoneme =
-  | {
-      id: string;
-      ipa: string;
-      base: string;
-      romanization: string;
-      type: 'vowel';
-      diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
-      allophones: Array<string>;
-      allophoneOf: string;
-      height: string;
-      backness: string;
-      rounded: boolean;
-    }
-  | {
-      id: string;
-      ipa: string;
-      base: string;
-      romanization: string;
-      type: 'consonant';
-      diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
-      allophones: Array<string>;
-      allophoneOf: string;
-      mannerOfArticulation: string;
-      placeOfArticulation: string;
-      voiced: boolean;
-    };
+export type Vowel = {
+  id: string;
+  ipa: string;
+  base: string;
+  romanization: string;
+  type: 'vowel';
+  diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
+  allophones: Array<string>;
+  allophoneOf: string;
+  height:
+    | 'close'
+    | 'highclosemid'
+    | 'closemid'
+    | 'mid'
+    | 'openmid'
+    | 'lowopenmid'
+    | 'open';
+  backness: 'front' | 'frontcentral' | 'central' | 'centralback' | 'back';
+  rounded: boolean;
+};
+export type Consonant = {
+  id: string;
+  ipa: string;
+  base: string;
+  romanization: string;
+  type: 'consonant';
+  diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
+  allophones: Array<string>;
+  allophoneOf: string;
+  mannerOfArticulation:
+    | 'plosive'
+    | 'nasal'
+    | 'trill'
+    | 'tapflap'
+    | 'lateralflap'
+    | 'fricative'
+    | 'lateralfricative'
+    | 'approximant'
+    | 'lateralapproximant'
+    | 'click'
+    | 'implosive';
+  placeOfArticulation:
+    | 'bilabial'
+    | 'labiodental'
+    | 'dental'
+    | 'alveolar'
+    | 'postalveolar'
+    | 'retroflex'
+    | 'alveolopalatal'
+    | 'palatal'
+    | 'labiovelar'
+    | 'velar'
+    | 'uvular'
+    | 'pharyngeal'
+    | 'epiglottal'
+    | 'glottal'
+    | 'other';
+  voiced: boolean;
+};
 
 export type screenPosition = 0 | 1 | 2 | 3;
 export type screenStr =

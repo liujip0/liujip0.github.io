@@ -1,5 +1,5 @@
 import { NavSection } from '../../common/Components.tsx';
-import { Phoneme } from '../../common/Types.tsx';
+import { Consonant, Vowel } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 
 export default function PhoneticInventory() {
@@ -1366,8 +1366,8 @@ function Phono({
           newInventory = newInventory.filter((item) => item.base !== children);
         } else {
           newInventory.push(
-            (vowel ?
-              {
+            vowel ?
+              ({
                 id: time + '-' + children,
                 ipa: children,
                 base: children,
@@ -1379,8 +1379,8 @@ function Phono({
                 height: height,
                 backness: backness,
                 rounded: rounded
-              }
-            : {
+              } as Vowel)
+            : ({
                 id: time + '-' + children,
                 ipa: children,
                 base: children,
@@ -1392,7 +1392,7 @@ function Phono({
                 mannerOfArticulation: mannerOfArticulation,
                 placeOfArticulation: placeOfArticulation,
                 voiced: voiced
-              }) as Phoneme
+              } as Consonant)
           );
         }
         changeConlang(['phonology', 'inventory'], newInventory);
