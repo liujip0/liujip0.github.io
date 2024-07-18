@@ -480,24 +480,29 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             (a, b) => Height_Arr.indexOf(a) - Height_Arr.indexOf(b)
           );
           const consonants = Array(consonantRowsCount.length).fill(
-            Array(consonantColsCount.length).fill('')
+            Array(consonantColsCount.length * 2).fill('')
           );
           const vowels = Array(vowelRowsCount.length).fill(
-            Array(vowelColsCount.length).fill('')
+            Array(vowelColsCount.length * 2).fill('')
           );
           for (let i = 0; i < conlang.phonology.inventory.length; i++) {
             const item = conlang.phonology.inventory[i];
             if (item.type === 'consonant') {
               const x = consonantRowsCount.indexOf(item.mannerOfArticulation);
-              const y = consonantColsCount.indexOf(item.placeOfArticulation);
-              if (consonants[x][y]) {
+              const y =
+                consonantColsCount.indexOf(item.placeOfArticulation) * 2 +
+                (item.voiced ? 1 : 0);
+              if (consonants[x][y] === '') {
                 consonants[x][y] = `${item.ipa} <${item.romanization}>`;
               } else {
                 consonants[x][y] += ` | ${item.ipa} <${item.romanization}>`;
               }
+              console.log(consonants);
             } else {
               const x = vowelRowsCount.indexOf(item.height);
-              const y = vowelColsCount.indexOf(item.backness);
+              const y =
+                vowelColsCount.indexOf(item.backness) * 2 +
+                (item.rounded ? 1 : 0);
               if (vowels[x][y] === '') {
                 vowels[x][y] = `${item.ipa} <${item.romanization}>`;
                 console.log(vowels[x][y]);
