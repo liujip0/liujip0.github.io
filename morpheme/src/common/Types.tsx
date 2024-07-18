@@ -110,17 +110,28 @@ export type Vowel = {
   diacritics: [IpaVowelDiacritic, IpaVowelDiacritic];
   allophones: Array<string>;
   allophoneOf: string;
-  height:
-    | 'close'
-    | 'highclosemid'
-    | 'closemid'
-    | 'mid'
-    | 'openmid'
-    | 'lowopenmid'
-    | 'open';
-  backness: 'front' | 'frontcentral' | 'central' | 'centralback' | 'back';
+  height: Height;
+  backness: Backness;
   rounded: boolean;
 };
+export const Height_Arr = [
+  'close',
+  'highclosemid',
+  'closemid',
+  'mid',
+  'openmid',
+  'lowopenmid',
+  'open'
+];
+export type Height = (typeof Height_Arr)[number];
+export const Backness_Arr = [
+  'front',
+  'frontcentral',
+  'central',
+  'centralback',
+  'back'
+];
+export type Backness = (typeof Backness_Arr)[number];
 export type Consonant = {
   id: string;
   ipa: string;
@@ -130,36 +141,42 @@ export type Consonant = {
   diacritics: [IpaConsonantDiacritic, IpaConsonantDiacritic];
   allophones: Array<string>;
   allophoneOf: string;
-  mannerOfArticulation:
-    | 'plosive'
-    | 'nasal'
-    | 'trill'
-    | 'tapflap'
-    | 'lateralflap'
-    | 'fricative'
-    | 'lateralfricative'
-    | 'approximant'
-    | 'lateralapproximant'
-    | 'click'
-    | 'implosive';
-  placeOfArticulation:
-    | 'bilabial'
-    | 'labiodental'
-    | 'dental'
-    | 'alveolar'
-    | 'postalveolar'
-    | 'retroflex'
-    | 'alveolopalatal'
-    | 'palatal'
-    | 'labiovelar'
-    | 'velar'
-    | 'uvular'
-    | 'pharyngeal'
-    | 'epiglottal'
-    | 'glottal'
-    | 'other';
+  mannerOfArticulation: MannerOfArticulation;
+  placeOfArticulation: PlaceOfArticulation;
   voiced: boolean;
 };
+export const MannerOfArticulation_Arr = [
+  'plosive',
+  'nasal',
+  'trill',
+  'tapflap',
+  'lateralflap',
+  'fricative',
+  'lateralfricative',
+  'approximant',
+  'lateralapproximant',
+  'click',
+  'implosive'
+];
+export type MannerOfArticulation = (typeof MannerOfArticulation_Arr)[number];
+export const PlaceOfArticulation_Arr = [
+  'bilabial',
+  'labiodental',
+  'dental',
+  'alveolar',
+  'postalveolar',
+  'retroflex',
+  'alveolopalatal',
+  'palatal',
+  'labiovelar',
+  'velar',
+  'uvular',
+  'pharyngeal',
+  'epiglottal',
+  'glottal',
+  'other'
+];
+export type PlaceOfArticulation = (typeof PlaceOfArticulation_Arr)[number];
 
 export type screenPosition = 0 | 1 | 2 | 3;
 export type screenStr =
