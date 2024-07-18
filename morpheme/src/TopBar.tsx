@@ -1,4 +1,5 @@
 import jsPDF, { jsPDFOptions } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { FormEventHandler, useEffect, useState } from 'react';
 import {
   TbChevronDown,
@@ -480,30 +481,33 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             (a, b) => Height_Arr.indexOf(a) - Height_Arr.indexOf(b)
           );
           const consonants: Array<Array<string>> = Array(
-            consonantRowsCount.length
+            consonantRowsCount.length + 1
           )
             .fill(null)
-            .map(() => Array(consonantColsCount.length * 2).fill(''));
-          const vowels: Array<Array<string>> = Array(vowelRowsCount.length)
+            .map(() => Array(consonantColsCount.length * 2 + 1).fill(''));
+          const vowels: Array<Array<string>> = Array(vowelRowsCount.length + 1)
             .fill(null)
-            .map(() => Array(vowelColsCount.length * 2).fill(''));
+            .map(() => Array(vowelColsCount.length * 2 + 1).fill(''));
           for (let i = 0; i < conlang.phonology.inventory.length; i++) {
             const item = conlang.phonology.inventory[i];
             if (item.type === 'consonant') {
-              const x = consonantRowsCount.indexOf(item.mannerOfArticulation);
+              const x =
+                consonantRowsCount.indexOf(item.mannerOfArticulation) + 1;
               const y =
                 consonantColsCount.indexOf(item.placeOfArticulation) * 2 +
-                (item.voiced ? 1 : 0);
+                (item.voiced ? 1 : 0) +
+                1;
               if (consonants[x][y] === '') {
                 consonants[x][y] = `${item.ipa} <${item.romanization}>`;
               } else {
                 consonants[x][y] += ` | ${item.ipa} <${item.romanization}>`;
               }
             } else {
-              const x = vowelRowsCount.indexOf(item.height);
+              const x = vowelRowsCount.indexOf(item.height) + 1;
               const y =
                 vowelColsCount.indexOf(item.backness) * 2 +
-                (item.rounded ? 1 : 0);
+                (item.rounded ? 1 : 0) +
+                1;
               if (vowels[x][y] === '') {
                 vowels[x][y] = `${item.ipa} <${item.romanization}>`;
                 console.log(vowels[x][y]);
@@ -511,6 +515,60 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
                 vowels[x][y] += ` | ${item.ipa} <${item.romanization}>`;
               }
             }
+          }
+          for (let i = 0; i < consonantColsCount.length; i++) {
+            consonants[0][i * 2 + 1] = {
+              bilabial: 'Bilabial',
+              labiodental: 'Labiodental',
+              dental: 'Dental',
+              alveolar: 'Alveolar',
+              postalveolar: 'Postalveolar',
+              retroflex: 'Retroflex',
+              alveolopalatal: 'Alveolopalatal',
+              palatal: 'Palatal',
+              labiovelar: 'Labiovelar',
+              velar: 'Velar',
+              uvular: 'Uvular',
+              pharyngeal: 'Pharyngeal',
+              epiglottal: 'Epiglottal',
+              glottal: 'Glottal',
+              other: 'Other'
+            }[consonantColsCount[i]]!;
+          }
+          for (let i = 0; i < consonantRowsCount.length; i++) {
+            consonants[i + 1][0] = {
+              plosive: 'Plosive',
+              nasal: 'Nasal',
+              trill: 'Trill',
+              tapflap: 'Tap or Flap',
+              lateralflap: 'Lateral Flap',
+              fricative: 'Fricative',
+              lateralfricative: 'Lateral Fricative',
+              approximant: 'Approximant',
+              lateralapproximant: 'Lateral Approximant',
+              click: 'Click',
+              implosive: 'Implosive'
+            }[consonantRowsCount[i]]!;
+          }
+          for (let i = 0; i < vowelColsCount.length; i++) {
+            vowels[0][i * 2 + 1] = {
+              front: 'Front',
+              frontcentral: '',
+              central: 'Central',
+              centralback: '',
+              back: 'Back'
+            }[vowelColsCount[i]]!;
+          }
+          for (let i = 0; i < vowelRowsCount.length; i++) {
+            vowels[i + 1][0] = {
+              close: 'Close',
+              highclosemid: '',
+              closemid: 'Close-Mid',
+              mid: '',
+              openmid: 'Open-Mid',
+              lowopenmid: '',
+              open: 'Open'
+            }[vowelRowsCount[i]]!;
           }
           console.log(consonants);
           console.log(vowels);
@@ -521,6 +579,12 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             unit === 'in' ? 1 : 25,
             unit === 'in' ? 1.5 : 37
           );
+          autoTable(doc, {
+            head: [consonants[0]],
+            body: consonants.slice(1),
+            theme: 'grid',
+            startY: unit === 'in' ? 2 : 50
+          });
           doc.setFontSize(10);
           doc.setFont('CharisSIL', 'normal');
           doc.text(
