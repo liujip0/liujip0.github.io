@@ -8,7 +8,7 @@ import {
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
 import { createId, romanizationToIpa } from '../common/Funcs.tsx';
-import { PartOfSpeech, Phoneme, Word } from '../common/Types.tsx';
+import { Consonant, PartOfSpeech, Vowel, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function LexiconScreen() {
@@ -16,7 +16,7 @@ export default function LexiconScreen() {
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [currentWord, setCurrentWord] = useState('');
   const createRomanizationMap = (
-    inventory: Array<Phoneme>
+    inventory: Array<Consonant | Vowel>
   ): Array<[string, string]> => {
     const mappingArr: Array<[string, string]> = [];
     for (let i = 0; i < inventory.length; i++) {

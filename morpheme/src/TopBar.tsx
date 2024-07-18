@@ -469,6 +469,74 @@ function ExportConlang() {
                             ] += 1;
                           }
                         }
+                        const consonantColsCount = [];
+                        for (const [key, value] of Object.entries(
+                          consonantCols
+                        )) {
+                          if (value > 0) {
+                            consonantColsCount.push(key);
+                          }
+                        }
+                        const consonantRowsCount = [];
+                        for (const [key, value] of Object.entries(
+                          consonantRows
+                        )) {
+                          if (value > 0) {
+                            consonantRowsCount.push(key);
+                          }
+                        }
+                        const consonants = Array(
+                          consonantRowsCount.length
+                        ).fill(Array(consonantColsCount.length).fill(''));
+                        const vowelColsCount = [];
+                        for (const [key, value] of Object.entries(vowelCols)) {
+                          if (value > 0) {
+                            vowelColsCount.push(key);
+                          }
+                        }
+                        const vowelRowsCount = [];
+                        for (const [key, value] of Object.entries(vowelRows)) {
+                          if (value > 0) {
+                            vowelRowsCount.push(key);
+                          }
+                        }
+                        const vowels = Array(vowelRowsCount.length).fill(
+                          Array(vowelColsCount.length).fill('')
+                        );
+                        for (
+                          let i = 0;
+                          i < conlang.phonology.inventory.length;
+                          i++
+                        ) {
+                          const item = conlang.phonology.inventory[i];
+                          if (item.type === 'consonant') {
+                            const x = consonantRowsCount.indexOf(
+                              item.mannerOfArticulation
+                            );
+                            const y = consonantColsCount.indexOf(
+                              item.placeOfArticulation
+                            );
+                            if (consonants[x][y]) {
+                              consonants[x][y] =
+                                `${item.ipa} <${item.romanization}>`;
+                            } else {
+                              consonants[x][y] +=
+                                ` | ${item.ipa} <${item.romanization}>`;
+                            }
+                          } else {
+                            const x = vowelRowsCount.indexOf(item.height);
+                            const y = vowelColsCount.indexOf(item.backness);
+                            if (vowels[x][y] === '') {
+                              vowels[x][y] =
+                                `${item.ipa} <${item.romanization}>`;
+                            } else {
+                              vowels[x][y] +=
+                                ` | ${item.ipa} <${item.romanization}>`;
+                            }
+                          }
+                        }
+                        console.log(consonants);
+                        console.log(vowels);
                         doc.setFontSize(18);
                         doc.setFont('CharisSIL', 'bold');
                         doc.text(

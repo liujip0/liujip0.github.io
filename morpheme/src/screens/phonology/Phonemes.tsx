@@ -13,9 +13,10 @@ import {
   sortVowelDiacritics
 } from '../../common/Funcs.tsx';
 import {
+  Consonant,
   IpaConsonantDiacritic,
   IpaVowelDiacritic,
-  Phoneme
+  Vowel
 } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 
@@ -49,7 +50,7 @@ function PhonemesTable() {
       changeConlang(['phonology', 'inventory'], newInventory);
     }
   };
-  const addPhoneme = (phoneme: Phoneme) => {
+  const addPhoneme = (phoneme: Consonant | Vowel) => {
     const newInventory = conlang.phonology.inventory;
     newInventory.push({
       ...phoneme,
@@ -158,13 +159,13 @@ function PhonemesTable() {
 }
 
 type PhonemesListProps = {
-  list: Array<Phoneme>;
+  list: Array<Consonant | Vowel>;
   changePhoneme: (id: string, property: string, newValue: unknown) => void;
-  addPhoneme: (phoneme: Phoneme) => void;
+  addPhoneme: (phoneme: Consonant | Vowel) => void;
   deletePhoneme: (id: string) => void;
   moveUpPhoneme: (id: string) => void;
   moveDownPhoneme: (id: string) => void;
-  getPhoneme: (id: string) => Phoneme;
+  getPhoneme: (id: string) => Consonant | Vowel;
 };
 function PhonemesList({
   list,
@@ -195,14 +196,14 @@ function PhonemesList({
 }
 
 type PhonemeTrProps = {
-  item: Phoneme;
+  item: Consonant | Vowel;
   allophoneOf: string;
   changePhoneme: (id: string, property: string, newValue: unknown) => void;
-  addPhoneme: (phoneme: Phoneme) => void;
+  addPhoneme: (phoneme: Consonant | Vowel) => void;
   deletePhoneme: (id: string) => void;
   moveUpPhoneme: (id: string) => void;
   moveDownPhoneme: (id: string) => void;
-  getPhoneme: (id: string) => Phoneme;
+  getPhoneme: (id: string) => Consonant | Vowel;
 };
 function PhonemeTr({
   item,
