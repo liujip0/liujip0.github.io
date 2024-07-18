@@ -479,12 +479,14 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           vowelRowsCount.sort(
             (a, b) => Height_Arr.indexOf(a) - Height_Arr.indexOf(b)
           );
-          const consonants = Array(consonantRowsCount.length).fill(
-            Array(consonantColsCount.length * 2).fill('')
-          );
-          const vowels = Array(vowelRowsCount.length).fill(
-            Array(vowelColsCount.length * 2).fill('')
-          );
+          const consonants: Array<Array<string>> = Array(
+            consonantRowsCount.length
+          )
+            .fill(null)
+            .map(() => Array(consonantColsCount.length * 2).fill(''));
+          const vowels: Array<Array<string>> = Array(vowelRowsCount.length)
+            .fill(null)
+            .map(() => Array(vowelColsCount.length * 2).fill(''));
           for (let i = 0; i < conlang.phonology.inventory.length; i++) {
             const item = conlang.phonology.inventory[i];
             if (item.type === 'consonant') {
@@ -497,7 +499,6 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               } else {
                 consonants[x][y] += ` | ${item.ipa} <${item.romanization}>`;
               }
-              console.log(consonants);
             } else {
               const x = vowelRowsCount.indexOf(item.height);
               const y =
