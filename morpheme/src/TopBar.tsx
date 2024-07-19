@@ -1,5 +1,5 @@
 import jsPDF, { jsPDFOptions } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import autoTable, { CellDef } from 'jspdf-autotable';
 import { FormEventHandler, useEffect, useState } from 'react';
 import {
   TbChevronDown,
@@ -480,14 +480,24 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           vowelRowsCount.sort(
             (a, b) => Height_Arr.indexOf(a) - Height_Arr.indexOf(b)
           );
-          const consonants: Array<Array<string>> = Array(
+          const consonants: Array<Array<string | CellDef>> = Array(
             consonantRowsCount.length + 1
           )
             .fill(null)
-            .map(() => Array(consonantColsCount.length * 2 + 1).fill(''));
-          const vowels: Array<Array<string>> = Array(vowelRowsCount.length + 1)
+            .map((_, index) =>
+              index === 0 ?
+                Array(consonantColsCount.length + 1).fill('')
+              : Array(consonantColsCount.length * 2 + 1).fill('')
+            );
+          const vowels: Array<Array<string | CellDef>> = Array(
+            vowelRowsCount.length + 1
+          )
             .fill(null)
-            .map(() => Array(vowelColsCount.length * 2 + 1).fill(''));
+            .map((_, index) =>
+              index === 0 ?
+                Array(vowelColsCount.length + 1).fill('')
+              : Array(vowelColsCount.length * 2 + 1).fill('')
+            );
           for (let i = 0; i < conlang.phonology.inventory.length; i++) {
             const item = conlang.phonology.inventory[i];
             if (item.type === 'consonant') {
@@ -517,23 +527,26 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             }
           }
           for (let i = 0; i < consonantColsCount.length; i++) {
-            consonants[0][i * 2 + 1] = {
-              bilabial: 'Bilabial',
-              labiodental: 'Labiodental',
-              dental: 'Dental',
-              alveolar: 'Alveolar',
-              postalveolar: 'Postalveolar',
-              retroflex: 'Retroflex',
-              alveolopalatal: 'Alveolopalatal',
-              palatal: 'Palatal',
-              labiovelar: 'Labiovelar',
-              velar: 'Velar',
-              uvular: 'Uvular',
-              pharyngeal: 'Pharyngeal',
-              epiglottal: 'Epiglottal',
-              glottal: 'Glottal',
-              other: 'Other'
-            }[consonantColsCount[i]]!;
+            consonants[0][i + 1] = {
+              content: {
+                bilabial: 'Bilabial',
+                labiodental: 'Labiodental',
+                dental: 'Dental',
+                alveolar: 'Alveolar',
+                postalveolar: 'Postalveolar',
+                retroflex: 'Retroflex',
+                alveolopalatal: 'Alveolopalatal',
+                palatal: 'Palatal',
+                labiovelar: 'Labiovelar',
+                velar: 'Velar',
+                uvular: 'Uvular',
+                pharyngeal: 'Pharyngeal',
+                epiglottal: 'Epiglottal',
+                glottal: 'Glottal',
+                other: 'Other'
+              }[consonantColsCount[i]]!,
+              colSpan: 2
+            };
           }
           for (let i = 0; i < consonantRowsCount.length; i++) {
             consonants[i + 1][0] = {
@@ -551,13 +564,16 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             }[consonantRowsCount[i]]!;
           }
           for (let i = 0; i < vowelColsCount.length; i++) {
-            vowels[0][i * 2 + 1] = {
-              front: 'Front',
-              frontcentral: '',
-              central: 'Central',
-              centralback: '',
-              back: 'Back'
-            }[vowelColsCount[i]]!;
+            vowels[0][i + 1] = {
+              content: {
+                front: 'Front',
+                frontcentral: '',
+                central: 'Central',
+                centralback: '',
+                back: 'Back'
+              }[vowelColsCount[i]]!,
+              colSpan: 2
+            };
           }
           for (let i = 0; i < vowelRowsCount.length; i++) {
             vowels[i + 1][0] = {
@@ -579,12 +595,29 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             unit === 'in' ? 1 : 25,
             unit === 'in' ? 1.5 : 37
           );
+          let finalY = 0;
           autoTable(doc, {
             head: [consonants[0]],
             body: consonants.slice(1),
-            theme: 'grid',
-            startY: unit === 'in' ? 2 : 50
+            startY: unit === 'in' ? 2 : 50,
+            theme: 'plain',
+            styles: {
+              font: 'CharisSIL',
+              fontStyle: 'normal',
+              lineWidth: 0.001,
+              lineColor: 0,
+              cellWidth: 0.7
+            },
+            didDrawPage: (data) => {
+              if (data.cursor) {
+                finalY = data.cursor.y;
+              }
+            },
+            margin: {
+              left: unit === 'in' ? 1 : 25
+            }
           });
+          doc.text('Vowels', unit === 'in' ? 1 : 25, finalY);
           doc.setFontSize(10);
           doc.setFont('CharisSIL', 'normal');
           doc.text(
@@ -594,11 +627,11 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           );
           doc.setTextColor(0, 0, 255);
           doc.textWithLink(
-            'https://liujip0.github.io/morpheme',
+            'https://liujip0.github.io/morpheme/',
             unit === 'in' ? 3 : 75,
             unit === 'in' ? 10.5 : 284,
             {
-              url: 'https://liujip0.github.io/morpheme'
+              url: 'https://liujip0.github.io/morpheme/'
             }
           );
           doc.setFontSize(16);
