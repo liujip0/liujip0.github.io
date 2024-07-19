@@ -91,9 +91,35 @@ export default function TopBar() {
   );
 }
 
+type PdfOptions = {
+  title: string;
+  author: string;
+  enabledSections: Record<string, boolean>;
+  orderedSections: Array<string>;
+  pageNumbers: boolean;
+  pageNumsIncludeTitle: boolean;
+  pageNumsIncludeToc: boolean;
+  paperSize: 'letter' | 'a4';
+};
 function ExportConlang() {
+  const conlang = useStoreState((s) => s.conlang);
   const [exportMenu, setExportMenu] = useState(false);
   const [pdfPopup, setPdfPopup] = useState(false);
+  const pdfOptionsInit: PdfOptions = {
+    title: conlang.name,
+    author: '',
+    enabledSections: {
+      title: true,
+      contents: true,
+      phonology: true
+    },
+    orderedSections: ['title', 'contents', 'phonology'],
+    pageNumbers: true,
+    pageNumsIncludeTitle: true,
+    pageNumsIncludeToc: true,
+    paperSize: 'letter'
+  };
+  const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
     <>
       <MenuItem
@@ -118,12 +144,14 @@ function ExportConlang() {
                 zIndex: '90',
                 backgroundColor: 'white',
                 fontSize: '0.7em',
-                width: 'max-content',
-                padding: '0.2em'
+                width: 'max-content'
               }}>
               <div
                 onClick={() => {
                   setPdfPopup(true);
+                }}
+                style={{
+                  padding: '0.2em'
                 }}>
                 Export to PDF
               </div>
@@ -131,39 +159,24 @@ function ExportConlang() {
           )}
         </div>
       </MenuItem>
-      {pdfPopup && <PdfPopup setPdfPopup={setPdfPopup} />}
+      {pdfPopup && (
+        <PdfPopup
+          pdfOptions={pdfOptions}
+          setPdfOptions={setPdfOptions}
+          setPdfPopup={setPdfPopup}
+        />
+      )}
     </>
   );
 }
 
-type PdfOptions = {
-  title: string;
-  author: string;
-  enabledSections: Record<string, boolean>;
-  orderedSections: Array<string>;
-  pageNumbers: boolean;
-  pageNumsIncludeTitle: boolean;
-  paperSize: 'letter' | 'a4';
-};
 type PdfPopupProps = {
+  pdfOptions: PdfOptions;
+  setPdfOptions: (value: PdfOptions) => void;
   setPdfPopup: (value: boolean) => void;
 };
-function PdfPopup({ setPdfPopup }: PdfPopupProps) {
+function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
   const conlang = useStoreState((s) => s.conlang);
-  const pdfOptionsInit: PdfOptions = {
-    title: conlang.name,
-    author: '',
-    enabledSections: {
-      title: true,
-      contents: true,
-      phonology: true
-    },
-    orderedSections: ['title', 'contents', 'phonology'],
-    pageNumbers: true,
-    pageNumsIncludeTitle: false,
-    paperSize: 'letter'
-  };
-  const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
     <Popup>
       <h1
@@ -316,7 +329,20 @@ function PdfPopup({ setPdfPopup }: PdfPopupProps) {
                 });
               }}
             />
-            Include Title Page
+            Page #s Include Title Page
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={pdfOptions.pageNumsIncludeToc}
+              onChange={(event) => {
+                setPdfOptions({
+                  ...pdfOptions,
+                  pageNumsIncludeToc: event.currentTarget.checked
+                });
+              }}
+            />
+            Page #s Include Table of Contents
           </label>
         </div>
       </div>
@@ -522,6 +548,12 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           if (vowelRows.openmid === 0) {
             vowelRowsFinal.splice(vowelRowsFinal.indexOf('openmid'), 1);
           }
+          if (
+            vowelRows.mid === 0 &&
+            (vowelRows.closemid > 0 || vowelRows.openmid > 0)
+          ) {
+            vowelRowsFinal.splice(vowelRowsFinal.indexOf('mid'), 1);
+          }
           const consonants: Array<Array<string | CellDef>> = Array(
             consonantRowsCount.length + 1
           )
@@ -648,7 +680,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               fontStyle: 'normal',
               lineWidth: 0.001,
               lineColor: 0,
-              cellWidth: 0.7
+              cellWidth: unit === 'in' ? 0.8 : 20
             },
             didDrawPage: (data) => {
               if (data.cursor) {
@@ -674,7 +706,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               fontStyle: 'normal',
               lineWidth: 0.001,
               lineColor: 0,
-              cellWidth: 0.8
+              cellWidth: unit === 'in' ? 0.8 : 20
             },
             didDrawPage: (data) => {
               if (data.cursor) {
@@ -685,24 +717,67 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               left: unit === 'in' ? 1 : 25
             }
           });
-          doc.setFontSize(10);
-          doc.setFont('CharisSIL', 'normal');
-          doc.text(
-            'Created with Morpheme',
-            unit === 'in' ? 1 : 25,
-            unit === 'in' ? 10.5 : 284
-          );
-          doc.setTextColor(0, 0, 255);
-          doc.textWithLink(
-            'https://liujip0.github.io/morpheme/',
-            unit === 'in' ? 3 : 75,
-            unit === 'in' ? 10.5 : 284,
-            {
-              url: 'https://liujip0.github.io/morpheme/'
-            }
-          );
-          doc.setFontSize(16);
-          doc.setTextColor(0);
+          if (doc.getCurrentPageInfo().pageNumber % 2 === 0) {
+            doc.setFontSize(10);
+            doc.setFont('CharisSIL', 'normal');
+            doc.text(
+              pdfOptions.title,
+              unit === 'in' ? 4.2 : 105,
+              unit === 'in' ? 10.5 : 284,
+              {
+                align: 'center'
+              }
+            );
+            doc.text(
+              pdfOptions.author,
+              unit === 'in' ? 7.5 : 185,
+              unit === 'in' ? 10.5 : 284,
+              {
+                align: 'right'
+              }
+            );
+            doc.setFontSize(12);
+            doc.setFont('CharisSIL', 'bold');
+            doc.text(
+              (
+                doc.getCurrentPageInfo().pageNumber -
+                (pdfOptions.pageNumsIncludeTitle ? 0 : 1) -
+                (pdfOptions.pageNumsIncludeToc ? 0 : 1)
+              ).toString(),
+              unit === 'in' ? 1 : 25,
+              unit === 'in' ? 10.5 : 284
+            );
+          } else {
+            doc.setFontSize(10);
+            doc.setFont('CharisSIL', 'normal');
+            doc.text(
+              'Created with Morpheme',
+              unit === 'in' ? 1 : 25,
+              unit === 'in' ? 10.5 : 284
+            );
+            doc.setTextColor(0, 0, 255);
+            doc.textWithLink(
+              'https://liujip0.github.io/morpheme/',
+              unit === 'in' ? 4.2 : 105,
+              unit === 'in' ? 10.5 : 284,
+              {
+                url: 'https://liujip0.github.io/morpheme/',
+                align: 'center'
+              }
+            );
+            doc.setTextColor(0);
+            doc.setFontSize(12);
+            doc.setFont('CharisSIL', 'bold');
+            doc.text(
+              (
+                doc.getCurrentPageInfo().pageNumber -
+                (pdfOptions.pageNumsIncludeTitle ? 0 : 1) -
+                (pdfOptions.pageNumsIncludeToc ? 0 : 1)
+              ).toString(),
+              unit === 'in' ? 7.5 : 185,
+              unit === 'in' ? 10.5 : 284
+            );
+          }
           doc.addPage(pdfOptions.paperSize);
           break;
         }
@@ -728,11 +803,75 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
       );
       doc.text(
         toc[i].page.toString(),
-        unit === 'in' ? 7.5 : 272,
+        unit === 'in' ? 7.5 : 185,
         unit === 'in' ? 2 + 0.5 * i : 50 + 12 * i
       );
     }
+    if (doc.getCurrentPageInfo().pageNumber % 2 === 0) {
+      doc.setFontSize(10);
+      doc.setFont('CharisSIL', 'normal');
+      doc.text(
+        pdfOptions.title,
+        unit === 'in' ? 4.2 : 105,
+        unit === 'in' ? 10.5 : 284,
+        {
+          align: 'center'
+        }
+      );
+      doc.text(
+        pdfOptions.author,
+        unit === 'in' ? 7.5 : 185,
+        unit === 'in' ? 10.5 : 284,
+        {
+          align: 'right'
+        }
+      );
+      doc.setFontSize(12);
+      doc.setFont('CharisSIL', 'bold');
+      if (pdfOptions.pageNumsIncludeToc) {
+        doc.text(
+          (
+            doc.getCurrentPageInfo().pageNumber -
+            (pdfOptions.pageNumsIncludeTitle ? 0 : 1)
+          ).toString(),
+          unit === 'in' ? 1 : 25,
+          unit === 'in' ? 10.5 : 284
+        );
+      }
+    } else {
+      doc.setFontSize(10);
+      doc.setFont('CharisSIL', 'normal');
+      doc.text(
+        'Created with Morpheme',
+        unit === 'in' ? 1 : 25,
+        unit === 'in' ? 10.5 : 284
+      );
+      doc.setTextColor(0, 0, 255);
+      doc.textWithLink(
+        'https://liujip0.github.io/morpheme/',
+        unit === 'in' ? 4.2 : 105,
+        unit === 'in' ? 10.5 : 284,
+        {
+          url: 'https://liujip0.github.io/morpheme/',
+          align: 'center'
+        }
+      );
+      doc.setTextColor(0);
+      doc.setFontSize(12);
+      doc.setFont('CharisSIL', 'bold');
+      if (pdfOptions.pageNumsIncludeToc) {
+        doc.text(
+          (
+            doc.getCurrentPageInfo().pageNumber -
+            (pdfOptions.pageNumsIncludeTitle ? 0 : 1)
+          ).toString(),
+          unit === 'in' ? 7.5 : 185,
+          unit === 'in' ? 10.5 : 284
+        );
+      }
+    }
   }
+  doc.deletePage(doc.getNumberOfPages());
   doc.save(conlang.name + '.pdf');
 }
 
