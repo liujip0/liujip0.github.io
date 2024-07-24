@@ -37,9 +37,9 @@ export const conlangInit: Conlang = {
         contents: [],
         name: '/'
       }
-    ],
-    foldersOnTop: false
+    ]
   },
+  declensions: [],
   lexicon: []
 };
 

@@ -20,10 +20,13 @@ export interface Conlang {
   };
   articles: {
     list: Array<Folder | Article>;
-    foldersOnTop: boolean;
   };
+  declensions: Array<Declension>;
   lexicon: Array<Word>;
 }
+type Declension = {
+  id: string;
+};
 export type Word = {
   id: string;
   romanization: string;
@@ -184,6 +187,7 @@ export type screenStr =
   | 'home'
   | 'phonology'
   | 'articles'
+  | 'declensions'
   | 'lexicon'
   | 'settings';
 export type windowsArr = Array<string>;

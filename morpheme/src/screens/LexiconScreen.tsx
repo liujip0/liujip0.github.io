@@ -7,7 +7,11 @@ import {
   TbTriangleInverted
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
-import { createId, romanizationToIpa } from '../common/Funcs.tsx';
+import {
+  createId,
+  partOfSpeechAbbreviation,
+  romanizationToIpa
+} from '../common/Funcs.tsx';
 import { Consonant, PartOfSpeech, Vowel, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
@@ -115,6 +119,12 @@ type WordsProps = {
 function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
+  const [deleteWord, setDeleteWord] = useState(false);
+  const getWord = (id: string) => {
+    const index = conlang.lexicon.findIndex((value) => value.id === id);
+    return conlang.lexicon[index];
+  };
+  const word = getWord(currentWord);
   const addWord = (word: Word) => {
     const id = createId(word.romanization);
     const newLexicon = conlang.lexicon;
@@ -125,6 +135,26 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
     changeConlang(['lexicon'], newLexicon);
     sortLexicon();
     return id;
+  };
+  const moveUpWord = (id: string) => {
+    const index = conlang.lexicon.findIndex((value) => value.id === id);
+    if (index > 0) {
+      const word = conlang.lexicon[index];
+      const newLexicon = conlang.lexicon;
+      newLexicon.splice(index, 1);
+      newLexicon.splice(index - 1, 0, word);
+      changeConlang(['lexicon'], newLexicon);
+    }
+  };
+  const moveDownWord = (id: string) => {
+    const index = conlang.lexicon.findIndex((value) => value.id === id);
+    if (index < conlang.lexicon.length - 1) {
+      const word = conlang.lexicon[index];
+      const newLexicon = conlang.lexicon;
+      newLexicon.splice(index, 1);
+      newLexicon.splice(index + 1, 0, word);
+      changeConlang(['lexicon'], newLexicon);
+    }
   };
   return (
     <div
@@ -155,6 +185,45 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
           }}>
           <TbPlus size={20} />
         </IconButton>
+        <IconButton
+          onClick={() => {
+            moveUpWord(currentWord);
+          }}>
+          <TbTriangle size={20} />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            moveDownWord(currentWord);
+          }}>
+          <TbTriangleInverted size={20} />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setDeleteWord(true);
+          }}>
+          <TbTrash size={20} />
+        </IconButton>
+        {deleteWord && (
+          <Alert
+            title="Confirmation"
+            description={
+              'Are you sure you want to delete ' +
+              word.romanization +
+              ' [' +
+              partOfSpeechAbbreviation(word.partOfSpeech) +
+              ']? This cannot be undone.'
+            }
+            onDecline={() => {
+              setDeleteWord(false);
+            }}
+            onAccept={() => {
+              setDeleteWord(false);
+              const newLexicon = conlang.lexicon;
+              newLexicon.filter((x) => x.id !== currentWord);
+              changeConlang(['lexicon'], newLexicon);
+            }}
+          />
+        )}
       </div>
       <div
         style={{
@@ -187,31 +256,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                 &nbsp;|&nbsp;
                 {item.definitions[0]}
                 &nbsp;[
-                {(() => {
-                  switch (item.partOfSpeech) {
-                    case 'noun':
-                      return 'N';
-                    case 'verb':
-                      return 'V';
-                    case 'adjective':
-                      return 'Adj';
-                    case 'adverb':
-                      return 'Adv';
-                    case 'pronoun':
-                      return 'Pron';
-                    case 'proper noun':
-                      return 'PropN';
-                    case 'particle':
-                      return 'Ptcl';
-                    case 'adposition':
-                      return 'Adp';
-                    case 'conjunction':
-                      return 'Conj';
-                    case '':
-                      return '';
-                  }
-                })()}
-                ]
+                {partOfSpeechAbbreviation(item.partOfSpeech)}]
               </div>
             );
           })}

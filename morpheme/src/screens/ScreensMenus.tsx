@@ -179,6 +179,11 @@ function Submenu({ position }: SubmenuProps) {
       </SubmenuButton>
       <SubmenuButton
         position={position}
+        screen={'declensions'}>
+        Declensions (Conjugations)
+      </SubmenuButton>
+      <SubmenuButton
+        position={position}
         screen={'lexicon'}>
         Lexicon
       </SubmenuButton>

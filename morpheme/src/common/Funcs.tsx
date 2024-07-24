@@ -4,7 +4,8 @@ import {
   Article,
   Folder,
   IpaConsonantDiacritic,
-  IpaVowelDiacritic
+  IpaVowelDiacritic,
+  PartOfSpeech
 } from './Types.tsx';
 
 export async function getFile(options: object) {
@@ -278,4 +279,29 @@ export function createId(type: string): string {
     '-' +
     datetime.getMilliseconds()
   );
+}
+
+export function partOfSpeechAbbreviation(partOfSpeech: PartOfSpeech) {
+  switch (partOfSpeech) {
+    case 'noun':
+      return 'N';
+    case 'verb':
+      return 'V';
+    case 'adjective':
+      return 'Adj';
+    case 'adverb':
+      return 'Adv';
+    case 'pronoun':
+      return 'Pron';
+    case 'proper noun':
+      return 'PropN';
+    case 'particle':
+      return 'Ptcl';
+    case 'adposition':
+      return 'Adp';
+    case 'conjunction':
+      return 'Conj';
+    case '':
+      return '';
+  }
 }

@@ -1,5 +1,6 @@
 import { screenPosition } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
+import DeclensionsScreen from './DeclensionsScreen.tsx';
 import HomeScreen from './HomeScreen.tsx';
 import LexiconScreen from './LexiconScreen.tsx';
 import ScreensMenus from './ScreensMenus';
@@ -77,12 +78,24 @@ function Screen({ location, position }: ScreenProps) {
         overflow: 'scroll',
         backgroundColor: 'white'
       }}>
-      {windows[position].split('-')[0] === 'start' && <StartScreen />}
-      {windows[position].split('-')[0] === 'home' && <HomeScreen />}
-      {windows[position].split('-')[0] === 'phonology' && <PhonologyScreen />}
-      {windows[position].split('-')[0] === 'articles' && <ArticlesScreen />}
-      {windows[position].split('-')[0] === 'lexicon' && <LexiconScreen />}
-      {windows[position].split('-')[0] === 'settings' && <SettingsScreen />}
+      {(() => {
+        switch (windows[position].split('-')[0]) {
+          case 'start':
+            return <StartScreen />;
+          case 'home':
+            return <HomeScreen />;
+          case 'phonology':
+            return <PhonologyScreen />;
+          case 'articles':
+            return <ArticlesScreen />;
+          case 'declensions':
+            return <DeclensionsScreen />;
+          case 'lexicon':
+            return <LexiconScreen />;
+          case 'settings':
+            return <SettingsScreen />;
+        }
+      })()}
     </div>
   );
 }
