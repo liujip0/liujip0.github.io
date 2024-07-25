@@ -3,6 +3,8 @@ import TopBar from './TopBar';
 import Widgets from './Widgets';
 
 export default function AppLayout() {
+  // eslint-disable-next-line prefer-const
+  let biRef = {};
   return (
     <div
       style={{
@@ -21,7 +23,7 @@ export default function AppLayout() {
       }}>
       <TopBar />
       <Widgets />
-      <ScreensLayout />
+      <ScreensLayout biRef={biRef} />
     </div>
   );
 }

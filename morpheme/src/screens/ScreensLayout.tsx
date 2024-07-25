@@ -9,7 +9,10 @@ import StartScreen from './StartScreen.tsx';
 import { ArticlesScreen } from './articles/ArticlesScreen.tsx';
 import PhonologyScreen from './phonology/PhonologyScreen.tsx';
 
-export default function ScreensLayout() {
+type ScreensLayoutProps = {
+  biRef: Record<string, unknown>;
+};
+export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
   const windows = useStoreState((s) => s.windows);
   return (
     <>
@@ -23,6 +26,7 @@ export default function ScreensLayout() {
           gridColumnStart: 'a0',
           gridColumnEnd: windows[0] === windows[1] ? 'a1' : 'a0'
         }}
+        biRef={biRef}
       />
 
       {windows[0] !== windows[1] && (
@@ -34,6 +38,7 @@ export default function ScreensLayout() {
             gridColumnStart: 'a1',
             gridColumnEnd: 'a1'
           }}
+          biRef={biRef}
         />
       )}
 
@@ -46,6 +51,7 @@ export default function ScreensLayout() {
             gridColumnStart: 'a2',
             gridColumnEnd: windows[2] === windows[3] ? 'a3' : 'a2'
           }}
+          biRef={biRef}
         />
       )}
 
@@ -58,6 +64,7 @@ export default function ScreensLayout() {
             gridColumnStart: 'a3',
             gridColumnEnd: 'a3'
           }}
+          biRef={biRef}
         />
       )}
     </>
@@ -67,8 +74,9 @@ export default function ScreensLayout() {
 type ScreenProps = {
   location: Record<string, string>;
   position: screenPosition;
+  biRef: Record<string, unknown>;
 };
-function Screen({ location, position }: ScreenProps) {
+function Screen({ location, position, biRef }: ScreenProps) {
   const windows = useStoreState((s) => s.windows);
   return (
     <div
@@ -87,7 +95,7 @@ function Screen({ location, position }: ScreenProps) {
           case 'phonology':
             return <PhonologyScreen />;
           case 'articles':
-            return <ArticlesScreen />;
+            return <ArticlesScreen biRef={biRef} />;
           case 'declensions':
             return <DeclensionsScreen />;
           case 'lexicon':

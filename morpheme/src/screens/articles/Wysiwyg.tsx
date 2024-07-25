@@ -41,6 +41,7 @@ import {
   TbSuperscript,
   TbUnderline
 } from 'react-icons/tb';
+import { useStoreState } from '../../common/Vals.tsx';
 import { CodeBlock, HorizontalRule, TextAlign } from './WysiwygComponents.tsx';
 
 const inlineMap = {
@@ -63,8 +64,10 @@ const inlineMap = {
 type WysiwygProps = {
   value: RawDraftContentState;
   setValue: (value: EditorState) => void;
+  biRef: Record<string, unknown>;
 };
-export default function Wysiwyg({ value, setValue }: WysiwygProps) {
+export default function Wysiwyg({ value, setValue, biRef }: WysiwygProps) {
+  const setLastInput = useStoreState((s) => s.setLastInput);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(convertFromRaw(value))
   );
@@ -72,7 +75,6 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
     setEditorState(state);
     setValue(state);
   };
-
   const handleKeyCommand = (command: string, state: EditorState) => {
     const newState = RichUtils.handleKeyCommand(state, command);
     if (newState) {
@@ -81,30 +83,15 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
     }
     return 'not-handled';
   };
-  const toggleInlineStyle = (style: string) => {
-    handleEditorChange(RichUtils.toggleInlineStyle(editorState, style));
-  };
-  const toggleBlockType = (blockType: string) => {
-    handleEditorChange(RichUtils.toggleBlockType(editorState, blockType));
-  };
-  const insertComponent = (
-    componentType: string,
-    data?: Record<string, unknown>
-  ) => {
-    const stateWithEntity = editorState
-      .getCurrentContent()
-      .createEntity(componentType, 'IMMUTABLE', data);
-    const entityKey = stateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = AtomicBlockUtils.insertAtomicBlock(
+  const insertText = (text: string) => {
+    EditorState.push(
       editorState,
-      entityKey,
-      '-'
-    );
-    handleEditorChange(
-      EditorState.forceSelection(
-        newEditorState,
-        newEditorState.getCurrentContent().getSelectionAfter()
-      )
+      Modifier.replaceText(
+        editorState.getCurrentContent(),
+        editorState.getSelection(),
+        text
+      ),
+      'insert-characters'
     );
   };
   const blockRendererFn = (contentBlock: ContentBlock) => {
@@ -171,8 +158,6 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
     }
   };
 
-  const imageSrcInput = useRef<HTMLInputElement>(null);
-
   return (
     <div
       style={{
@@ -182,273 +167,10 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         flexDirection: 'column',
         overflowY: 'scroll'
       }}>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          marginBottom: '1em'
-        }}>
-        <WysiwygSection>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('BOLD');
-            }}>
-            <TbBold />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('ITALIC');
-            }}>
-            <TbItalic />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('UNDERLINE');
-            }}>
-            <TbUnderline />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('STRIKETHROUGH');
-            }}>
-            <TbStrikethrough />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('SUPERSCRIPT');
-            }}>
-            <TbSuperscript />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('SUBSCRIPT');
-            }}>
-            <TbSubscript />
-          </WysiwygIcon>
-        </WysiwygSection>
-
-        <WysiwygSection>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleInlineStyle('CODE');
-            }}>
-            <TbCode />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleBlockType('code-block');
-            }}>
-            <TbFileCode />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleBlockType('blockquote');
-            }}>
-            <TbBlockquote />
-          </WysiwygIcon>
-        </WysiwygSection>
-
-        <WysiwygSection>
-          <WysiwygSubmenu
-            icon={
-              <WysiwygIcon>
-                <TbHeading />
-              </WysiwygIcon>
-            }>
-            <WysiwygSection>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('unstyled');
-                }}>
-                <TbHeadingOff />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-one');
-                }}>
-                <TbH1 />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-two');
-                }}>
-                <TbH2 />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-three');
-                }}>
-                <TbH3 />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-four');
-                }}>
-                <TbH4 />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-five');
-                }}>
-                <TbH5 />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('header-six');
-                }}>
-                <TbH6 />
-              </WysiwygIcon>
-            </WysiwygSection>
-          </WysiwygSubmenu>
-        </WysiwygSection>
-
-        <WysiwygSection>
-          <WysiwygSubmenu icon={<TbAlignLeft />}>
-            <WysiwygSection>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('align-left');
-                }}>
-                <TbAlignLeft />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('align-center');
-                }}>
-                <TbAlignCenter />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('align-right');
-                }}>
-                <TbAlignRight />
-              </WysiwygIcon>
-              <WysiwygIcon
-                onClick={(event) => {
-                  event.preventDefault();
-                  toggleBlockType('align-justify');
-                }}>
-                <TbAlignJustified />
-              </WysiwygIcon>
-            </WysiwygSection>
-          </WysiwygSubmenu>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleBlockType('unordered-list-item');
-            }}>
-            <TbList />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleBlockType('ordered-list-item');
-            }}>
-            <TbListNumbers />
-          </WysiwygIcon>
-        </WysiwygSection>
-
-        <WysiwygSection>
-          <WysiwygSubmenu icon={<TbPhoto />}>
-            <WysiwygSection>
-              <input
-                ref={imageSrcInput}
-                style={{
-                  margin: '0.3em'
-                }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    document.getElementById('imageSrcButton')?.click();
-                  }
-                }}
-                placeholder="Image URL"
-                type="url"
-              />
-              <WysiwygIcon
-                id={'imageSrcButton'}
-                onClick={(event) => {
-                  event.preventDefault();
-                  if (imageSrcInput.current) {
-                    insertComponent('image', {
-                      src: imageSrcInput.current.value
-                    });
-                  }
-                }}>
-                <TbCheck />
-              </WysiwygIcon>
-            </WysiwygSection>
-          </WysiwygSubmenu>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              insertComponent('horizontal-rule');
-            }}>
-            <TbSeparator />
-          </WysiwygIcon>
-        </WysiwygSection>
-
-        <WysiwygSection>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              handleEditorChange(EditorState.undo(editorState));
-            }}>
-            <TbArrowBackUp />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              handleEditorChange(EditorState.redo(editorState));
-            }}>
-            <TbArrowForwardUp />
-          </WysiwygIcon>
-          <WysiwygIcon
-            onClick={(event) => {
-              event.preventDefault();
-              toggleBlockType('unstyled');
-              const stylesToRemove = editorState
-                .getCurrentInlineStyle()
-                .toArray();
-              handleEditorChange(
-                EditorState.push(
-                  editorState,
-                  stylesToRemove.reduce((state, style) => {
-                    return Modifier.removeInlineStyle(
-                      state,
-                      editorState.getSelection(),
-                      style
-                    );
-                  }, editorState.getCurrentContent()),
-                  'change-block-type'
-                )
-              );
-            }}>
-            <TbClearFormatting />
-          </WysiwygIcon>
-        </WysiwygSection>
-      </div>
+      <WysiwygMenu
+        editorState={editorState}
+        handleEditorChange={handleEditorChange}
+      />
       <div
         style={{
           overflowY: 'scroll',
@@ -462,8 +184,316 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
           handleKeyCommand={handleKeyCommand}
           editorState={editorState}
           onChange={handleEditorChange}
+          onFocus={() => {
+            setLastInput('wysiwyg');
+            biRef.insertText = insertText;
+          }}
         />
       </div>
+    </div>
+  );
+}
+
+type WysiwygMenuProps = {
+  editorState: EditorState;
+  handleEditorChange: (state: EditorState) => void;
+};
+function WysiwygMenu({ editorState, handleEditorChange }: WysiwygMenuProps) {
+  const imageSrcInput = useRef<HTMLInputElement>(null);
+
+  const toggleInlineStyle = (style: string) => {
+    handleEditorChange(RichUtils.toggleInlineStyle(editorState, style));
+  };
+  const toggleBlockType = (blockType: string) => {
+    handleEditorChange(RichUtils.toggleBlockType(editorState, blockType));
+  };
+  const insertComponent = (
+    componentType: string,
+    data?: Record<string, unknown>
+  ) => {
+    const stateWithEntity = editorState
+      .getCurrentContent()
+      .createEntity(componentType, 'IMMUTABLE', data);
+    const entityKey = stateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = AtomicBlockUtils.insertAtomicBlock(
+      editorState,
+      entityKey,
+      '-'
+    );
+    handleEditorChange(
+      EditorState.forceSelection(
+        newEditorState,
+        newEditorState.getCurrentContent().getSelectionAfter()
+      )
+    );
+  };
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        marginBottom: '1em'
+      }}>
+      <WysiwygSection>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('BOLD');
+          }}>
+          <TbBold />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('ITALIC');
+          }}>
+          <TbItalic />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('UNDERLINE');
+          }}>
+          <TbUnderline />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('STRIKETHROUGH');
+          }}>
+          <TbStrikethrough />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('SUPERSCRIPT');
+          }}>
+          <TbSuperscript />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('SUBSCRIPT');
+          }}>
+          <TbSubscript />
+        </WysiwygIcon>
+      </WysiwygSection>
+
+      <WysiwygSection>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleInlineStyle('CODE');
+          }}>
+          <TbCode />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleBlockType('code-block');
+          }}>
+          <TbFileCode />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleBlockType('blockquote');
+          }}>
+          <TbBlockquote />
+        </WysiwygIcon>
+      </WysiwygSection>
+
+      <WysiwygSection>
+        <WysiwygSubmenu
+          icon={
+            <WysiwygIcon>
+              <TbHeading />
+            </WysiwygIcon>
+          }>
+          <WysiwygSection>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('unstyled');
+              }}>
+              <TbHeadingOff />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-one');
+              }}>
+              <TbH1 />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-two');
+              }}>
+              <TbH2 />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-three');
+              }}>
+              <TbH3 />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-four');
+              }}>
+              <TbH4 />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-five');
+              }}>
+              <TbH5 />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('header-six');
+              }}>
+              <TbH6 />
+            </WysiwygIcon>
+          </WysiwygSection>
+        </WysiwygSubmenu>
+      </WysiwygSection>
+
+      <WysiwygSection>
+        <WysiwygSubmenu icon={<TbAlignLeft />}>
+          <WysiwygSection>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('align-left');
+              }}>
+              <TbAlignLeft />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('align-center');
+              }}>
+              <TbAlignCenter />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('align-right');
+              }}>
+              <TbAlignRight />
+            </WysiwygIcon>
+            <WysiwygIcon
+              onClick={(event) => {
+                event.preventDefault();
+                toggleBlockType('align-justify');
+              }}>
+              <TbAlignJustified />
+            </WysiwygIcon>
+          </WysiwygSection>
+        </WysiwygSubmenu>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleBlockType('unordered-list-item');
+          }}>
+          <TbList />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleBlockType('ordered-list-item');
+          }}>
+          <TbListNumbers />
+        </WysiwygIcon>
+      </WysiwygSection>
+
+      <WysiwygSection>
+        <WysiwygSubmenu icon={<TbPhoto />}>
+          <WysiwygSection>
+            <input
+              ref={imageSrcInput}
+              style={{
+                margin: '0.3em'
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  document.getElementById('imageSrcButton')?.click();
+                }
+              }}
+              placeholder="Image URL"
+              type="url"
+            />
+            <WysiwygIcon
+              id={'imageSrcButton'}
+              onClick={(event) => {
+                event.preventDefault();
+                if (imageSrcInput.current) {
+                  insertComponent('image', {
+                    src: imageSrcInput.current.value
+                  });
+                }
+              }}>
+              <TbCheck />
+            </WysiwygIcon>
+          </WysiwygSection>
+        </WysiwygSubmenu>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            insertComponent('horizontal-rule');
+          }}>
+          <TbSeparator />
+        </WysiwygIcon>
+      </WysiwygSection>
+
+      <WysiwygSection>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            handleEditorChange(EditorState.undo(editorState));
+          }}>
+          <TbArrowBackUp />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            handleEditorChange(EditorState.redo(editorState));
+          }}>
+          <TbArrowForwardUp />
+        </WysiwygIcon>
+        <WysiwygIcon
+          onClick={(event) => {
+            event.preventDefault();
+            toggleBlockType('unstyled');
+            const stylesToRemove = editorState
+              .getCurrentInlineStyle()
+              .toArray();
+            handleEditorChange(
+              EditorState.push(
+                editorState,
+                stylesToRemove.reduce((state, style) => {
+                  return Modifier.removeInlineStyle(
+                    state,
+                    editorState.getSelection(),
+                    style
+                  );
+                }, editorState.getCurrentContent()),
+                'change-block-type'
+              )
+            );
+          }}>
+          <TbClearFormatting />
+        </WysiwygIcon>
+      </WysiwygSection>
     </div>
   );
 }

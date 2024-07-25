@@ -1,5 +1,5 @@
 import { createRef, useRef, useState } from 'react';
-import { createId } from '../common/Funcs.tsx';
+import { createId, writeFile } from '../common/Funcs.tsx';
 import { DimenRes } from '../common/Resources';
 import { useStoreState } from '../common/Vals';
 
@@ -74,28 +74,6 @@ export default function SettingsScreen() {
           changeConlang(['widgets', 'charInsert', 'chars'], value.split(','));
         }}
       />
-
-      <h2>Articles</h2>
-      <RadioInput
-        label="Folders on top"
-        description={
-          'When articles are listed together, folders will show up ' +
-          'on top regardless of alphabetical order.'
-        }
-        options={[
-          {
-            label: 'Yes',
-            value: 'true'
-          },
-          {
-            label: 'No',
-            value: 'false'
-          }
-        ]}
-        onSave={(value) => {
-          changeConlang(['articles', 'foldersOnTop'], value === 'true');
-        }}
-      />
     </>
   );
 }
@@ -114,6 +92,9 @@ function TextInput({
   defaultValue,
   onSave
 }: TextInputProps) {
+  const conlang = useStoreState((s) => s.conlang);
+  const setSaved = useStoreState((s) => s.setSaved);
+  const fileHandle = useStoreState((s) => s.fileHandle);
   const setLastInput = useStoreState((s) => s.setLastInput);
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -151,6 +132,10 @@ function TextInput({
           onClick={() => {
             if (inputRef.current) {
               onSave(inputRef.current.value);
+              setSaved(true);
+              if (fileHandle) {
+                writeFile(fileHandle, JSON.stringify(conlang));
+              }
             }
           }}
           ref={buttonRef}
@@ -198,6 +183,9 @@ function RadioInput({
   onSave,
   customOption
 }: RadioInputProps) {
+  const conlang = useStoreState((s) => s.conlang);
+  const setSaved = useStoreState((s) => s.setSaved);
+  const fileHandle = useStoreState((s) => s.fileHandle);
   const time = new Date().getTime();
   const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>(
     Array.from(
@@ -322,6 +310,10 @@ function RadioInput({
       <button
         onClick={() => {
           onSave(currentValue);
+          setSaved(true);
+          if (fileHandle) {
+            writeFile(fileHandle, JSON.stringify(conlang));
+          }
         }}
         ref={buttonRef}
         style={{
