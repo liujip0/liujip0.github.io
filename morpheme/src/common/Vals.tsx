@@ -39,7 +39,10 @@ export const conlangInit: Conlang = {
       }
     ]
   },
-  declensions: [],
+  declensions: {
+    list: [],
+    order: {}
+  },
   lexicon: []
 };
 

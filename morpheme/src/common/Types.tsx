@@ -21,11 +21,17 @@ export interface Conlang {
   articles: {
     list: Array<Folder | Article>;
   };
-  declensions: Array<Declension>;
+  declensions: {
+    list: Array<Declension>;
+    order: Record<PartOfSpeech, Array<string>>;
+  };
   lexicon: Array<Word>;
 }
-type Declension = {
+export type Declension = {
   id: string;
+  name: string;
+  gloss: Array<string>;
+  affix: Array<string>;
 };
 export type Word = {
   id: string;

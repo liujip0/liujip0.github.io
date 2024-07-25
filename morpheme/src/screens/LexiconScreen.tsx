@@ -218,8 +218,8 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
             }}
             onAccept={() => {
               setDeleteWord(false);
-              const newLexicon = conlang.lexicon;
-              newLexicon.filter((x) => x.id !== currentWord);
+              let newLexicon = conlang.lexicon;
+              newLexicon = newLexicon.filter((x) => x.id !== currentWord);
               changeConlang(['lexicon'], newLexicon);
             }}
           />
