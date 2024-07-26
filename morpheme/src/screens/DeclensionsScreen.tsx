@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TbGripVertical } from 'react-icons/tb';
 import { NavBar, NavSection } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { Declension, PartOfSpeech } from '../common/Types.tsx';
@@ -43,13 +44,9 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
   const [dragging, setDragging] = useState<string | null>(null);
   const handleDragStart = (
     event: React.DragEvent<HTMLLIElement>,
-    declension: Declension | '_'
+    declension: string
   ) => {
-    if (declension === '_') {
-      setDragging(declension);
-    } else {
-      setDragging(declension.id);
-    }
+    setDragging(declension);
     event.dataTransfer.setData('text/plain', '');
   };
   const handleDragEnd = () => {
@@ -60,39 +57,28 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
   };
   const handleDrop = (targetItem: string) => {
     if (!dragging) return;
-    const currentIndex = conlang.declensions[partOfSpeech].findIndex((x) => {
-      if (x === '_') {
-        return x === dragging;
-      } else {
-        return x.id === dragging;
-      }
-    });
-    const targetIndex = conlang.declensions[partOfSpeech].findIndex((x) => {
-      if (x === '_') {
-        return x === targetItem;
-      } else {
-        return x.id === targetItem;
-      }
-    });
+    const currentIndex = conlang.declensions[partOfSpeech].findIndex((x) =>
+      x === '_' ? x === dragging : x.id === dragging
+    );
+    const targetIndex = conlang.declensions[partOfSpeech].findIndex((x) =>
+      x === '_' ? x === targetItem : x.id === targetItem
+    );
     if (currentIndex !== -1 && targetIndex !== -1) {
       const newDeclensions = conlang.declensions[partOfSpeech];
+      const draggedItem = newDeclensions[currentIndex];
       newDeclensions.splice(currentIndex, 1);
-      newDeclensions.splice(
-        targetIndex,
-        0,
-        conlang.declensions[partOfSpeech].find((x) => {
-          if (x === '_') {
-            return x === dragging;
-          } else {
-            return x.id === dragging;
-          }
-        })!
-      );
-      changeConlang(['declensions'], {
-        ...conlang.declensions,
-        [partOfSpeech]: newDeclensions
-      });
+      newDeclensions.splice(targetIndex, 0, draggedItem);
+      changeConlang(['declensions', partOfSpeech], newDeclensions);
     }
+  };
+  const changeDeclension = (id: string, property: string, value: unknown) => {
+    const newDeclensions = conlang.declensions[partOfSpeech];
+    const index = newDeclensions.findIndex((x) =>
+      x === '_' ? false : x.id === id
+    );
+    const declension = newDeclensions[index] as Declension;
+    newDeclensions.splice(index, 1, { ...declension, [property]: value });
+    changeConlang(['declensions', partOfSpeech], newDeclensions);
   };
   return (
     <>
@@ -101,7 +87,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
           const newDeclensions = conlang.declensions[partOfSpeech];
           newDeclensions.push({
             id: createId('declension'),
-            name: createId('declension'),
+            name: '',
             affix: [],
             gloss: []
           });
@@ -109,31 +95,90 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             ...conlang.declensions,
             [partOfSpeech]: newDeclensions
           });
+          console.log(newDeclensions);
         }}>
         Add Declension
       </button>
-      <ul>
-        {conlang.declensions[partOfSpeech].map((item) =>
-          (() => {
-            if (item === '_') {
-              return (
-                <li
-                  key={'_'}
-                  draggable
-                  onDragStart={(event) => {
-                    handleDragStart(event, '_');
+      <ul
+        style={{
+          listStyleType: 'none',
+          listStylePosition: 'outside',
+          padding: '0'
+        }}>
+        {conlang.declensions[partOfSpeech].map((item) => {
+          if (item === '_') {
+            return (
+              <li
+                key={'_'}
+                draggable
+                onDragStart={(event) => {
+                  handleDragStart(event, '_');
+                }}
+                onDragEnd={handleDragEnd}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop('_')}
+                style={{
+                  border: '1px solid black',
+                  padding: '0.3em',
+                  marginBottom: '0.1em',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                <TbGripVertical
+                  size={20}
+                  style={{
+                    marginRight: '0.5em'
                   }}
-                  onDragEnd={handleDragEnd}
-                  onDragOver={handleDragOver}
-                  onDrop={() => handleDrop('_')}>
-                  Root Word
-                </li>
-              );
-            } else {
-              return <li key={item.id}>{item.name}</li>;
-            }
-          })()
-        )}
+                />
+                <div>Root Word</div>
+              </li>
+            );
+          } else {
+            return (
+              <li
+                key={item.id}
+                draggable
+                onDragStart={(event) => {
+                  handleDragStart(event, item.id);
+                }}
+                onDragEnd={handleDragEnd}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(item.id)}
+                style={{
+                  border: '1px solid black',
+                  padding: '0.3em',
+                  marginBottom: '0.1em',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                <TbGripVertical
+                  size={20}
+                  style={{
+                    marginRight: '0.5em'
+                  }}
+                />
+                <table>
+                  <tr>
+                    <td colSpan={Math.max(1, item.affix.length)}>
+                      Name:{' '}
+                      <input
+                        value={item.name}
+                        onInput={(event) => {
+                          changeDeclension(
+                            item.id,
+                            'name',
+                            event.currentTarget.value
+                          );
+                        }}
+                        size={50}
+                      />
+                    </td>
+                  </tr>
+                </table>
+              </li>
+            );
+          }
+        })}
       </ul>
     </>
   );
