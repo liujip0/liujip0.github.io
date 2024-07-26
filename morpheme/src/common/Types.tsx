@@ -21,10 +21,7 @@ export interface Conlang {
   articles: {
     list: Array<Folder | Article>;
   };
-  declensions: {
-    list: Array<Declension>;
-    order: Record<PartOfSpeech, Array<string>>;
-  };
+  declensions: Record<PartOfSpeech, Array<Declension | '_'>>;
   lexicon: Array<Word>;
 }
 export type Declension = {

@@ -40,8 +40,15 @@ export const conlangInit: Conlang = {
     ]
   },
   declensions: {
-    list: [],
-    order: {}
+    'noun': ['_'],
+    'verb': ['_'],
+    'adjective': ['_'],
+    'adverb': ['_'],
+    'pronoun': ['_'],
+    'proper noun': ['_'],
+    'particle': ['_'],
+    'adposition': ['_'],
+    'conjugation': ['_']
   },
   lexicon: []
 };
@@ -68,6 +75,9 @@ interface StoreState {
 
   lastInput: string;
   setLastInput: (value: string) => void;
+
+  insertText: (text: string) => void;
+  setInsertText: (value: (text: string) => void) => void;
 }
 export const useStoreState = create<StoreState>()((set) => ({
   saved: true,
@@ -368,5 +378,9 @@ export const useStoreState = create<StoreState>()((set) => ({
   replaceConlang: (value) => set(() => ({ conlang: value, saved: false })),
 
   lastInput: '',
-  setLastInput: (value) => set(() => ({ lastInput: value }))
+  setLastInput: (value) => set(() => ({ lastInput: value })),
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  insertText: (_text) => {},
+  setInsertText: (value) => set(() => ({ insertText: value }))
 }));

@@ -1,101 +1,140 @@
-import { useState } from 'react';
-import {
-  TbPlus,
-  TbTrash,
-  TbTriangle,
-  TbTriangleInverted
-} from 'react-icons/tb';
-import { IconButton, NavBar } from '../common/Components.tsx';
+import React, { useState } from 'react';
+import { NavBar, NavSection } from '../common/Components.tsx';
+import { createId } from '../common/Funcs.tsx';
+import { Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function DeclensionsScreen() {
-  const [currentDeclension, setCurrentDeclension] = useState('');
   return (
     <>
-      <NavBar sections={[{ id: 'noundeclensions', label: 'Nouns' }]} />
-      <div
-        style={{
-          display: 'flex',
-          height: '100%'
-        }}>
-        <Declensions
-          currentDeclension={currentDeclension}
-          setCurrentDeclension={setCurrentDeclension}
-        />
-      </div>
+      <NavBar
+        sections={[
+          { id: 'NDeclensions', label: 'Nouns' },
+          { id: 'VDeclensions', label: 'Verbs' },
+          { id: 'AdjDeclensions', label: 'Adjectives' },
+          { id: 'AdvDeclensions', label: 'Adverbs' },
+          { id: 'PronDeclensions', label: 'Pronouns' },
+          { id: 'PropNDeclensions', label: 'Proper Nouns' },
+          { id: 'PtclDeclensions', label: 'Particles' },
+          { id: 'AdpDeclensions', label: 'Adpositions' },
+          { id: 'ConjDeclensions', label: 'Conjugations' }
+        ]}
+      />
+      <NavSection id="NDeclensions">Nouns</NavSection>
+      <Declensions partOfSpeech="noun" />
+      <NavSection id="VDeclensions">Verbs</NavSection>
+      <NavSection id="AdjDeclensions">Adjectives</NavSection>
+      <NavSection id="AdvDeclensions">Adverbs</NavSection>
+      <NavSection id="PronDeclensions">Pronouns</NavSection>
+      <NavSection id="PropNDeclensions">Proper Nouns</NavSection>
+      <NavSection id="PtclDeclensions">Particles</NavSection>
+      <NavSection id="AdpDeclensions">Adpositions</NavSection>
+      <NavSection id="ConjDeclensions">Conjugations</NavSection>
     </>
   );
 }
 
 type DeclensionsProps = {
-  currentDeclension: string;
-  setCurrentDeclension: (value: string) => void;
+  partOfSpeech: PartOfSpeech;
 };
-function Declensions({
-  currentDeclension,
-  setCurrentDeclension
-}: DeclensionsProps) {
+function Declensions({ partOfSpeech }: DeclensionsProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const changeConlang = useStoreState((s) => s.changeConlang);
+  const [dragging, setDragging] = useState<string | null>(null);
+  const handleDragStart = (
+    event: React.DragEvent<HTMLLIElement>,
+    declension: Declension | '_'
+  ) => {
+    if (declension === '_') {
+      setDragging(declension);
+    } else {
+      setDragging(declension.id);
+    }
+    event.dataTransfer.setData('text/plain', '');
+  };
+  const handleDragEnd = () => {
+    setDragging(null);
+  };
+  const handleDragOver = (event: React.DragEvent<HTMLLIElement>) => {
+    event.preventDefault();
+  };
+  const handleDrop = (targetItem: string) => {
+    if (!dragging) return;
+    const currentIndex = conlang.declensions[partOfSpeech].findIndex((x) => {
+      if (x === '_') {
+        return x === dragging;
+      } else {
+        return x.id === dragging;
+      }
+    });
+    const targetIndex = conlang.declensions[partOfSpeech].findIndex((x) => {
+      if (x === '_') {
+        return x === targetItem;
+      } else {
+        return x.id === targetItem;
+      }
+    });
+    if (currentIndex !== -1 && targetIndex !== -1) {
+      const newDeclensions = conlang.declensions[partOfSpeech];
+      newDeclensions.splice(currentIndex, 1);
+      newDeclensions.splice(
+        targetIndex,
+        0,
+        conlang.declensions[partOfSpeech].find((x) => {
+          if (x === '_') {
+            return x === dragging;
+          } else {
+            return x.id === dragging;
+          }
+        })!
+      );
+      changeConlang(['declensions'], {
+        ...conlang.declensions,
+        [partOfSpeech]: newDeclensions
+      });
+    }
+  };
   return (
-    <div
-      style={{
-        width: '12em',
-        display: 'flex',
-        backgroundColor: 'lightgray',
-        flexDirection: 'column',
-        padding: '0.5em'
-      }}>
-      <div
-        style={{
-          backgroundColor: 'white',
-          marginBottom: '1em',
-          display: 'flex',
-          justifyContent: 'space-around'
+    <>
+      <button
+        onClick={() => {
+          const newDeclensions = conlang.declensions[partOfSpeech];
+          newDeclensions.push({
+            id: createId('declension'),
+            name: createId('declension'),
+            affix: [],
+            gloss: []
+          });
+          changeConlang(['declensions'], {
+            ...conlang.declensions,
+            [partOfSpeech]: newDeclensions
+          });
         }}>
-        <IconButton>
-          <TbPlus size={20} />
-        </IconButton>
-        <IconButton>
-          <TbTriangle size={20} />
-        </IconButton>
-        <IconButton>
-          <TbTriangleInverted size={20} />
-        </IconButton>
-        <IconButton>
-          <TbTrash size={20} />
-        </IconButton>
-      </div>
-      <div
-        style={{
-          backgroundColor: 'white',
-          flex: '1',
-          overflowY: 'scroll'
-        }}>
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'white',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-          {conlang.declensions.list.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                backgroundColor:
-                  item.id === currentDeclension ? 'darkgray' : 'white',
-                paddingLeft: '0.3em',
-                cursor: 'pointer'
-              }}
-              onClick={() => {
-                setCurrentDeclension(item.id);
-              }}>
-              {item.id}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+        Add Declension
+      </button>
+      <ul>
+        {conlang.declensions[partOfSpeech].map((item) =>
+          (() => {
+            if (item === '_') {
+              return (
+                <li
+                  key={'_'}
+                  draggable
+                  onDragStart={(event) => {
+                    handleDragStart(event, '_');
+                  }}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop('_')}>
+                  Root Word
+                </li>
+              );
+            } else {
+              return <li key={item.id}>{item.name}</li>;
+            }
+          })()
+        )}
+      </ul>
+    </>
   );
 }

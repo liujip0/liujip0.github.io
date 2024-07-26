@@ -4,7 +4,6 @@ import Widgets from './Widgets';
 
 export default function AppLayout() {
   // eslint-disable-next-line prefer-const
-  let biRef = {};
   return (
     <div
       style={{
@@ -22,8 +21,8 @@ export default function AppLayout() {
         backgroundColor: 'lightgray'
       }}>
       <TopBar />
-      <Widgets biRef={biRef} />
-      <ScreensLayout biRef={biRef} />
+      <Widgets />
+      <ScreensLayout />
     </div>
   );
 }

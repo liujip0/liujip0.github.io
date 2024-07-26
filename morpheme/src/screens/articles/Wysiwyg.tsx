@@ -64,16 +64,19 @@ const inlineMap = {
 type WysiwygProps = {
   value: RawDraftContentState;
   setValue: (value: EditorState) => void;
-  biRef: Record<string, unknown>;
 };
-export default function Wysiwyg({ value, setValue, biRef }: WysiwygProps) {
+export default function Wysiwyg({ value, setValue }: WysiwygProps) {
   const setLastInput = useStoreState((s) => s.setLastInput);
+  const setInsertText = useStoreState((s) => s.setInsertText);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(convertFromRaw(value))
   );
   const handleEditorChange = (state: EditorState) => {
+    console.log(state.getSelection().getStartOffset());
     setEditorState(state);
     setValue(state);
+    setLastInput('wysiwyg');
+    setInsertText(insertText);
   };
   const handleKeyCommand = (command: string, state: EditorState) => {
     const newState = RichUtils.handleKeyCommand(state, command);
@@ -89,6 +92,7 @@ export default function Wysiwyg({ value, setValue, biRef }: WysiwygProps) {
     console.log(
       currentContent.getBlockForKey(currentSelection.getStartKey()).getText()
     );
+    console.log(currentSelection.getStartOffset());
     const newContentState = Modifier.replaceText(
       currentContent,
       currentSelection,
@@ -197,7 +201,7 @@ export default function Wysiwyg({ value, setValue, biRef }: WysiwygProps) {
           onChange={handleEditorChange}
           onFocus={() => {
             setLastInput('wysiwyg');
-            biRef.insertText = insertText;
+            setInsertText(insertText);
           }}
         />
       </div>

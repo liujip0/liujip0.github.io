@@ -9,10 +9,7 @@ import StartScreen from './StartScreen.tsx';
 import { ArticlesScreen } from './articles/ArticlesScreen.tsx';
 import PhonologyScreen from './phonology/PhonologyScreen.tsx';
 
-type ScreensLayoutProps = {
-  biRef: Record<string, unknown>;
-};
-export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
+export default function ScreensLayout() {
   const windows = useStoreState((s) => s.windows);
   return (
     <>
@@ -26,7 +23,6 @@ export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
           gridColumnStart: 'a0',
           gridColumnEnd: windows[0] === windows[1] ? 'a1' : 'a0'
         }}
-        biRef={biRef}
       />
 
       {windows[0] !== windows[1] && (
@@ -38,7 +34,6 @@ export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
             gridColumnStart: 'a1',
             gridColumnEnd: 'a1'
           }}
-          biRef={biRef}
         />
       )}
 
@@ -51,7 +46,6 @@ export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
             gridColumnStart: 'a2',
             gridColumnEnd: windows[2] === windows[3] ? 'a3' : 'a2'
           }}
-          biRef={biRef}
         />
       )}
 
@@ -64,7 +58,6 @@ export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
             gridColumnStart: 'a3',
             gridColumnEnd: 'a3'
           }}
-          biRef={biRef}
         />
       )}
     </>
@@ -74,9 +67,8 @@ export default function ScreensLayout({ biRef }: ScreensLayoutProps) {
 type ScreenProps = {
   location: Record<string, string>;
   position: screenPosition;
-  biRef: Record<string, unknown>;
 };
-function Screen({ location, position, biRef }: ScreenProps) {
+function Screen({ location, position }: ScreenProps) {
   const windows = useStoreState((s) => s.windows);
   return (
     <div
@@ -95,7 +87,7 @@ function Screen({ location, position, biRef }: ScreenProps) {
           case 'phonology':
             return <PhonologyScreen />;
           case 'articles':
-            return <ArticlesScreen biRef={biRef} />;
+            return <ArticlesScreen />;
           case 'declensions':
             return <DeclensionsScreen />;
           case 'lexicon':

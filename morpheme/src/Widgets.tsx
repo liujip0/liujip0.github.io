@@ -11,10 +11,7 @@ import { PartOfSpeech, PartOfSpeech_Arr } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
 import { PartOfSpeechSelect } from './screens/LexiconScreen.tsx';
 
-type WidgetsProps = {
-  biRef: Record<string, unknown>;
-};
-export default function Widgets({ biRef }: WidgetsProps) {
+export default function Widgets() {
   const conlang = useStoreState((s) => s.conlang);
   const cxsinRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const cxsoutRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -31,7 +28,6 @@ export default function Widgets({ biRef }: WidgetsProps) {
         <CharInsertWidget
           cxsinRef={cxsinRef}
           cxsoutRef={cxsoutRef}
-          biRef={biRef}
         />
       )}
       {conlang.widgets.cxs.enabled && (
@@ -408,15 +404,11 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
 type CharInsertWidgetProps = {
   cxsinRef: MutableRefObject<HTMLInputElement | null>;
   cxsoutRef: MutableRefObject<HTMLInputElement | null>;
-  biRef: Record<string, unknown>;
 };
-function CharInsertWidget({
-  cxsinRef,
-  cxsoutRef,
-  biRef
-}: CharInsertWidgetProps) {
+function CharInsertWidget({ cxsinRef, cxsoutRef }: CharInsertWidgetProps) {
   const conlang = useStoreState((s) => s.conlang);
   const lastInput = useStoreState((s) => s.lastInput);
+  const insertText = useStoreState((s) => s.insertText);
   return (
     <Widget>
       {conlang.widgets.charInsert.chars.map((char) => {
@@ -427,11 +419,11 @@ function CharInsertWidget({
               fontFamily: 'monospace',
               marginRight: '0.2em'
             }}
-            onClick={() => {
+            onClick={(event) => {
+              event.preventDefault();
               if (lastInput) {
-                if (lastInput === 'wysiwyg' && biRef.insertText) {
-                  console.log(biRef);
-                  (biRef.insertText as (text: string) => void)(char);
+                if (lastInput === 'wysiwyg') {
+                  insertText(char);
                 } else {
                   const element = document.getElementById(
                     lastInput

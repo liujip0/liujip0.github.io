@@ -14,10 +14,7 @@ import { Article, Folder } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 import Wysiwyg from './Wysiwyg.tsx';
 
-type ArticlesScreenProps = {
-  biRef: Record<string, unknown>;
-};
-export function ArticlesScreen({ biRef }: ArticlesScreenProps) {
+export function ArticlesScreen() {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [currentArticle, setCurrentArticle] = useState('root');
@@ -46,7 +43,6 @@ export function ArticlesScreen({ biRef }: ArticlesScreenProps) {
       <ArticleEditor
         currentArticle={currentArticle}
         changeArticle={changeArticle}
-        biRef={biRef}
       />
     </div>
   );
@@ -319,13 +315,8 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
 type ArticleEditorProps = {
   currentArticle: string;
   changeArticle: (id: string, property: string, newValue: unknown) => void;
-  biRef: Record<string, unknown>;
 };
-function ArticleEditor({
-  currentArticle,
-  changeArticle,
-  biRef
-}: ArticleEditorProps) {
+function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
   const setLastInput = useStoreState((s) => s.setLastInput);
   const article = conlang.articles.list.find((x) => x.id === currentArticle)!;
@@ -370,7 +361,6 @@ function ArticleEditor({
             const content = convertToRaw(editorState.getCurrentContent());
             changeArticle(article.id, 'contents', content);
           }}
-          biRef={biRef}
         />
       )}
     </div>
