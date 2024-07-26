@@ -49,8 +49,9 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
     setDragging(declension);
     event.dataTransfer.setData('text/plain', '');
   };
-  const handleDragEnd = () => {
+  const handleDragEnd = (event: React.DragEvent<HTMLLIElement>) => {
     setDragging(null);
+    event.currentTarget.draggable = false;
   };
   const handleDragOver = (event: React.DragEvent<HTMLLIElement>) => {
     event.preventDefault();
@@ -110,7 +111,6 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             return (
               <li
                 key={'_'}
-                draggable
                 onDragStart={(event) => {
                   handleDragStart(event, '_');
                 }}
@@ -124,12 +124,26 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   display: 'flex',
                   alignItems: 'center'
                 }}>
-                <TbGripVertical
-                  size={20}
-                  style={{
-                    marginRight: '0.5em'
+                <div
+                  onMouseDown={(event) => {
+                    const parentLi = event.currentTarget.parentElement;
+                    if (parentLi) {
+                      parentLi.draggable = true;
+                    }
                   }}
-                />
+                  onMouseUp={(event) => {
+                    const parentLi = event.currentTarget.parentElement;
+                    if (parentLi) {
+                      parentLi.draggable = false;
+                    }
+                  }}>
+                  <TbGripVertical
+                    size={20}
+                    style={{
+                      marginRight: '0.5em'
+                    }}
+                  />
+                </div>
                 <div>Root Word</div>
               </li>
             );
@@ -137,7 +151,6 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             return (
               <li
                 key={item.id}
-                draggable
                 onDragStart={(event) => {
                   handleDragStart(event, item.id);
                 }}
@@ -151,12 +164,26 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   display: 'flex',
                   alignItems: 'center'
                 }}>
-                <TbGripVertical
-                  size={20}
-                  style={{
-                    marginRight: '0.5em'
+                <div
+                  onMouseDown={(event) => {
+                    const parentLi = event.currentTarget.parentElement;
+                    if (parentLi) {
+                      parentLi.draggable = true;
+                    }
                   }}
-                />
+                  onMouseUp={(event) => {
+                    const parentLi = event.currentTarget.parentElement;
+                    if (parentLi) {
+                      parentLi.draggable = false;
+                    }
+                  }}>
+                  <TbGripVertical
+                    size={20}
+                    style={{
+                      marginRight: '0.5em'
+                    }}
+                  />
+                </div>
                 <table>
                   <tr>
                     <td colSpan={Math.max(1, item.affix.length)}>
@@ -170,9 +197,16 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                             event.currentTarget.value
                           );
                         }}
-                        size={50}
+                        style={{
+                          width: '70%'
+                        }}
                       />
                     </td>
+                  </tr>
+                  <tr>
+                    {item.gloss.map((gloss) => (
+                      <td>{gloss}</td>
+                    ))}
                   </tr>
                 </table>
               </li>
