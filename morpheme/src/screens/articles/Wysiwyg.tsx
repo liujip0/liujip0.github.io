@@ -84,15 +84,26 @@ export default function Wysiwyg({ value, setValue, biRef }: WysiwygProps) {
     return 'not-handled';
   };
   const insertText = (text: string) => {
-    EditorState.push(
+    const currentContent = editorState.getCurrentContent();
+    const currentSelection = editorState.getSelection();
+    console.log(
+      currentContent.getBlockForKey(currentSelection.getStartKey()).getText()
+    );
+    const newContentState = Modifier.replaceText(
+      currentContent,
+      currentSelection,
+      text
+    );
+    const newEditorState = EditorState.push(
       editorState,
-      Modifier.replaceText(
-        editorState.getCurrentContent(),
-        editorState.getSelection(),
-        text
-      ),
+      newContentState,
       'insert-characters'
     );
+    const newSelectedState = EditorState.forceSelection(
+      newEditorState,
+      newContentState.getSelectionAfter()
+    );
+    handleEditorChange(newSelectedState);
   };
   const blockRendererFn = (contentBlock: ContentBlock) => {
     console.log(contentBlock.getType());

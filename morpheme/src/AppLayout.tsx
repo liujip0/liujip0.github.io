@@ -22,7 +22,7 @@ export default function AppLayout() {
         backgroundColor: 'lightgray'
       }}>
       <TopBar />
-      <Widgets />
+      <Widgets biRef={biRef} />
       <ScreensLayout biRef={biRef} />
     </div>
   );
