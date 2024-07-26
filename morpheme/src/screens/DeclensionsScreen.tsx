@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TbGripVertical } from 'react-icons/tb';
-import { NavBar, NavSection } from '../common/Components.tsx';
+import { TbCopy, TbGripVertical, TbPlus, TbTrash } from 'react-icons/tb';
+import { IconButton, NavBar, NavSection } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
@@ -184,31 +184,169 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                     }}
                   />
                 </div>
-                <table>
-                  <tr>
-                    <td colSpan={Math.max(1, item.affix.length)}>
-                      Name:{' '}
-                      <input
-                        value={item.name}
-                        onInput={(event) => {
-                          changeDeclension(
-                            item.id,
-                            'name',
-                            event.currentTarget.value
-                          );
-                        }}
+                <div
+                  style={{
+                    overflowX: 'scroll',
+                    flex: '1'
+                  }}>
+                  <table
+                    style={{
+                      width: 'max-content'
+                    }}>
+                    <tr>
+                      <td
+                        colSpan={item.affix.length + 1}
                         style={{
-                          width: '70%'
-                        }}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    {item.gloss.map((gloss) => (
-                      <td>{gloss}</td>
-                    ))}
-                  </tr>
-                </table>
+                          padding: '0.5em'
+                        }}>
+                        Name:&nbsp;
+                        <input
+                          value={item.name}
+                          onInput={(event) => {
+                            changeDeclension(
+                              item.id,
+                              'name',
+                              event.currentTarget.value
+                            );
+                          }}
+                          style={{
+                            width: '70%',
+                            maxWidth: '40em'
+                          }}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      {item.gloss.map((gloss, index) => (
+                        <td
+                          style={{
+                            padding: '0.5em'
+                          }}>
+                          {gloss.map((x, xIndex) => (
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center'
+                              }}>
+                              <select
+                                value={x}
+                                onChange={(event) => {
+                                  const newGloss = item.gloss;
+                                  const newX = gloss;
+                                  newX.splice(
+                                    xIndex,
+                                    1,
+                                    event.currentTarget.value
+                                  );
+                                  newGloss.splice(index, 1, newX);
+                                  changeDeclension(item.id, 'gloss', newGloss);
+                                }}
+                                style={{
+                                  width: '80%'
+                                }}>
+                                <option value={''}>-</option>
+                              </select>
+                              <IconButton
+                                onClick={() => {
+                                  const newGloss = item.gloss;
+                                  const newX = gloss;
+                                  newX.splice(xIndex, 1);
+                                  newGloss.splice(index, 1, newX);
+                                  changeDeclension(item.id, 'gloss', newGloss);
+                                }}>
+                                <TbTrash size={17} />
+                              </IconButton>
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const newGloss = item.gloss;
+                              newGloss.splice(index, 1, [...gloss, '']);
+                              changeDeclension(item.id, 'gloss', newGloss);
+                            }}>
+                            Add Gloss
+                          </button>
+                        </td>
+                      ))}
+                      <td rowSpan={3}>
+                        <IconButton
+                          onClick={() => {
+                            changeDeclension(item.id, 'affix', [
+                              ...item.affix,
+                              ''
+                            ]);
+                            changeDeclension(item.id, 'gloss', [
+                              ...item.gloss,
+                              ['']
+                            ]);
+                          }}>
+                          <TbPlus size={20} />
+                        </IconButton>
+                      </td>
+                    </tr>
+                    <tr>
+                      {item.affix.map((affix, index) => (
+                        <td
+                          style={{
+                            padding: '0.5em'
+                          }}>
+                          <input
+                            value={affix}
+                            onInput={(event) => {
+                              const newAffix = item.affix;
+                              newAffix.splice(
+                                index,
+                                1,
+                                event.currentTarget.value
+                              );
+                              changeDeclension(item.id, 'affix', newAffix);
+                            }}
+                            style={{
+                              width: '100%'
+                            }}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      {item.affix.map((_affix, index) => (
+                        <td>
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-evenly',
+                              height: '100%',
+                              width: '100%'
+                            }}>
+                            <IconButton
+                              onClick={() => {
+                                const newAffix = item.affix;
+                                newAffix.splice(index, 0, item.affix[index]);
+                                changeDeclension(item.id, 'affix', newAffix);
+                                const newGloss = item.gloss;
+                                newGloss.splice(index, 0, item.gloss[index]);
+                                changeDeclension(item.id, 'gloss', newGloss);
+                              }}>
+                              <TbCopy size={18} />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                const newAffix = item.affix;
+                                newAffix.splice(index, 1);
+                                changeDeclension(item.id, 'affix', newAffix);
+                                const newGloss = item.gloss;
+                                newGloss.splice(index, 1);
+                                changeDeclension(item.id, 'gloss', newGloss);
+                              }}>
+                              <TbTrash size={18} />
+                            </IconButton>
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  </table>
+                </div>
               </li>
             );
           }

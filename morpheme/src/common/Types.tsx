@@ -27,7 +27,7 @@ export interface Conlang {
 export type Declension = {
   id: string;
   name: string;
-  gloss: Array<string>;
+  gloss: Array<Array<string>>;
   affix: Array<string>;
 };
 export type Word = {
