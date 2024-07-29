@@ -24,24 +24,24 @@ export default function SettingsScreen() {
         options={[
           {
             label: 'Disabled',
-            value: '0'
+            value: '0',
           },
           {
             label: 'Every 1 minute',
-            value: '1'
+            value: '1',
           },
           {
             label: 'Every 5 minutes',
-            value: '5'
+            value: '5',
           },
           {
             label: 'Every 10 minutes',
-            value: '10'
-          }
+            value: '10',
+          },
         ]}
         customOption={{
           label: 'Custom:',
-          description: 'Time in minutes between saves'
+          description: 'Time in minutes between saves',
         }}
         defaultValue={conlang.autosave.toString()}
         onSave={(value) => changeConlang(['autosave'], parseInt(value))}
@@ -53,12 +53,12 @@ export default function SettingsScreen() {
         options={[
           {
             label: 'Yes',
-            value: 'true'
+            value: 'true',
           },
           {
             label: 'No',
-            value: 'false'
-          }
+            value: 'false',
+          },
         ]}
         defaultValue={conlang.widgets.charInsert.enabled.toString()}
         onSave={(value) => {
@@ -90,7 +90,7 @@ function TextInput({
   label,
   description,
   defaultValue,
-  onSave
+  onSave,
 }: TextInputProps) {
   const conlang = useStoreState((s) => s.conlang);
   const setSaved = useStoreState((s) => s.setSaved);
@@ -105,7 +105,7 @@ function TextInput({
         fontSize: DimenRes.input.label,
         display: 'block',
         marginBottom: DimenRes.input.spaceBetween,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       }}>
       {label}
       <div>
@@ -124,7 +124,7 @@ function TextInput({
           type="text"
           style={{
             fontSize: DimenRes.input.input,
-            fontFamily: 'monospace'
+            fontFamily: 'monospace',
           }}
         />
         &nbsp;
@@ -140,7 +140,7 @@ function TextInput({
           }}
           ref={buttonRef}
           style={{
-            fontSize: DimenRes.input.button
+            fontSize: DimenRes.input.button,
           }}>
           Save
         </button>
@@ -149,7 +149,7 @@ function TextInput({
         <div
           style={{
             fontSize: DimenRes.input.description,
-            fontWeight: 'normal'
+            fontWeight: 'normal',
           }}>
           {description}
         </div>
@@ -181,7 +181,7 @@ function RadioInput({
   defaultValue,
   description,
   onSave,
-  customOption
+  customOption,
 }: RadioInputProps) {
   const conlang = useStoreState((s) => s.conlang);
   const setSaved = useStoreState((s) => s.setSaved);
@@ -207,7 +207,7 @@ function RadioInput({
         fontSize: DimenRes.input.label,
         display: 'block',
         marginBottom: DimenRes.input.spaceBetween,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       }}>
       {label}
       {options.map((x: RadioInputOption, i: number) => {
@@ -217,7 +217,7 @@ function RadioInput({
             style={{
               display: 'flex',
               alignItems: 'center',
-              margin: '0.25em 0'
+              margin: '0.25em 0',
             }}>
             <input
               ref={inputRefs.current[i]}
@@ -233,7 +233,7 @@ function RadioInput({
               style={{
                 fontSize: DimenRes.input.input,
                 marginLeft: '0.5em',
-                fontWeight: 'normal'
+                fontWeight: 'normal',
               }}
               htmlFor={'radioinput-' + time + '-' + x.value}>
               {x.label}
@@ -241,7 +241,7 @@ function RadioInput({
               {x.description && (
                 <span
                   style={{
-                    fontSize: DimenRes.input.description
+                    fontSize: DimenRes.input.description,
                   }}>
                   {x.description}
                 </span>
@@ -255,7 +255,7 @@ function RadioInput({
           style={{
             display: 'flex',
             alignItems: 'center',
-            margin: '0.25em 0'
+            margin: '0.25em 0',
           }}>
           <input
             ref={inputRefs.current[options.length]}
@@ -274,7 +274,7 @@ function RadioInput({
               fontSize: DimenRes.input.input,
               marginLeft: '0.5em',
               fontWeight: 'normal',
-              padding: '0'
+              padding: '0',
             }}
             htmlFor={'radioinput-custom'}>
             {customOption.label}&nbsp;
@@ -290,7 +290,7 @@ function RadioInput({
               <span
                 style={{
                   fontSize: DimenRes.input.description,
-                  padding: '0'
+                  padding: '0',
                 }}>
                 {customOption.description}
               </span>
@@ -302,7 +302,7 @@ function RadioInput({
         <div
           style={{
             fontSize: DimenRes.input.description,
-            fontWeight: 'normal'
+            fontWeight: 'normal',
           }}>
           {description}
         </div>
@@ -318,7 +318,7 @@ function RadioInput({
         ref={buttonRef}
         style={{
           fontSize: DimenRes.input.button,
-          marginTop: '0.3em'
+          marginTop: '0.3em',
         }}>
         Save
       </button>

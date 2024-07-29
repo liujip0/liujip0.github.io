@@ -13,21 +13,21 @@ export function NavBar({ sections }: NavBarProps) {
         position: 'sticky',
         top: '0',
         display: 'flex',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       }}>
       {sections.map((x) => {
         return (
           <button
             key={x.id}
             style={{
-              margin: '0.2em'
+              margin: '0.2em',
             }}
             onClick={() => {
               const element = document.getElementById(x.id)!;
               element.scrollIntoView({
                 block: 'start',
                 inline: 'nearest',
-                behavior: 'smooth'
+                behavior: 'smooth',
               });
             }}>
             {x.label}
@@ -47,7 +47,7 @@ export function NavSection({ id, children }: NavSectionProps) {
     <h1
       style={{
         marginTop: '1em',
-        paddingTop: '1.3em'
+        paddingTop: '1.3em',
       }}
       id={id}>
       {children}
@@ -68,7 +68,7 @@ export function Popup({ children }: PopupProps) {
         backgroundColor: '#00000088',
         width: '100vw',
         height: '100vh',
-        zIndex: '99'
+        zIndex: '99',
       }}>
       <div
         style={{
@@ -80,7 +80,7 @@ export function Popup({ children }: PopupProps) {
           flexDirection: 'column',
           backgroundColor: 'lightgray',
           border: '3px solid darkgray',
-          padding: '1em'
+          padding: '1em',
         }}>
         {children}
       </div>
@@ -101,21 +101,21 @@ export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
         style={{
           textAlign: 'left',
           margin: '0',
-          fontSize: '1.6em'
+          fontSize: '1.6em',
         }}>
         {title}
       </h1>
       <p
         style={{
           fontWeight: 'normal',
-          textAlign: 'left'
+          textAlign: 'left',
         }}>
         {description}
       </p>
       <div
         style={{
           display: 'flex',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
         }}>
         <button onClick={onDecline}>Go Back</button>&nbsp;
         <button onClick={onAccept}>Continue</button>
@@ -136,7 +136,7 @@ export function IconButton({ onClick, children }: IconButtonProps) {
         backgroundColor: 'transparent',
         border: 'none',
         margin: '0',
-        padding: '0.3em'
+        padding: '0.3em',
       }}>
       {children}
     </button>

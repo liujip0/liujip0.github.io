@@ -9,7 +9,7 @@ export default function ScreensMenus() {
       <MenuButtonCont
         position={{
           gridRowStart: 'a0',
-          gridColumnStart: 'a0'
+          gridColumnStart: 'a0',
         }}>
         <MenuButtons position={0} />
         <Submenu position={0} />
@@ -18,7 +18,7 @@ export default function ScreensMenus() {
         position={{
           gridRowStart: 'a1',
           gridColumnEnd: 'a1',
-          marginLeft: 'auto'
+          marginLeft: 'auto',
         }}>
         <Submenu position={1} />
         <MenuButtons position={1} />
@@ -27,7 +27,7 @@ export default function ScreensMenus() {
         position={{
           gridRowEnd: 'a2',
           gridColumnStart: 'a2',
-          marginTop: 'auto'
+          marginTop: 'auto',
         }}>
         <MenuButtons position={2} />
         <Submenu position={2} />
@@ -37,7 +37,7 @@ export default function ScreensMenus() {
           gridRowEnd: 'a3',
           gridColumnEnd: 'a3',
           marginTop: 'auto',
-          marginLeft: 'auto'
+          marginLeft: 'auto',
         }}>
         <Submenu position={3} />
         <MenuButtons position={3} />
@@ -59,7 +59,7 @@ function MenuButtonCont({ position, children }: MenuButtonContProps) {
         height: 'min-content',
         display: 'flex',
         backgroundColor: 'darkgray',
-        zIndex: '2'
+        zIndex: '2',
       }}>
       {children}
     </div>
@@ -77,7 +77,7 @@ function MenuButtons({ position }: MenuButtonsProps) {
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}>
       <IconButton
         onClick={() => {
@@ -86,7 +86,7 @@ function MenuButtons({ position }: MenuButtonsProps) {
         <TbSquareOff
           size={17}
           style={{
-            transform: 'scaleX(-1)'
+            transform: 'scaleX(-1)',
           }}
         />
       </IconButton>
@@ -129,7 +129,7 @@ function SubmenuButton({ position, screen, children }: SubmenuButtonProps) {
       style={{
         border: 'none',
         backgroundColor: 'transparent',
-        padding: '0.3em'
+        padding: '0.3em',
       }}
       onClick={() => {
         if (submenus[position] === 'add') {
@@ -155,7 +155,7 @@ function Submenu({ position }: SubmenuProps) {
       style={{
         display: submenus[position] ? 'flex' : 'none',
         flexDirection: 'column',
-        backgroundColor: 'lightgray'
+        backgroundColor: 'lightgray',
       }}>
       <SubmenuButton
         position={position}

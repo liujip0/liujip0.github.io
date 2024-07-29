@@ -18,7 +18,7 @@ export default function AppLayout() {
         gridTemplateColumns: '1fr 1em 1fr',
         gridTemplateAreas: `'a a a' 'b b b' 'a0 c a1' 'd d d' 'a2 e a3'`,
         overflow: 'scroll',
-        backgroundColor: 'lightgray'
+        backgroundColor: 'lightgray',
       }}>
       <TopBar />
       <Widgets />

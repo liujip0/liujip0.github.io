@@ -7,7 +7,7 @@ import {
   screenStr,
   submenuStr,
   submenusArr,
-  windowsArr
+  windowsArr,
 } from './Types';
 
 export const conlangInit: Conlang = {
@@ -16,17 +16,17 @@ export const conlangInit: Conlang = {
   widgets: {
     charInsert: {
       enabled: true,
-      chars: ['A', 'a', 'B', 'b', 'C', 'c']
+      chars: ['A', 'a', 'B', 'b', 'C', 'c'],
     },
     dictSearch: {
-      enabled: true
+      enabled: true,
     },
     cxs: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
   phonology: {
-    inventory: []
+    inventory: [],
   },
   articles: {
     list: [
@@ -35,22 +35,22 @@ export const conlangInit: Conlang = {
         id: 'root',
         path: [],
         contents: [],
-        name: '/'
-      }
-    ]
+        name: '/',
+      },
+    ],
   },
   declensions: {
-    'noun': ['_'],
-    'verb': ['_'],
-    'adjective': ['_'],
-    'adverb': ['_'],
-    'pronoun': ['_'],
+    noun: ['_'],
+    verb: ['_'],
+    adjective: ['_'],
+    adverb: ['_'],
+    pronoun: ['_'],
     'proper noun': ['_'],
-    'particle': ['_'],
-    'adposition': ['_'],
-    'conjugation': ['_']
+    particle: ['_'],
+    adposition: ['_'],
+    conjugation: ['_'],
   },
-  lexicon: []
+  lexicon: [],
 };
 
 interface StoreState {
@@ -92,7 +92,7 @@ export const useStoreState = create<StoreState>()((set) => ({
       const newSubmenus = [...s.submenus];
       newSubmenus[position] = menu;
       return {
-        submenus: newSubmenus
+        submenus: newSubmenus,
       };
     }),
 
@@ -277,7 +277,7 @@ export const useStoreState = create<StoreState>()((set) => ({
         s.windows[2] === s.windows[3]
       ) {
         return {
-          windows: ['0-start', '0-start', '0-start', '0-start']
+          windows: ['0-start', '0-start', '0-start', '0-start'],
         };
       } else {
         switch (position) {
@@ -373,7 +373,7 @@ export const useStoreState = create<StoreState>()((set) => ({
   changeConlang: (path, value) =>
     set((s) => ({
       conlang: deepUpdate(s.conlang, path, value),
-      saved: false
+      saved: false,
     })),
   replaceConlang: (value) => set(() => ({ conlang: value, saved: false })),
 
@@ -382,5 +382,5 @@ export const useStoreState = create<StoreState>()((set) => ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   insertText: (_text) => {},
-  setInsertText: (value) => set(() => ({ insertText: value }))
+  setInsertText: (value) => set(() => ({ insertText: value })),
 }));

@@ -5,6 +5,6 @@ export const DimenRes = {
     input: '1em',
     button: '1em',
     description: '0.8em',
-    spaceBetween: '1em'
-  }
+    spaceBetween: '1em',
+  },
 };

@@ -5,7 +5,7 @@ import {
   TbChevronDown,
   TbChevronUp,
   TbTriangle,
-  TbTriangleInverted
+  TbTriangleInverted,
 } from 'react-icons/tb';
 import { IconButton, Popup } from './common/Components.tsx';
 import {
@@ -17,7 +17,7 @@ import {
   MannerOfArticulation,
   MannerOfArticulation_Arr,
   PlaceOfArticulation,
-  PlaceOfArticulation_Arr
+  PlaceOfArticulation_Arr,
 } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
 import { charisBold } from './fonts/charis/CharisSIL-Bold-bold.ts';
@@ -46,13 +46,13 @@ export default function ExportConlang() {
     enabledSections: {
       title: true,
       contents: true,
-      phonology: true
+      phonology: true,
     },
     orderedSections: ['title', 'contents', 'phonology'],
     pageNumbers: true,
     pageNumsIncludeTitle: true,
     pageNumsIncludeToc: true,
-    paperSize: 'letter'
+    paperSize: 'letter',
   };
   const [pdfOptions, setPdfOptions] = useState<PdfOptions>(pdfOptionsInit);
   return (
@@ -63,7 +63,7 @@ export default function ExportConlang() {
         }}>
         <div
           style={{
-            position: 'relative'
+            position: 'relative',
           }}>
           Export
           {exportMenu ?
@@ -79,14 +79,14 @@ export default function ExportConlang() {
                 zIndex: '90',
                 backgroundColor: 'white',
                 fontSize: '0.7em',
-                width: 'max-content'
+                width: 'max-content',
               }}>
               <div
                 onClick={() => {
                   setPdfPopup(true);
                 }}
                 style={{
-                  padding: '0.2em'
+                  padding: '0.2em',
                 }}>
                 Export to PDF
               </div>
@@ -119,7 +119,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
           textAlign: 'left',
           margin: '0',
           fontSize: '1.3em',
-          marginBottom: '0.3em'
+          marginBottom: '0.3em',
         }}>
         Export to PDF
       </h1>
@@ -127,7 +127,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
         style={{
           overflowY: 'scroll',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}>
         <TextInput
           id="pdftitle"
@@ -136,7 +136,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
           onInput={(event) => {
             setPdfOptions({
               ...pdfOptions,
-              title: event.currentTarget.value
+              title: event.currentTarget.value,
             });
           }}
         />
@@ -147,14 +147,14 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
           onInput={(event) => {
             setPdfOptions({
               ...pdfOptions,
-              author: event.currentTarget.value
+              author: event.currentTarget.value,
             });
           }}
         />
         <label
           style={{
             fontSize: '0.7em',
-            marginBottom: '0.5em'
+            marginBottom: '0.5em',
           }}>
           <b>Paper Size:&nbsp;</b>
           <select
@@ -162,7 +162,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             onChange={(event) => {
               setPdfOptions({
                 ...pdfOptions,
-                paperSize: event.currentTarget.value
+                paperSize: event.currentTarget.value,
               } as PdfOptions);
             }}>
             <option value="letter">Letter</option>
@@ -174,7 +174,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             fontSize: '0.7em',
             marginBottom: '0.5em',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}>
           <b>Sections to Include</b>
           {pdfOptions.orderedSections.map((item) => (
@@ -187,8 +187,8 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                     ...pdfOptions,
                     enabledSections: {
                       ...pdfOptions.enabledSections,
-                      [item]: event.currentTarget.checked
-                    }
+                      [item]: event.currentTarget.checked,
+                    },
                   });
                 }}
               />
@@ -196,7 +196,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                 {
                   title: 'Title Page',
                   contents: 'Table of Contents',
-                  phonology: 'Phonology'
+                  phonology: 'Phonology',
                 }[item]
               }
               <IconButton
@@ -208,7 +208,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                     newOrderedSections.splice(index - 1, 0, item);
                     setPdfOptions({
                       ...pdfOptions,
-                      orderedSections: newOrderedSections
+                      orderedSections: newOrderedSections,
                     });
                   }
                 }}>
@@ -223,7 +223,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                     newOrderedSections.splice(index + 1, 0, item);
                     setPdfOptions({
                       ...pdfOptions,
-                      orderedSections: newOrderedSections
+                      orderedSections: newOrderedSections,
                     });
                   }
                 }}>
@@ -237,7 +237,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             fontSize: '0.7em',
             marginBottom: '0.5em',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}>
           <b>Other Settings</b>
           <label>
@@ -247,7 +247,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
               onChange={(event) => {
                 setPdfOptions({
                   ...pdfOptions,
-                  pageNumbers: event.currentTarget.checked
+                  pageNumbers: event.currentTarget.checked,
                 });
               }}
             />
@@ -260,7 +260,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
               onChange={(event) => {
                 setPdfOptions({
                   ...pdfOptions,
-                  pageNumsIncludeTitle: event.currentTarget.checked
+                  pageNumsIncludeTitle: event.currentTarget.checked,
                 });
               }}
             />
@@ -273,7 +273,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
               onChange={(event) => {
                 setPdfOptions({
                   ...pdfOptions,
-                  pageNumsIncludeToc: event.currentTarget.checked
+                  pageNumsIncludeToc: event.currentTarget.checked,
                 });
               }}
             />
@@ -285,7 +285,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
         style={{
           display: 'flex',
           justifyContent: 'flex-end',
-          marginTop: '0.3em'
+          marginTop: '0.3em',
         }}>
         <button
           onClick={() => {
@@ -309,11 +309,11 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
 function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
   const unit = {
     letter: 'in',
-    a4: 'mm'
+    a4: 'mm',
   }[pdfOptions.paperSize];
   const doc = new jsPDF({
     unit: unit,
-    format: pdfOptions.paperSize
+    format: pdfOptions.paperSize,
   } as jsPDFOptions);
   doc.addFileToVFS('CharisSIL-Regular.ttf', charisRegular);
   doc.addFont('CharisSIL-Regular.ttf', 'CharisSIL', 'normal');
@@ -334,7 +334,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         case 'title': {
           toc.push({
             section: 'Title Page',
-            page: doc.getCurrentPageInfo().pageNumber
+            page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(25);
           console.log(doc.getFontList());
@@ -344,7 +344,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             unit === 'in' ? 1 : 25,
             unit === 'in' ? 3 : 75,
             {
-              maxWidth: unit === 'in' ? 6.5 : 160
+              maxWidth: unit === 'in' ? 6.5 : 160,
             }
           );
           if (pdfOptions.author) {
@@ -355,7 +355,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               unit === 'in' ? 1 : 25,
               unit === 'in' ? 5 : 125,
               {
-                maxWidth: unit === 'in' ? 6.5 : 160
+                maxWidth: unit === 'in' ? 6.5 : 160,
               }
             );
           }
@@ -365,7 +365,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         case 'contents': {
           toc.push({
             section: 'Table of Contents',
-            page: doc.getCurrentPageInfo().pageNumber
+            page: doc.getCurrentPageInfo().pageNumber,
           });
           tocPage = doc.getCurrentPageInfo().pageNumber;
           doc.addPage(pdfOptions.paperSize);
@@ -374,7 +374,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         case 'phonology': {
           toc.push({
             section: 'Phonology',
-            page: doc.getCurrentPageInfo().pageNumber
+            page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(20);
           doc.setFont('CharisSIL', 'bold');
@@ -552,9 +552,9 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
                 pharyngeal: 'Pharyngeal',
                 epiglottal: 'Epiglottal',
                 glottal: 'Glottal',
-                other: 'Other'
+                other: 'Other',
               }[consonantColsCount[i]]!,
-              colSpan: 2
+              colSpan: 2,
             };
           }
           for (let i = 0; i < consonantRowsCount.length; i++) {
@@ -569,7 +569,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               approximant: 'Approximant',
               lateralapproximant: 'Lateral Approximant',
               click: 'Click',
-              implosive: 'Implosive'
+              implosive: 'Implosive',
             }[consonantRowsCount[i]]!;
           }
           for (let i = 0; i < vowelColsFinal.length; i++) {
@@ -579,9 +579,9 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
                 frontcentral: vowelCols.front > 0 ? '' : 'Front',
                 central: 'Central',
                 centralback: vowelCols.back > 0 ? '' : 'Back',
-                back: 'Back'
+                back: 'Back',
               }[vowelColsFinal[i]]!,
-              colSpan: 2
+              colSpan: 2,
             };
           }
           for (let i = 0; i < vowelRowsFinal.length; i++) {
@@ -592,7 +592,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               mid: vowelRows.closemid > 0 && vowelRows.openmid > 0 ? '' : 'Mid',
               openmid: 'Open-Mid',
               lowopenmid: vowelRows.open > 0 ? '' : 'Open',
-              open: 'Open'
+              open: 'Open',
             }[vowelRowsFinal[i]]!;
           }
           console.log(consonants);
@@ -615,7 +615,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               fontStyle: 'normal',
               lineWidth: 0.001,
               lineColor: 0,
-              cellWidth: unit === 'in' ? 0.8 : 20
+              cellWidth: unit === 'in' ? 0.8 : 20,
             },
             didDrawPage: (data) => {
               if (data.cursor) {
@@ -623,8 +623,8 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               }
             },
             margin: {
-              left: unit === 'in' ? 1 : 25
-            }
+              left: unit === 'in' ? 1 : 25,
+            },
           });
           doc.text(
             'Vowels',
@@ -641,7 +641,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               fontStyle: 'normal',
               lineWidth: 0.001,
               lineColor: 0,
-              cellWidth: unit === 'in' ? 0.8 : 20
+              cellWidth: unit === 'in' ? 0.8 : 20,
             },
             didDrawPage: (data) => {
               if (data.cursor) {
@@ -649,8 +649,8 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               }
             },
             margin: {
-              left: unit === 'in' ? 1 : 25
-            }
+              left: unit === 'in' ? 1 : 25,
+            },
           });
           if (doc.getCurrentPageInfo().pageNumber % 2 === 0) {
             doc.setFontSize(10);
@@ -660,7 +660,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               unit === 'in' ? 4.2 : 105,
               unit === 'in' ? 10.5 : 284,
               {
-                align: 'center'
+                align: 'center',
               }
             );
             doc.text(
@@ -668,7 +668,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               unit === 'in' ? 7.5 : 185,
               unit === 'in' ? 10.5 : 284,
               {
-                align: 'right'
+                align: 'right',
               }
             );
             doc.setFontSize(12);
@@ -697,7 +697,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
               unit === 'in' ? 10.5 : 284,
               {
                 url: 'https://liujip0.github.io/morpheme/',
-                align: 'center'
+                align: 'center',
               }
             );
             doc.setTextColor(0);
@@ -719,7 +719,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         case 'articles': {
           toc.push({
             section: 'Articles',
-            page: doc.getCurrentPageInfo().pageNumber
+            page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(20);
           doc.setFont('CharisSIL', 'bold');
@@ -761,7 +761,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         unit === 'in' ? 4.2 : 105,
         unit === 'in' ? 10.5 : 284,
         {
-          align: 'center'
+          align: 'center',
         }
       );
       doc.text(
@@ -769,7 +769,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         unit === 'in' ? 7.5 : 185,
         unit === 'in' ? 10.5 : 284,
         {
-          align: 'right'
+          align: 'right',
         }
       );
       doc.setFontSize(12);
@@ -799,7 +799,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         unit === 'in' ? 10.5 : 284,
         {
           url: 'https://liujip0.github.io/morpheme/',
-          align: 'center'
+          align: 'center',
         }
       );
       doc.setTextColor(0);
@@ -833,7 +833,7 @@ function TextInput({ id, label, value, onInput }: TextInputProps) {
     <label
       style={{
         fontSize: '0.7em',
-        marginBottom: '0.5em'
+        marginBottom: '0.5em',
       }}>
       <b>{label}:&nbsp;</b>
       <input

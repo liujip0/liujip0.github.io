@@ -28,19 +28,19 @@ export default function TopBar() {
         backgroundColor: 'gray',
         display: 'flex',
         alignItems: 'center',
-        gridArea: 'a'
+        gridArea: 'a',
       }}>
       <div
         style={{
           fontSize: '1.5em',
-          margin: '0.4em 0.5em 0.4em 0.5em'
+          margin: '0.4em 0.5em 0.4em 0.5em',
         }}>
         Morpheme
       </div>
 
       <div
         style={{
-          display: 'flex'
+          display: 'flex',
         }}>
         <MenuItem
           onClick={() => {
@@ -77,7 +77,7 @@ export function MenuItem({ onClick, children }: MenuItemProps) {
     <div
       style={{
         margin: '0.2em 0em 0.2em 1em',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
       onClick={onClick}>
       {children}

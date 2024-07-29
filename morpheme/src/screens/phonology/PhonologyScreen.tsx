@@ -10,7 +10,7 @@ export default function PhonologyScreen() {
           { id: 'inventory', label: 'Phonetic Inventory' },
           { id: 'phonemes', label: 'Phonemes & Romanization' },
           { id: 'orthography', label: 'Orthography' },
-          { id: 'phonotactics', label: 'Phonotactics' }
+          { id: 'phonotactics', label: 'Phonotactics' },
         ]}
       />
       <PhoneticInventory />

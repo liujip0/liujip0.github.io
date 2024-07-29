@@ -6,7 +6,7 @@ import {
   TbPlus,
   TbTrash,
   TbTriangle,
-  TbTriangleInverted
+  TbTriangleInverted,
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../../common/Components.tsx';
 import { createId, findArticleChildren } from '../../common/Funcs.tsx';
@@ -24,7 +24,7 @@ export function ArticlesScreen() {
     if (index !== -1) {
       newArticles.splice(index, 1, {
         ...conlang.articles.list[index],
-        [property]: newValue
+        [property]: newValue,
       });
       changeConlang(['articles', 'list'], newArticles);
     }
@@ -33,7 +33,7 @@ export function ArticlesScreen() {
     <div
       style={{
         display: 'flex',
-        height: '100%'
+        height: '100%',
       }}>
       <Articles
         currentArticle={currentArticle}
@@ -56,7 +56,7 @@ type ArticlesProps = {
 function Articles({
   currentArticle,
   setCurrentArticle,
-  changeArticle
+  changeArticle,
 }: ArticlesProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
@@ -66,7 +66,7 @@ function Articles({
     const newArticles = conlang.articles.list;
     newArticles.push({
       ...article,
-      id: id
+      id: id,
     });
     changeConlang(['articles', 'list'], newArticles);
     return id;
@@ -102,7 +102,7 @@ function Articles({
         display: 'flex',
         backgroundColor: 'lightgray',
         flexDirection: 'column',
-        padding: '0.5em'
+        padding: '0.5em',
       }}>
       <div
         style={{
@@ -110,7 +110,7 @@ function Articles({
           marginBottom: '1em',
           display: 'flex',
           justifyContent: 'space-around',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <IconButton
           onClick={() => {
@@ -125,11 +125,11 @@ function Articles({
                   EditorState.createEmpty().getCurrentContent()
                 ),
                 id: '',
-                path: [...getArticle(currentArticle).path, currentArticle]
+                path: [...getArticle(currentArticle).path, currentArticle],
               });
               changeArticle(currentArticle, 'contents', [
                 ...(getArticle(currentArticle) as Folder).contents,
-                id
+                id,
               ]);
             }
           }}>
@@ -147,18 +147,18 @@ function Articles({
                 name: 'Untitled',
                 contents: [],
                 id: '',
-                path: [...getArticle(currentArticle).path, currentArticle]
+                path: [...getArticle(currentArticle).path, currentArticle],
               });
               changeArticle(currentArticle, 'contents', [
                 ...(getArticle(currentArticle) as Folder).contents,
-                id
+                id,
               ]);
             }
           }}>
           <div
             style={{
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
             <TbPlus size={12} />
             <TbFolder size={18} />
@@ -225,7 +225,7 @@ function Articles({
         style={{
           backgroundColor: 'white',
           flex: '1',
-          overflowY: 'scroll'
+          overflowY: 'scroll',
         }}>
         <div
           style={{
@@ -233,7 +233,7 @@ function Articles({
             height: '100%',
             backgroundColor: 'white',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}>
           <ArticlesList
             list={conlang.articles.list}
@@ -273,11 +273,11 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                     'em',
                   cursor: 'pointer',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                 <div
                   style={{
-                    marginRight: '0.2em'
+                    marginRight: '0.2em',
                   }}>
                   {depth > 1 ?
                     index === list.length - 1 ?
@@ -289,7 +289,7 @@ function ArticlesList({ list, depth, value, onChange }: ArticlesListProps) {
                   (item.type === 'article' ? <TbFile /> : <TbFolder />)}
                 <div
                   style={{
-                    marginLeft: '0.2em'
+                    marginLeft: '0.2em',
                   }}>
                   {item.name}
                 </div>
@@ -329,13 +329,13 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
       style={{
         flex: '1',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}>
       <div
         style={{
           width: '100%',
           textAlign: 'center',
-          padding: '1em'
+          padding: '1em',
         }}>
         <label>
           Name:{' '}

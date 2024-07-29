@@ -5,7 +5,7 @@ import {
   Folder,
   IpaConsonantDiacritic,
   IpaVowelDiacritic,
-  PartOfSpeech
+  PartOfSpeech,
 } from './Types.tsx';
 
 export async function getFile(options: object) {
@@ -18,7 +18,7 @@ export async function getFile(options: object) {
   const contents = await fileData.text();
   return {
     contents: contents,
-    fileHandle: fileHandle
+    fileHandle: fileHandle,
   };
 }
 
@@ -50,7 +50,7 @@ export function deepUpdate<T>(obj: T, path: string[], value: unknown): T {
   const [head, ...rest] = path;
   return {
     ...obj,
-    [head]: deepUpdate(((obj as NestedObject)[head] as T) || {}, rest, value)
+    [head]: deepUpdate(((obj as NestedObject)[head] as T) || {}, rest, value),
   };
 }
 

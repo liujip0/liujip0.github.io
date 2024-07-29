@@ -4,13 +4,13 @@ import {
   TbPlus,
   TbTrash,
   TbTriangle,
-  TbTriangleInverted
+  TbTriangleInverted,
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../common/Components.tsx';
 import {
   createId,
   partOfSpeechAbbreviation,
-  romanizationToIpa
+  romanizationToIpa,
 } from '../common/Funcs.tsx';
 import { Consonant, PartOfSpeech, Vowel, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
@@ -81,7 +81,7 @@ export default function LexiconScreen() {
     if (index !== -1) {
       newLexicon.splice(index, 1, {
         ...conlang.lexicon[index],
-        [property]: newValue
+        [property]: newValue,
       });
       changeConlang(['lexicon'], newLexicon);
       sortLexicon();
@@ -91,7 +91,7 @@ export default function LexiconScreen() {
     <div
       style={{
         display: 'flex',
-        height: '100%'
+        height: '100%',
       }}>
       <Words
         currentWord={currentWord}
@@ -130,7 +130,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
     const newLexicon = conlang.lexicon;
     newLexicon.push({
       ...word,
-      id: id
+      id: id,
     });
     changeConlang(['lexicon'], newLexicon);
     sortLexicon();
@@ -163,14 +163,14 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
         display: 'flex',
         backgroundColor: 'lightgray',
         flexDirection: 'column',
-        padding: '0.5em'
+        padding: '0.5em',
       }}>
       <div
         style={{
           backgroundColor: 'white',
           marginBottom: '1em',
           display: 'flex',
-          justifyContent: 'space-around'
+          justifyContent: 'space-around',
         }}>
         <IconButton
           onClick={() => {
@@ -180,7 +180,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
               ipa: '',
               ipaOverride: false,
               definitions: [''],
-              partOfSpeech: ''
+              partOfSpeech: '',
             });
           }}>
           <TbPlus size={20} />
@@ -229,7 +229,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
         style={{
           backgroundColor: 'white',
           flex: '1',
-          overflowY: 'scroll'
+          overflowY: 'scroll',
         }}>
         <div
           style={{
@@ -237,7 +237,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
             height: '100%',
             backgroundColor: 'white',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}>
           {conlang.lexicon.map((item) => {
             return (
@@ -247,7 +247,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                   backgroundColor:
                     item.id === currentWord ? 'darkgray' : 'white',
                   paddingLeft: '0.3em',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => {
                   setCurrentWord(item.id);
@@ -274,7 +274,7 @@ type WordEditorProps = {
 function WordEditor({
   currentWord,
   changeWord,
-  createRomanizationMap
+  createRomanizationMap,
 }: WordEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
   const setLastInput = useStoreState((s) => s.setLastInput);
@@ -290,13 +290,13 @@ function WordEditor({
         flex: '1',
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'scroll'
+        overflowY: 'scroll',
       }}>
       {word && (
         <>
           <div
             style={{
-              marginBottom: '1em'
+              marginBottom: '1em',
             }}>
             <label>
               Romanization:&nbsp;
@@ -322,7 +322,7 @@ function WordEditor({
           </div>
           <div
             style={{
-              marginBottom: '1em'
+              marginBottom: '1em',
             }}>
             <label>
               IPA:&nbsp;
@@ -341,7 +341,7 @@ function WordEditor({
             </label>
             <div
               style={{
-                fontSize: '0.8em'
+                fontSize: '0.8em',
               }}>
               <label>
                 <input
@@ -366,7 +366,7 @@ function WordEditor({
           </div>
           <div
             style={{
-              marginBottom: '1em'
+              marginBottom: '1em',
             }}>
             <label>
               Part of Speech:&nbsp;
@@ -380,7 +380,7 @@ function WordEditor({
           </div>
           <div
             style={{
-              marginBottom: '1em'
+              marginBottom: '1em',
             }}>
             Definitions:
             <div
@@ -388,7 +388,7 @@ function WordEditor({
                 display: 'flex',
                 flexDirection: 'column',
                 border: '1px solid black',
-                padding: '1em'
+                padding: '1em',
               }}>
               <button
                 onClick={() => {
@@ -399,12 +399,12 @@ function WordEditor({
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  width: 'max-content'
+                  width: 'max-content',
                 }}>
                 <TbPlus size={18} />
                 <div
                   style={{
-                    height: 'min-content'
+                    height: 'min-content',
                   }}>
                   &nbsp;New Definition
                 </div>
@@ -412,18 +412,18 @@ function WordEditor({
               <ol
                 style={{
                   margin: '0',
-                  padding: '1em'
+                  padding: '1em',
                 }}>
                 {word.definitions.map((item, index) => (
                   <li
                     key={index}
                     style={{
-                      marginBottom: '0.5em'
+                      marginBottom: '0.5em',
                     }}>
                     <div
                       style={{
                         display: 'flex',
-                        alignItems: 'center'
+                        alignItems: 'center',
                       }}>
                       <input
                         value={item}
@@ -439,7 +439,7 @@ function WordEditor({
                         style={{
                           minWidth: '20em',
                           width: '70%',
-                          marginRight: '0.5em'
+                          marginRight: '0.5em',
                         }}
                         id={'wordDefinition-' + index + id}
                         onFocus={() => {
@@ -521,7 +521,7 @@ type PartOfSpeechSelectProps = {
 export function PartOfSpeechSelect({
   value,
   onChange,
-  style
+  style,
 }: PartOfSpeechSelectProps) {
   return (
     <select

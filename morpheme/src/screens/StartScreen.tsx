@@ -23,13 +23,13 @@ export default function StartScreen() {
               {
                 description: 'JSON Files',
                 accept: {
-                  'application/json': ['.json']
-                }
-              }
+                  'application/json': ['.json'],
+                },
+              },
             ],
             multiple: false,
             excludeAcceptAllOption: true,
-            id: 'morpheme-picker'
+            id: 'morpheme-picker',
           }).then((value) => {
             console.log(value.fileHandle);
             console.log(value.contents);
@@ -66,18 +66,18 @@ export default function StartScreen() {
             const name = conlangNameRef.current.value;
             const newConlang: Conlang = {
               ...conlangInit,
-              name: name
+              name: name,
             };
             createFile({
               types: [
                 {
                   description: 'JSON Files',
-                  accept: { 'application/json': ['.json'] }
-                }
+                  accept: { 'application/json': ['.json'] },
+                },
               ],
               id: 'morpheme-picker',
               startIn: 'downloads',
-              suggestedName: name + '.json'
+              suggestedName: name + '.json',
             }).then((value) => {
               console.log('createnewconlang' + value);
               setFileHandle(value);

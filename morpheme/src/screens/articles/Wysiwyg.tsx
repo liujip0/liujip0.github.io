@@ -6,7 +6,7 @@ import {
   Modifier,
   RawDraftContentState,
   RichUtils,
-  convertFromRaw
+  convertFromRaw,
 } from 'draft-js';
 import React, { MouseEventHandler, useRef, useState } from 'react';
 import {
@@ -39,7 +39,7 @@ import {
   TbStrikethrough,
   TbSubscript,
   TbSuperscript,
-  TbUnderline
+  TbUnderline,
 } from 'react-icons/tb';
 import { useStoreState } from '../../common/Vals.tsx';
 import { CodeBlock, HorizontalRule, TextAlign } from './WysiwygComponents.tsx';
@@ -49,16 +49,16 @@ const inlineMap = {
     backgroundColor: 'lightgray',
     padding: '4px 6px',
     borderRadius: '4px',
-    fontFamily: `'Roboto Mono', 'Courier New', Courier, monospace`
+    fontFamily: `'Roboto Mono', 'Courier New', Courier, monospace`,
   },
   SUPERSCRIPT: {
     fontSize: '0.83em',
-    verticalAlign: 'super'
+    verticalAlign: 'super',
   },
   SUBSCRIPT: {
     fontSize: '0.83em',
-    verticalAlign: 'sub'
-  }
+    verticalAlign: 'sub',
+  },
 };
 
 type WysiwygProps = {
@@ -120,12 +120,12 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
           case 'horizontal-rule':
             return {
               component: HorizontalRule,
-              editable: false
+              editable: false,
             };
           case 'image':
             return {
               component: Image,
-              editable: false
+              editable: false,
             };
           default:
             return null;
@@ -134,39 +134,39 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
       case 'code-block':
         return {
           component: CodeBlock,
-          editable: true
+          editable: true,
         };
       case 'align-left':
         return {
           component: TextAlign,
           editable: true,
           props: {
-            align: 'left'
-          }
+            align: 'left',
+          },
         };
       case 'align-center':
         return {
           component: TextAlign,
           editable: true,
           props: {
-            align: 'center'
-          }
+            align: 'center',
+          },
         };
       case 'align-right':
         return {
           component: TextAlign,
           editable: true,
           props: {
-            align: 'right'
-          }
+            align: 'right',
+          },
         };
       case 'align-justify':
         return {
           component: TextAlign,
           editable: true,
           props: {
-            align: 'justify'
-          }
+            align: 'justify',
+          },
         };
       default:
         return null;
@@ -180,7 +180,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
         flex: '1',
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'scroll'
+        overflowY: 'scroll',
       }}>
       <WysiwygMenu
         editorState={editorState}
@@ -191,7 +191,7 @@ export default function Wysiwyg({ value, setValue }: WysiwygProps) {
           overflowY: 'scroll',
           flex: '1',
           border: '1px solid black',
-          padding: '1em'
+          padding: '1em',
         }}>
         <Editor
           customStyleMap={inlineMap}
@@ -247,7 +247,7 @@ function WysiwygMenu({ editorState, handleEditorChange }: WysiwygMenuProps) {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        marginBottom: '1em'
+        marginBottom: '1em',
       }}>
       <WysiwygSection>
         <WysiwygIcon
@@ -434,7 +434,7 @@ function WysiwygMenu({ editorState, handleEditorChange }: WysiwygMenuProps) {
             <input
               ref={imageSrcInput}
               style={{
-                margin: '0.3em'
+                margin: '0.3em',
               }}
               onClick={(event) => {
                 event.stopPropagation();
@@ -453,7 +453,7 @@ function WysiwygMenu({ editorState, handleEditorChange }: WysiwygMenuProps) {
                 event.preventDefault();
                 if (imageSrcInput.current) {
                   insertComponent('image', {
-                    src: imageSrcInput.current.value
+                    src: imageSrcInput.current.value,
                   });
                 }
               }}>
@@ -522,7 +522,7 @@ function WysiwygSection({ children }: WysiwygSectionProps) {
       style={{
         display: 'flex',
         border: '1px solid black',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       }}>
       {children}
     </div>
@@ -549,7 +549,7 @@ function WysiwygIcon({ onClick, id, children }: WysiwygIconProps) {
         backgroundColor: 'transparent',
         border: 'none',
         fontSize: '18px',
-        padding: '0'
+        padding: '0',
       }}>
       {children}
     </button>
@@ -571,7 +571,7 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
         position: 'relative',
         width: '2em',
         height: '1.5em',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <button
         onClick={(event) => {
@@ -588,7 +588,7 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
           width: '100%',
           height: '100%',
           padding: '0',
-          fontSize: '18px'
+          fontSize: '18px',
         }}>
         {icon}
         <TbChevronDown />
@@ -599,7 +599,7 @@ function WysiwygSubmenu({ icon, children }: WysiwygSubmenuProps) {
             zIndex: '10',
             position: 'absolute',
             top: '1.6em',
-            left: '-3em'
+            left: '-3em',
           }}>
           {children}
         </div>

@@ -11,7 +11,7 @@ export function CodeBlock({ block }: CustomBlockProps) {
       style={{
         backgroundColor: 'lightgray',
         padding: '4px 6px',
-        borderRadius: '4px'
+        borderRadius: '4px',
       }}>
       <code className="monospace">{block.getText()}</code>
     </pre>
@@ -25,13 +25,13 @@ type TextAlignProps = {
 };
 export function TextAlign({
   block,
-  blockProps
+  blockProps,
 }: CustomBlockProps & TextAlignProps) {
   const { align } = blockProps;
   return (
     <div
       style={{
-        textAlign: align
+        textAlign: align,
       }}>
       {block.getText()}
     </div>

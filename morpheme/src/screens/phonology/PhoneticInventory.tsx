@@ -24,11 +24,11 @@ function ConsonantsTable() {
   return (
     <div
       style={{
-        overflowX: 'scroll'
+        overflowX: 'scroll',
       }}>
       <table
         style={{
-          width: 'min-content'
+          width: 'min-content',
         }}>
         <thead>
           <tr>
@@ -1049,7 +1049,7 @@ function VowelsTable() {
   return (
     <div
       style={{
-        overflowX: 'scroll'
+        overflowX: 'scroll',
       }}>
       <table>
         <thead>
@@ -1326,7 +1326,7 @@ function Phono({
   mannerOfArticulation,
   placeOfArticulation,
   voiced,
-  children
+  children,
 }: {
   colSpan?: number;
   mannerOfArticulation: string;
@@ -1343,7 +1343,7 @@ function Phono({
   mannerOfArticulation,
   placeOfArticulation,
   voiced = false,
-  children
+  children,
 }: {
   colSpan?: number;
   vowel?: boolean;
@@ -1378,7 +1378,7 @@ function Phono({
                 allophoneOf: '',
                 height: height,
                 backness: backness,
-                rounded: rounded
+                rounded: rounded,
               } as Vowel)
             : ({
                 id: time + '-' + children,
@@ -1391,7 +1391,7 @@ function Phono({
                 allophoneOf: '',
                 mannerOfArticulation: mannerOfArticulation,
                 placeOfArticulation: placeOfArticulation,
-                voiced: voiced
+                voiced: voiced,
               } as Consonant)
           );
         }
@@ -1403,7 +1403,7 @@ function Phono({
         backgroundColor:
           conlang.phonology.inventory.some((item) => item.base === children) ?
             'lightblue'
-          : 'white'
+          : 'white',
       }}>
       {children}
     </td>

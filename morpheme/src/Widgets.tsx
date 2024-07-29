@@ -4,7 +4,7 @@ import {
   TbChevronUp,
   TbCopy,
   TbFilter,
-  TbFilterX
+  TbFilterX,
 } from 'react-icons/tb';
 import { parseCxs, unparseCxs } from './common/Funcs.tsx';
 import { PartOfSpeech, PartOfSpeech_Arr } from './common/Types.tsx';
@@ -22,7 +22,7 @@ export default function Widgets() {
         display: 'flex',
         position: 'absolute',
         gridArea: 'b',
-        width: '100%'
+        width: '100%',
       }}>
       {conlang.widgets.charInsert.enabled && (
         <CharInsertWidget
@@ -55,7 +55,7 @@ const dictFilterInit = {
   definitionCount: 0,
   romanization: '',
   ipa: '',
-  definitions: ''
+  definitions: '',
 };
 function DictSearchWidget() {
   const conlang = useStoreState((s) => s.conlang);
@@ -71,7 +71,7 @@ function DictSearchWidget() {
       <div
         style={{
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <input
           id="dictsearch"
@@ -81,13 +81,13 @@ function DictSearchWidget() {
           className="charis"
           placeholder="Lexicon Search"
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
           value={dictFilter.general}
           onInput={(event) => {
             setDictFilter({
               ...dictFilter,
-              general: event.currentTarget.value
+              general: event.currentTarget.value,
             });
           }}
         />
@@ -97,7 +97,7 @@ function DictSearchWidget() {
             setDictFilterExpanded(dictFilterExpanded ? false : true);
           }}
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}>
           <TbFilter size={16} />
         </button>
@@ -113,7 +113,7 @@ function DictSearchWidget() {
           }}
           style={{
             height: 'min-content',
-            width: 'min-content'
+            width: 'min-content',
           }}>
           {dictSearchExpanded ?
             <TbChevronUp size={16} />
@@ -125,7 +125,7 @@ function DictSearchWidget() {
           marginTop: '0.3em',
           display: dictFilterExpanded ? 'flex' : 'none',
           alignItems: 'center',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
         }}>
         <input
           placeholder="Romanization"
@@ -133,12 +133,12 @@ function DictSearchWidget() {
           onInput={(event) => {
             setDictFilter({
               ...dictFilter,
-              romanization: event.currentTarget.value
+              romanization: event.currentTarget.value,
             });
           }}
           type="text"
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <input
@@ -147,12 +147,12 @@ function DictSearchWidget() {
           onInput={(event) => {
             setDictFilter({
               ...dictFilter,
-              ipa: event.currentTarget.value
+              ipa: event.currentTarget.value,
             });
           }}
           type="text"
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <PartOfSpeechSelect
@@ -160,11 +160,11 @@ function DictSearchWidget() {
           onChange={(event) => {
             setDictFilter({
               ...dictFilter,
-              partOfSpeech: event.currentTarget.value as PartOfSpeech
+              partOfSpeech: event.currentTarget.value as PartOfSpeech,
             });
           }}
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <input
@@ -172,13 +172,13 @@ function DictSearchWidget() {
           placeholder="Def. Ct."
           style={{
             marginRight: '0.5em',
-            width: '5em'
+            width: '5em',
           }}
           value={dictFilter.definitionCount ? dictFilter.definitionCount : ''}
           onInput={(event) => {
             setDictFilter({
               ...dictFilter,
-              definitionCount: parseInt(event.currentTarget.value)
+              definitionCount: parseInt(event.currentTarget.value),
             });
           }}
         />
@@ -188,12 +188,12 @@ function DictSearchWidget() {
           onInput={(event) => {
             setDictFilter({
               ...dictFilter,
-              definitions: event.currentTarget.value
+              definitions: event.currentTarget.value,
             });
           }}
           type="text"
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <button
@@ -206,7 +206,7 @@ function DictSearchWidget() {
       <div
         style={{
           marginTop: '0.3em',
-          display: dictSearchExpanded ? 'flex' : 'none'
+          display: dictSearchExpanded ? 'flex' : 'none',
         }}>
         {(() => {
           if (
@@ -274,7 +274,7 @@ function DictSearchWidget() {
                         <ol
                           style={{
                             margin: '0',
-                            paddingLeft: '1em'
+                            paddingLeft: '1em',
                           }}>
                           {item.definitions.map((x) => (
                             <li>{x}</li>
@@ -310,7 +310,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
       <div
         style={{
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <input
           className="charis"
@@ -327,7 +327,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
             }
           }}
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <button
@@ -342,7 +342,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
             }
           }}
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}>
           <TbCopy size={16} />
         </button>
@@ -353,7 +353,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
           }}
           style={{
             height: 'min-content',
-            width: 'min-content'
+            width: 'min-content',
           }}>
           {cxsExpanded ?
             <TbChevronUp size={16} />
@@ -364,7 +364,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
         style={{
           marginTop: '0.3em',
           display: cxsExpanded ? 'flex' : 'none',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <input
           className="charis"
@@ -380,7 +380,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
             }
           }}
           style={{
-            marginRight: '0.5em'
+            marginRight: '0.5em',
           }}
         />
         <button
@@ -417,7 +417,7 @@ function CharInsertWidget({ cxsinRef, cxsoutRef }: CharInsertWidgetProps) {
             key={char}
             style={{
               fontFamily: 'monospace',
-              marginRight: '0.2em'
+              marginRight: '0.2em',
             }}
             onClick={(event) => {
               event.preventDefault();
@@ -474,7 +474,7 @@ function Widget({ id, onClick, style, children }: WidgetProps) {
         border: '1px solid black',
         height: 'min-content',
         zIndex: '2',
-        position: 'relative'
+        position: 'relative',
       }}>
       {children}
     </div>

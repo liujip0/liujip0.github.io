@@ -48,7 +48,7 @@ export const PartOfSpeech_Arr = [
   'particle',
   'adposition',
   'conjunction',
-  ''
+  '',
 ];
 export type PartOfSpeech = (typeof PartOfSpeech_Arr)[number];
 export type Folder = {
@@ -127,7 +127,7 @@ export const Height_Arr = [
   'mid',
   'openmid',
   'lowopenmid',
-  'open'
+  'open',
 ];
 export type Height = (typeof Height_Arr)[number];
 export const Backness_Arr = [
@@ -135,7 +135,7 @@ export const Backness_Arr = [
   'frontcentral',
   'central',
   'centralback',
-  'back'
+  'back',
 ];
 export type Backness = (typeof Backness_Arr)[number];
 export type Consonant = {
@@ -162,7 +162,7 @@ export const MannerOfArticulation_Arr = [
   'approximant',
   'lateralapproximant',
   'click',
-  'implosive'
+  'implosive',
 ];
 export type MannerOfArticulation = (typeof MannerOfArticulation_Arr)[number];
 export const PlaceOfArticulation_Arr = [
@@ -180,7 +180,7 @@ export const PlaceOfArticulation_Arr = [
   'pharyngeal',
   'epiglottal',
   'glottal',
-  'other'
+  'other',
 ];
 export type PlaceOfArticulation = (typeof PlaceOfArticulation_Arr)[number];
 

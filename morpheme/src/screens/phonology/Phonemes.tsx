@@ -3,20 +3,20 @@ import {
   TbCopy,
   TbTrash,
   TbTriangle,
-  TbTriangleInverted
+  TbTriangleInverted,
 } from 'react-icons/tb';
 import { Alert, IconButton, NavSection } from '../../common/Components.tsx';
 import {
   createId,
   diacriticToChar,
   sortConsonantsDiacritics,
-  sortVowelDiacritics
+  sortVowelDiacritics,
 } from '../../common/Funcs.tsx';
 import {
   Consonant,
   IpaConsonantDiacritic,
   IpaVowelDiacritic,
-  Vowel
+  Vowel,
 } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 
@@ -45,7 +45,7 @@ function PhonemesTable() {
     if (index !== -1) {
       newInventory.splice(index, 1, {
         ...conlang.phonology.inventory[index],
-        [property]: newValue
+        [property]: newValue,
       });
       changeConlang(['phonology', 'inventory'], newInventory);
     }
@@ -54,7 +54,7 @@ function PhonemesTable() {
     const newInventory = conlang.phonology.inventory;
     newInventory.push({
       ...phoneme,
-      id: createId(phoneme.base)
+      id: createId(phoneme.base),
     });
     changeConlang(['phoology', 'inventory'], newInventory);
   };
@@ -92,11 +92,11 @@ function PhonemesTable() {
   return (
     <div
       style={{
-        overflowX: 'scroll'
+        overflowX: 'scroll',
       }}>
       <table
         style={{
-          width: 'max-content'
+          width: 'max-content',
         }}>
         <thead>
           <tr>
@@ -130,7 +130,7 @@ function PhonemesTable() {
                     conlang.phonology.inventory.forEach((item, index) => {
                       newInventory.splice(index, 1, {
                         ...item,
-                        romanization: item.ipa
+                        romanization: item.ipa,
                       });
                     });
                     changeConlang(['phonology', 'inventory'], newInventory);
@@ -174,7 +174,7 @@ function PhonemesList({
   deletePhoneme,
   moveUpPhoneme,
   moveDownPhoneme,
-  getPhoneme
+  getPhoneme,
 }: PhonemesListProps) {
   return (
     <>
@@ -213,7 +213,7 @@ function PhonemeTr({
   deletePhoneme,
   moveUpPhoneme,
   moveDownPhoneme,
-  getPhoneme
+  getPhoneme,
 }: PhonemeTrProps) {
   const conlang = useStoreState((s) => s.conlang);
   const setLastInput = useStoreState((s) => s.setLastInput);
@@ -244,7 +244,7 @@ function PhonemeTr({
                 'lowered',
                 'dental',
                 'apical',
-                'laminal'
+                'laminal',
               ].includes(diacritics[0])
           )
       );
@@ -297,7 +297,7 @@ function PhonemeTr({
               ).allophones;
               changePhoneme(event.currentTarget.value, 'allophones', [
                 ...allophones,
-                item.id
+                item.id,
               ]);
             }
           }}

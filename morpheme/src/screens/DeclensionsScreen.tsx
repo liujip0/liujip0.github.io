@@ -18,7 +18,7 @@ export default function DeclensionsScreen() {
           { id: 'PropNDeclensions', label: 'Proper Nouns' },
           { id: 'PtclDeclensions', label: 'Particles' },
           { id: 'AdpDeclensions', label: 'Adpositions' },
-          { id: 'ConjDeclensions', label: 'Conjugations' }
+          { id: 'ConjDeclensions', label: 'Conjugations' },
         ]}
       />
       <NavSection id="NDeclensions">Nouns</NavSection>
@@ -90,11 +90,11 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             id: createId('declension'),
             name: '',
             affix: [],
-            gloss: []
+            gloss: [],
           });
           changeConlang(['declensions'], {
             ...conlang.declensions,
-            [partOfSpeech]: newDeclensions
+            [partOfSpeech]: newDeclensions,
           });
           console.log(newDeclensions);
         }}>
@@ -104,7 +104,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         style={{
           listStyleType: 'none',
           listStylePosition: 'outside',
-          padding: '0'
+          padding: '0',
         }}>
         {conlang.declensions[partOfSpeech].map((item) => {
           if (item === '_') {
@@ -122,7 +122,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   padding: '0.3em',
                   marginBottom: '0.1em',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                 <div
                   onMouseDown={(event) => {
@@ -140,7 +140,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   <TbGripVertical
                     size={20}
                     style={{
-                      marginRight: '0.5em'
+                      marginRight: '0.5em',
                     }}
                   />
                 </div>
@@ -162,7 +162,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   padding: '0.3em',
                   marginBottom: '0.1em',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                 <div
                   onMouseDown={(event) => {
@@ -180,24 +180,24 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                   <TbGripVertical
                     size={20}
                     style={{
-                      marginRight: '0.5em'
+                      marginRight: '0.5em',
                     }}
                   />
                 </div>
                 <div
                   style={{
                     overflowX: 'scroll',
-                    flex: '1'
+                    flex: '1',
                   }}>
                   <table
                     style={{
-                      width: 'max-content'
+                      width: 'max-content',
                     }}>
                     <tr>
                       <td
                         colSpan={item.affix.length + 1}
                         style={{
-                          padding: '0.5em'
+                          padding: '0.5em',
                         }}>
                         Name:&nbsp;
                         <input
@@ -211,7 +211,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                           }}
                           style={{
                             width: '70%',
-                            maxWidth: '40em'
+                            maxWidth: '40em',
                           }}
                         />
                       </td>
@@ -220,13 +220,13 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                       {item.gloss.map((gloss, index) => (
                         <td
                           style={{
-                            padding: '0.5em'
+                            padding: '0.5em',
                           }}>
                           {gloss.map((x, xIndex) => (
                             <div
                               style={{
                                 display: 'flex',
-                                alignItems: 'center'
+                                alignItems: 'center',
                               }}>
                               <select
                                 value={x}
@@ -242,7 +242,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                                   changeDeclension(item.id, 'gloss', newGloss);
                                 }}
                                 style={{
-                                  width: '80%'
+                                  width: '80%',
                                 }}>
                                 <option value={''}>-</option>
                               </select>
@@ -273,11 +273,11 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                           onClick={() => {
                             changeDeclension(item.id, 'affix', [
                               ...item.affix,
-                              ''
+                              '',
                             ]);
                             changeDeclension(item.id, 'gloss', [
                               ...item.gloss,
-                              ['']
+                              [''],
                             ]);
                           }}>
                           <TbPlus size={20} />
@@ -288,7 +288,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                       {item.affix.map((affix, index) => (
                         <td
                           style={{
-                            padding: '0.5em'
+                            padding: '0.5em',
                           }}>
                           <input
                             value={affix}
@@ -302,7 +302,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                               changeDeclension(item.id, 'affix', newAffix);
                             }}
                             style={{
-                              width: '100%'
+                              width: '100%',
                             }}
                           />
                         </td>
@@ -317,7 +317,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                               alignItems: 'center',
                               justifyContent: 'space-evenly',
                               height: '100%',
-                              width: '100%'
+                              width: '100%',
                             }}>
                             <IconButton
                               onClick={() => {

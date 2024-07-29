@@ -21,7 +21,7 @@ export default function ScreensLayout() {
           gridRowStart: 'a0',
           gridRowEnd: windows[0] === windows[2] ? 'a2' : 'a0',
           gridColumnStart: 'a0',
-          gridColumnEnd: windows[0] === windows[1] ? 'a1' : 'a0'
+          gridColumnEnd: windows[0] === windows[1] ? 'a1' : 'a0',
         }}
       />
 
@@ -32,7 +32,7 @@ export default function ScreensLayout() {
             gridRowStart: 'a1',
             gridRowEnd: windows[1] === windows[3] ? 'a3' : 'a1',
             gridColumnStart: 'a1',
-            gridColumnEnd: 'a1'
+            gridColumnEnd: 'a1',
           }}
         />
       )}
@@ -44,7 +44,7 @@ export default function ScreensLayout() {
             gridRowStart: 'a2',
             gridRowEnd: 'a2',
             gridColumnStart: 'a2',
-            gridColumnEnd: windows[2] === windows[3] ? 'a3' : 'a2'
+            gridColumnEnd: windows[2] === windows[3] ? 'a3' : 'a2',
           }}
         />
       )}
@@ -56,7 +56,7 @@ export default function ScreensLayout() {
             gridRowStart: 'a3',
             gridRowEnd: 'a3',
             gridColumnStart: 'a3',
-            gridColumnEnd: 'a3'
+            gridColumnEnd: 'a3',
           }}
         />
       )}
@@ -76,7 +76,7 @@ function Screen({ location, position }: ScreenProps) {
         ...location,
         padding: '0.5em 2em',
         overflow: 'scroll',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       }}>
       {(() => {
         switch (windows[position].split('-')[0]) {
