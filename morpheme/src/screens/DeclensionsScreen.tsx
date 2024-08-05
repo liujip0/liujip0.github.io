@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TbCopy, TbGripVertical, TbPlus, TbTrash } from 'react-icons/tb';
 import { IconButton, NavBar, NavSection } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
+import { Gloss } from '../common/Gloss.tsx';
 import { Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
@@ -109,249 +110,296 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         {conlang.declensions[partOfSpeech].map((item) => {
           if (item === '_') {
             return (
-              <li
-                key={'_'}
-                onDragStart={(event) => {
-                  handleDragStart(event, '_');
-                }}
-                onDragEnd={handleDragEnd}
-                onDragOver={handleDragOver}
-                onDrop={() => handleDrop('_')}
-                style={{
-                  border: '1px solid black',
-                  padding: '0.3em',
-                  marginBottom: '0.1em',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}>
-                <div
-                  onMouseDown={(event) => {
-                    const parentLi = event.currentTarget.parentElement;
-                    if (parentLi) {
-                      parentLi.draggable = true;
-                    }
-                  }}
-                  onMouseUp={(event) => {
-                    const parentLi = event.currentTarget.parentElement;
-                    if (parentLi) {
-                      parentLi.draggable = false;
-                    }
-                  }}>
-                  <TbGripVertical
-                    size={20}
-                    style={{
-                      marginRight: '0.5em',
-                    }}
-                  />
-                </div>
-                <div>Root Word</div>
-              </li>
+              <RootWord
+                handleDragStart={handleDragStart}
+                handleDragEnd={handleDragEnd}
+                handleDragOver={handleDragOver}
+                handleDrop={handleDrop}
+              />
             );
           } else {
             return (
-              <li
-                key={item.id}
-                onDragStart={(event) => {
-                  handleDragStart(event, item.id);
+              <Affix
+                declension={item}
+                changeDeclension={(property, value) => {
+                  changeDeclension(item.id, property, value);
                 }}
-                onDragEnd={handleDragEnd}
-                onDragOver={handleDragOver}
-                onDrop={() => handleDrop(item.id)}
-                style={{
-                  border: '1px solid black',
-                  padding: '0.3em',
-                  marginBottom: '0.1em',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}>
-                <div
-                  onMouseDown={(event) => {
-                    const parentLi = event.currentTarget.parentElement;
-                    if (parentLi) {
-                      parentLi.draggable = true;
-                    }
-                  }}
-                  onMouseUp={(event) => {
-                    const parentLi = event.currentTarget.parentElement;
-                    if (parentLi) {
-                      parentLi.draggable = false;
-                    }
-                  }}>
-                  <TbGripVertical
-                    size={20}
-                    style={{
-                      marginRight: '0.5em',
-                    }}
-                  />
-                </div>
-                <div
-                  style={{
-                    overflowX: 'scroll',
-                    flex: '1',
-                  }}>
-                  <table
-                    style={{
-                      width: 'max-content',
-                    }}>
-                    <tr>
-                      <td
-                        colSpan={item.affix.length + 1}
-                        style={{
-                          padding: '0.5em',
-                        }}>
-                        Name:&nbsp;
-                        <input
-                          value={item.name}
-                          onInput={(event) => {
-                            changeDeclension(
-                              item.id,
-                              'name',
-                              event.currentTarget.value
-                            );
-                          }}
-                          style={{
-                            width: '70%',
-                            maxWidth: '40em',
-                          }}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      {item.gloss.map((gloss, index) => (
-                        <td
-                          style={{
-                            padding: '0.5em',
-                          }}>
-                          {gloss.map((x, xIndex) => (
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                              }}>
-                              <select
-                                value={x}
-                                onChange={(event) => {
-                                  const newGloss = item.gloss;
-                                  const newX = gloss;
-                                  newX.splice(
-                                    xIndex,
-                                    1,
-                                    event.currentTarget.value
-                                  );
-                                  newGloss.splice(index, 1, newX);
-                                  changeDeclension(item.id, 'gloss', newGloss);
-                                }}
-                                style={{
-                                  width: '80%',
-                                }}>
-                                <option value={''}>-</option>
-                              </select>
-                              <IconButton
-                                onClick={() => {
-                                  const newGloss = item.gloss;
-                                  const newX = gloss;
-                                  newX.splice(xIndex, 1);
-                                  newGloss.splice(index, 1, newX);
-                                  changeDeclension(item.id, 'gloss', newGloss);
-                                }}>
-                                <TbTrash size={17} />
-                              </IconButton>
-                            </div>
-                          ))}
-                          <button
-                            onClick={() => {
-                              const newGloss = item.gloss;
-                              newGloss.splice(index, 1, [...gloss, '']);
-                              changeDeclension(item.id, 'gloss', newGloss);
-                            }}>
-                            Add Gloss
-                          </button>
-                        </td>
-                      ))}
-                      <td rowSpan={3}>
-                        <IconButton
-                          onClick={() => {
-                            changeDeclension(item.id, 'affix', [
-                              ...item.affix,
-                              '',
-                            ]);
-                            changeDeclension(item.id, 'gloss', [
-                              ...item.gloss,
-                              [''],
-                            ]);
-                          }}>
-                          <TbPlus size={20} />
-                        </IconButton>
-                      </td>
-                    </tr>
-                    <tr>
-                      {item.affix.map((affix, index) => (
-                        <td
-                          style={{
-                            padding: '0.5em',
-                          }}>
-                          <input
-                            value={affix}
-                            onInput={(event) => {
-                              const newAffix = item.affix;
-                              newAffix.splice(
-                                index,
-                                1,
-                                event.currentTarget.value
-                              );
-                              changeDeclension(item.id, 'affix', newAffix);
-                            }}
-                            style={{
-                              width: '100%',
-                            }}
-                          />
-                        </td>
-                      ))}
-                    </tr>
-                    <tr>
-                      {item.affix.map((_affix, index) => (
-                        <td>
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-evenly',
-                              height: '100%',
-                              width: '100%',
-                            }}>
-                            <IconButton
-                              onClick={() => {
-                                const newAffix = item.affix;
-                                newAffix.splice(index, 0, item.affix[index]);
-                                changeDeclension(item.id, 'affix', newAffix);
-                                const newGloss = item.gloss;
-                                newGloss.splice(index, 0, item.gloss[index]);
-                                changeDeclension(item.id, 'gloss', newGloss);
-                              }}>
-                              <TbCopy size={18} />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                const newAffix = item.affix;
-                                newAffix.splice(index, 1);
-                                changeDeclension(item.id, 'affix', newAffix);
-                                const newGloss = item.gloss;
-                                newGloss.splice(index, 1);
-                                changeDeclension(item.id, 'gloss', newGloss);
-                              }}>
-                              <TbTrash size={18} />
-                            </IconButton>
-                          </div>
-                        </td>
-                      ))}
-                    </tr>
-                  </table>
-                </div>
-              </li>
+                handleDragStart={handleDragStart}
+                handleDragEnd={handleDragEnd}
+                handleDragOver={handleDragOver}
+                handleDrop={handleDrop}
+              />
             );
           }
         })}
       </ul>
     </>
+  );
+}
+
+type AffixProps = {
+  declension: Declension;
+  changeDeclension: (property: string, value: unknown) => void;
+  handleDragStart: (
+    event: React.DragEvent<HTMLLIElement>,
+    declension: string
+  ) => void;
+  handleDragEnd: (event: React.DragEvent<HTMLLIElement>) => void;
+  handleDragOver: (event: React.DragEvent<HTMLLIElement>) => void;
+  handleDrop: (targetItem: string) => void;
+};
+function Affix({
+  declension,
+  changeDeclension,
+  handleDragStart,
+  handleDragEnd,
+  handleDragOver,
+  handleDrop,
+}: AffixProps) {
+  return (
+    <li
+      key={declension.id}
+      onDragStart={(event) => {
+        handleDragStart(event, declension.id);
+      }}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+      onDrop={() => handleDrop(declension.id)}
+      style={{
+        border: '1px solid black',
+        padding: '0.3em',
+        marginBottom: '0.1em',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+      <div
+        onMouseDown={(event) => {
+          const parentLi = event.currentTarget.parentElement;
+          if (parentLi) {
+            parentLi.draggable = true;
+          }
+        }}
+        onMouseUp={(event) => {
+          const parentLi = event.currentTarget.parentElement;
+          if (parentLi) {
+            parentLi.draggable = false;
+          }
+        }}>
+        <TbGripVertical
+          size={20}
+          style={{
+            marginRight: '0.5em',
+          }}
+        />
+      </div>
+      <div
+        style={{
+          overflowX: 'scroll',
+          flex: '1',
+        }}>
+        <table
+          style={{
+            width: 'max-content',
+          }}>
+          <tr>
+            <td
+              colSpan={declension.affix.length + 1}
+              style={{
+                padding: '0.5em',
+              }}>
+              Name:&nbsp;
+              <input
+                value={declension.name}
+                onInput={(event) => {
+                  changeDeclension('name', event.currentTarget.value);
+                }}
+                style={{
+                  width: '70%',
+                  maxWidth: '40em',
+                }}
+              />
+            </td>
+          </tr>
+          <tr>
+            {declension.gloss.map((gloss, index) => (
+              <td
+                style={{
+                  padding: '0.5em',
+                }}>
+                {gloss.map((x, xIndex) => (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <select
+                      value={x}
+                      onChange={(event) => {
+                        const newGloss = declension.gloss;
+                        const newX = gloss;
+                        newX.splice(xIndex, 1, event.currentTarget.value);
+                        newGloss.splice(index, 1, newX);
+                        changeDeclension('gloss', newGloss);
+                      }}
+                      style={{
+                        width: '80%',
+                      }}>
+                      <option value={''}>-</option>
+                      {Object.keys(Gloss).map((key) => (
+                        <option
+                          value={key}
+                          key={key}>
+                          {key}
+                        </option>
+                      ))}
+                    </select>
+                    <IconButton
+                      onClick={() => {
+                        const newGloss = declension.gloss;
+                        const newX = gloss;
+                        newX.splice(xIndex, 1);
+                        newGloss.splice(index, 1, newX);
+                        changeDeclension('gloss', newGloss);
+                      }}>
+                      <TbTrash size={17} />
+                    </IconButton>
+                  </div>
+                ))}
+                <button
+                  onClick={() => {
+                    const newGloss = declension.gloss;
+                    newGloss.splice(index, 1, [...gloss, '']);
+                    changeDeclension('gloss', newGloss);
+                  }}>
+                  Add Gloss
+                </button>
+              </td>
+            ))}
+            <td rowSpan={3}>
+              <IconButton
+                onClick={() => {
+                  changeDeclension('affix', [...declension.affix, '']);
+                  changeDeclension('gloss', [...declension.gloss, ['']]);
+                }}>
+                <TbPlus size={20} />
+              </IconButton>
+            </td>
+          </tr>
+          <tr>
+            {declension.affix.map((affix, index) => (
+              <td
+                style={{
+                  padding: '0.5em',
+                }}>
+                <input
+                  value={affix}
+                  onInput={(event) => {
+                    const newAffix = declension.affix;
+                    newAffix.splice(index, 1, event.currentTarget.value);
+                    changeDeclension('affix', newAffix);
+                  }}
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </td>
+            ))}
+          </tr>
+          <tr>
+            {declension.affix.map((_affix, index) => (
+              <td>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-evenly',
+                    height: '100%',
+                    width: '100%',
+                  }}>
+                  <IconButton
+                    onClick={() => {
+                      const newAffix = declension.affix;
+                      newAffix.splice(index, 0, declension.affix[index]);
+                      changeDeclension('affix', newAffix);
+                      const newGloss = declension.gloss;
+                      newGloss.splice(index, 0, declension.gloss[index]);
+                      changeDeclension('gloss', newGloss);
+                    }}>
+                    <TbCopy size={18} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      const newAffix = declension.affix;
+                      newAffix.splice(index, 1);
+                      changeDeclension('affix', newAffix);
+                      const newGloss = declension.gloss;
+                      newGloss.splice(index, 1);
+                      changeDeclension('gloss', newGloss);
+                    }}>
+                    <TbTrash size={18} />
+                  </IconButton>
+                </div>
+              </td>
+            ))}
+          </tr>
+        </table>
+      </div>
+    </li>
+  );
+}
+
+type RootWordProps = {
+  handleDragStart: (
+    event: React.DragEvent<HTMLLIElement>,
+    declension: string
+  ) => void;
+  handleDragEnd: (event: React.DragEvent<HTMLLIElement>) => void;
+  handleDragOver: (event: React.DragEvent<HTMLLIElement>) => void;
+  handleDrop: (targetItem: string) => void;
+};
+function RootWord({
+  handleDragStart,
+  handleDragEnd,
+  handleDragOver,
+  handleDrop,
+}: RootWordProps) {
+  return (
+    <li
+      key={'_'}
+      onDragStart={(event) => {
+        handleDragStart(event, '_');
+      }}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+      onDrop={() => handleDrop('_')}
+      style={{
+        border: '1px solid black',
+        padding: '0.3em',
+        marginBottom: '0.1em',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+      <div
+        onMouseDown={(event) => {
+          const parentLi = event.currentTarget.parentElement;
+          if (parentLi) {
+            parentLi.draggable = true;
+          }
+        }}
+        onMouseUp={(event) => {
+          const parentLi = event.currentTarget.parentElement;
+          if (parentLi) {
+            parentLi.draggable = false;
+          }
+        }}>
+        <TbGripVertical
+          size={20}
+          style={{
+            marginRight: '0.5em',
+          }}
+        />
+      </div>
+      <div>Root Word</div>
+    </li>
   );
 }
