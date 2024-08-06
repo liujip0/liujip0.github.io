@@ -1,12 +1,14 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useState } from 'react';
+import { Gloss } from './Gloss.tsx';
 
 type NavBarProps = {
   sections: Array<{
     label: string;
     id: string;
   }>;
+  custom?: React.ReactNode;
 };
-export function NavBar({ sections }: NavBarProps) {
+export function NavBar({ sections, custom }: NavBarProps) {
   return (
     <div
       style={{
@@ -14,6 +16,7 @@ export function NavBar({ sections }: NavBarProps) {
         top: '0',
         display: 'flex',
         backgroundColor: 'white',
+        width: '100%',
       }}>
       {sections.map((x) => {
         return (
@@ -34,6 +37,7 @@ export function NavBar({ sections }: NavBarProps) {
           </button>
         );
       })}
+      {custom}
     </div>
   );
 }
@@ -140,5 +144,63 @@ export function IconButton({ onClick, children }: IconButtonProps) {
       }}>
       {children}
     </button>
+  );
+}
+
+type GlossingAbbreviationsProps = {
+  onClose: () => void;
+};
+export function GlossingAbbreviations({ onClose }: GlossingAbbreviationsProps) {
+  const [searchAbbr, setSearchAbbr] = useState('');
+  const [searchDef, setSearchDef] = useState('');
+  return (
+    <Popup>
+      <h1
+        style={{
+          textAlign: 'left',
+          margin: '0',
+          fontSize: '1.6em',
+        }}>
+        Glossing Abbreviations
+      </h1>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <input
+                value={searchAbbr}
+                onInput={(event) => {
+                  setSearchAbbr(event.currentTarget.value);
+                }}
+              />
+            </th>
+            <th>
+              <input
+                value={searchDef}
+                onInput={(event) => {
+                  setSearchDef(event.currentTarget.value);
+                }}
+              />
+            </th>
+          </tr>
+        </thead>
+        {Object.entries(Gloss)
+          .filter((x) => x[0].includes(searchAbbr))
+          .filter((x) => x[1].includes(searchDef))
+          .map((item) => (
+            <tr>
+              <td>{item[0]}</td>
+              <td>{item[1]}</td>
+            </tr>
+          ))}
+      </table>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}>
+        <button onClick={onClose}>Done</button>
+      </div>
+    </Popup>
   );
 }

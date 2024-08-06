@@ -21,6 +21,14 @@ export default function DeclensionsScreen() {
           { id: 'AdpDeclensions', label: 'Adpositions' },
           { id: 'ConjDeclensions', label: 'Conjugations' },
         ]}
+        custom={
+          <button
+            style={{
+              marginLeft: 'auto',
+            }}>
+            Glossing Abbreviations
+          </button>
+        }
       />
       <NavSection id="NDeclensions">Nouns</NavSection>
       <Declensions partOfSpeech="noun" />
