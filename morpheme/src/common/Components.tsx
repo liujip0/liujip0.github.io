@@ -85,6 +85,7 @@ export function Popup({ children }: PopupProps) {
           backgroundColor: 'lightgray',
           border: '3px solid darkgray',
           padding: '1em',
+          maxHeight: '80vh',
         }}>
         {children}
       </div>
@@ -163,39 +164,53 @@ export function GlossingAbbreviations({ onClose }: GlossingAbbreviationsProps) {
         }}>
         Glossing Abbreviations
       </h1>
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <input
-                value={searchAbbr}
-                onInput={(event) => {
-                  setSearchAbbr(event.currentTarget.value);
-                }}
-              />
-            </th>
-            <th>
-              <input
-                value={searchDef}
-                onInput={(event) => {
-                  setSearchDef(event.currentTarget.value);
-                }}
-              />
-            </th>
-          </tr>
-        </thead>
-        {Object.entries(Gloss)
-          .filter((x) => x[0].includes(searchAbbr))
-          .filter((x) => x[1].includes(searchDef))
-          .map((item) => (
-            <tr>
-              <td>{item[0]}</td>
-              <td>{item[1]}</td>
-            </tr>
-          ))}
-      </table>
       <div
         style={{
+          overflow: 'scroll',
+          flex: '1',
+          marginTop: '1em',
+          marginBottom: '1em',
+        }}>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <input
+                  value={searchAbbr}
+                  onInput={(event) => {
+                    setSearchAbbr(event.currentTarget.value);
+                  }}
+                />
+              </th>
+              <th>
+                <input
+                  value={searchDef}
+                  onInput={(event) => {
+                    setSearchDef(event.currentTarget.value);
+                  }}
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </th>
+            </tr>
+          </thead>
+          {Object.entries(Gloss)
+            .filter((x) =>
+              x[0].toUpperCase().includes(searchAbbr.toUpperCase())
+            )
+            .filter((x) => x[1].toUpperCase().includes(searchDef.toUpperCase()))
+            .map((item) => (
+              <tr key={item[0]}>
+                <td>{item[0]}</td>
+                <td>{item[1]}</td>
+              </tr>
+            ))}
+        </table>
+      </div>
+      <div
+        style={{
+          width: '100%',
           display: 'flex',
           justifyContent: 'flex-end',
         }}>

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { TbCopy, TbGripVertical, TbPlus, TbTrash } from 'react-icons/tb';
-import { IconButton, NavBar, NavSection } from '../common/Components.tsx';
+import {
+  GlossingAbbreviations,
+  IconButton,
+  NavBar,
+  NavSection,
+} from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { Gloss } from '../common/Gloss.tsx';
 import { Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function DeclensionsScreen() {
+  const [glossingAbbreviations, setGlossingAbbreviations] = useState(false);
   return (
     <>
       <NavBar
@@ -25,11 +31,22 @@ export default function DeclensionsScreen() {
           <button
             style={{
               marginLeft: 'auto',
+              fontSize: '1.2em',
+            }}
+            onClick={() => {
+              setGlossingAbbreviations(true);
             }}>
             Glossing Abbreviations
           </button>
         }
       />
+      {glossingAbbreviations && (
+        <GlossingAbbreviations
+          onClose={() => {
+            setGlossingAbbreviations(false);
+          }}
+        />
+      )}
       <NavSection id="NDeclensions">Nouns</NavSection>
       <Declensions partOfSpeech="noun" />
       <NavSection id="VDeclensions">Verbs</NavSection>
