@@ -23,7 +23,17 @@ export interface Conlang {
   };
   declensions: {
     properNounEqualsNoun: boolean;
-    list: Record<PartOfSpeech, Array<Declension | '_' | PronounTable>>;
+    list: {
+      noun: Array<Declension | '_'>;
+      verb: Array<Declension | '_'>;
+      adjective: Array<Declension | '_'>;
+      adverb: Array<Declension | '_'>;
+      pronoun: Array<PronounTable>;
+      'proper noun': Array<Declension | '_'>;
+      particle: Array<Declension | '_'>;
+      adposition: Array<Declension | '_'>;
+      conjunction: Array<Declension | '_'>;
+    };
   };
   lexicon: Array<Word>;
 }
