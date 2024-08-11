@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TbCopy, TbGripVertical, TbPlus, TbTrash } from 'react-icons/tb';
 import {
   GlossingAbbreviations,
@@ -12,7 +12,11 @@ import { Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function DeclensionsScreen() {
+  const conlang = useStoreState((s) => s.conlang);
   const [glossingAbbreviations, setGlossingAbbreviations] = useState(false);
+  const [propNEqualsNoun, setPropNEqualsNoun] = useState(
+    conlang.declensions.properNounEqualsNoun
+  );
   return (
     <>
       <NavBar
@@ -50,13 +54,29 @@ export default function DeclensionsScreen() {
       <NavSection id="NDeclensions">Nouns</NavSection>
       <Declensions partOfSpeech="noun" />
       <NavSection id="VDeclensions">Verbs</NavSection>
+      <Declensions partOfSpeech="verb" />
       <NavSection id="AdjDeclensions">Adjectives</NavSection>
+      <Declensions partOfSpeech="adjective" />
       <NavSection id="AdvDeclensions">Adverbs</NavSection>
+      <Declensions partOfSpeech="adverb" />
       <NavSection id="PronDeclensions">Pronouns</NavSection>
+      <Pronouns />
       <NavSection id="PropNDeclensions">Proper Nouns</NavSection>
+      <Declensions partOfSpeech="proper noun" />
       <NavSection id="PtclDeclensions">Particles</NavSection>
+      <Declensions partOfSpeech="particle" />
       <NavSection id="AdpDeclensions">Adpositions</NavSection>
+      <Declensions partOfSpeech="adposition" />
       <NavSection id="ConjDeclensions">Conjugations</NavSection>
+      <Declensions partOfSpeech="conjugation" />
+    </>
+  );
+}
+
+function Pronouns() {
+  return (
+    <>
+      <button>Add Table</button>
     </>
   );
 }
@@ -84,41 +104,41 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
   };
   const handleDrop = (targetItem: string) => {
     if (!dragging) return;
-    const currentIndex = conlang.declensions[partOfSpeech].findIndex((x) =>
-      x === '_' ? x === dragging : x.id === dragging
+    const currentIndex = conlang.declensions.list[partOfSpeech].findIndex(
+      (x) => (x === '_' ? x === dragging : x.id === dragging)
     );
-    const targetIndex = conlang.declensions[partOfSpeech].findIndex((x) =>
+    const targetIndex = conlang.declensions.list[partOfSpeech].findIndex((x) =>
       x === '_' ? x === targetItem : x.id === targetItem
     );
     if (currentIndex !== -1 && targetIndex !== -1) {
-      const newDeclensions = conlang.declensions[partOfSpeech];
+      const newDeclensions = conlang.declensions.list[partOfSpeech];
       const draggedItem = newDeclensions[currentIndex];
       newDeclensions.splice(currentIndex, 1);
       newDeclensions.splice(targetIndex, 0, draggedItem);
-      changeConlang(['declensions', partOfSpeech], newDeclensions);
+      changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
     }
   };
   const changeDeclension = (id: string, property: string, value: unknown) => {
-    const newDeclensions = conlang.declensions[partOfSpeech];
+    const newDeclensions = conlang.declensions.list[partOfSpeech];
     const index = newDeclensions.findIndex((x) =>
       x === '_' ? false : x.id === id
     );
     const declension = newDeclensions[index] as Declension;
     newDeclensions.splice(index, 1, { ...declension, [property]: value });
-    changeConlang(['declensions', partOfSpeech], newDeclensions);
+    changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
   };
   return (
     <>
       <button
         onClick={() => {
-          const newDeclensions = conlang.declensions[partOfSpeech];
+          const newDeclensions = conlang.declensions.list[partOfSpeech];
           newDeclensions.push({
             id: createId('declension'),
             name: '',
             affix: [],
             gloss: [],
           });
-          changeConlang(['declensions'], {
+          changeConlang(['declensions', 'list'], {
             ...conlang.declensions,
             [partOfSpeech]: newDeclensions,
           });
@@ -132,7 +152,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
           listStylePosition: 'outside',
           padding: '0',
         }}>
-        {conlang.declensions[partOfSpeech].map((item) => {
+        {conlang.declensions.list[partOfSpeech].map((item) => {
           if (item === '_') {
             return (
               <RootWord
@@ -145,7 +165,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
           } else {
             return (
               <Affix
-                declension={item}
+                declension={item as Declension}
                 changeDeclension={(property, value) => {
                   changeDeclension(item.id, property, value);
                 }}

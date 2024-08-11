@@ -21,9 +21,15 @@ export interface Conlang {
   articles: {
     list: Array<Folder | Article>;
   };
-  declensions: Record<PartOfSpeech, Array<Declension | '_'>>;
+  declensions: {
+    properNounEqualsNoun: boolean;
+    list: Record<PartOfSpeech, Array<Declension | '_' | PronounTable>>;
+  };
   lexicon: Array<Word>;
 }
+export type PronounTable = {
+  id: string;
+};
 export type Declension = {
   id: string;
   name: string;
