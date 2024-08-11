@@ -39,9 +39,11 @@ export interface Conlang {
 }
 export type PronounTable = {
   id: string;
+  type: 'pronountable';
 };
 export type Declension = {
   id: string;
+  type: 'declension';
   name: string;
   gloss: Array<Array<string>>;
   affix: Array<string>;

@@ -186,14 +186,15 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             conlang.declensions.list[
               partOfSpeech as keyof typeof conlang.declensions.list
             ];
-          newDeclensions.push({
+          (newDeclensions as Array<Declension | '_'>).push({
             id: createId('declension'),
+            type: 'declension',
             name: '',
             affix: [],
             gloss: [],
           });
           changeConlang(['declensions', 'list'], {
-            ...conlang.declensions,
+            ...conlang.declensions.list,
             [partOfSpeech]: newDeclensions,
           });
           console.log(newDeclensions);
@@ -224,8 +225,30 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
               <Affix
                 key={item.id}
                 declension={item as Declension}
-                changeDeclension={(property, value) => {
+                changeAffix={(property, value) => {
                   changeDeclension(item.id, property, value);
+                }}
+                deleteAffix={() => {
+                  let newDeclensions =
+                    conlang.declensions.list[
+                      partOfSpeech as keyof typeof conlang.declensions.list
+                    ];
+                  newDeclensions = newDeclensions.filter((x) =>
+                    x === '_' ? true : x.id !== item.id
+                  ) as Array<Declension | '_'>;
+                  changeConlang(
+                    ['declensions', 'list', partOfSpeech],
+                    newDeclensions
+                  );
+                  if (
+                    partOfSpeech === 'noun' &&
+                    conlang.declensions.properNounEqualsNoun
+                  ) {
+                    changeConlang(
+                      ['declensions', 'list', 'proper noun'],
+                      newDeclensions
+                    );
+                  }
                 }}
                 handleDragStart={handleDragStart}
                 handleDragEnd={handleDragEnd}
@@ -242,7 +265,8 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
 
 type AffixProps = {
   declension: Declension;
-  changeDeclension: (property: string, value: unknown) => void;
+  changeAffix: (property: string, value: unknown) => void;
+  deleteAffix: () => void;
   handleDragStart: (
     event: React.DragEvent<HTMLLIElement>,
     declension: string
@@ -253,7 +277,8 @@ type AffixProps = {
 };
 function Affix({
   declension,
-  changeDeclension,
+  changeAffix,
+  deleteAffix,
   handleDragStart,
   handleDragEnd,
   handleDragOver,
@@ -313,7 +338,7 @@ function Affix({
               <input
                 value={declension.name}
                 onInput={(event) => {
-                  changeDeclension('name', event.currentTarget.value);
+                  changeAffix('name', event.currentTarget.value);
                 }}
                 style={{
                   width: '70%',
@@ -341,7 +366,7 @@ function Affix({
                         const newX = gloss;
                         newX.splice(xIndex, 1, event.currentTarget.value);
                         newGloss.splice(index, 1, newX);
-                        changeDeclension('gloss', newGloss);
+                        changeAffix('gloss', newGloss);
                       }}
                       style={{
                         width: '80%',
@@ -361,7 +386,7 @@ function Affix({
                         const newX = gloss;
                         newX.splice(xIndex, 1);
                         newGloss.splice(index, 1, newX);
-                        changeDeclension('gloss', newGloss);
+                        changeAffix('gloss', newGloss);
                       }}>
                       <TbTrash size={17} />
                     </IconButton>
@@ -371,7 +396,7 @@ function Affix({
                   onClick={() => {
                     const newGloss = declension.gloss;
                     newGloss.splice(index, 1, [...gloss, '']);
-                    changeDeclension('gloss', newGloss);
+                    changeAffix('gloss', newGloss);
                   }}>
                   Add Gloss
                 </button>
@@ -380,8 +405,8 @@ function Affix({
             <td rowSpan={3}>
               <IconButton
                 onClick={() => {
-                  changeDeclension('affix', [...declension.affix, '']);
-                  changeDeclension('gloss', [...declension.gloss, ['']]);
+                  changeAffix('affix', [...declension.affix, '']);
+                  changeAffix('gloss', [...declension.gloss, ['']]);
                 }}>
                 <TbPlus size={20} />
               </IconButton>
@@ -398,7 +423,7 @@ function Affix({
                   onInput={(event) => {
                     const newAffix = declension.affix;
                     newAffix.splice(index, 1, event.currentTarget.value);
-                    changeDeclension('affix', newAffix);
+                    changeAffix('affix', newAffix);
                   }}
                   style={{
                     width: '100%',
@@ -422,10 +447,10 @@ function Affix({
                     onClick={() => {
                       const newAffix = declension.affix;
                       newAffix.splice(index, 0, declension.affix[index]);
-                      changeDeclension('affix', newAffix);
+                      changeAffix('affix', newAffix);
                       const newGloss = declension.gloss;
                       newGloss.splice(index, 0, declension.gloss[index]);
-                      changeDeclension('gloss', newGloss);
+                      changeAffix('gloss', newGloss);
                     }}>
                     <TbCopy size={18} />
                   </IconButton>
@@ -433,10 +458,10 @@ function Affix({
                     onClick={() => {
                       const newAffix = declension.affix;
                       newAffix.splice(index, 1);
-                      changeDeclension('affix', newAffix);
+                      changeAffix('affix', newAffix);
                       const newGloss = declension.gloss;
                       newGloss.splice(index, 1);
-                      changeDeclension('gloss', newGloss);
+                      changeAffix('gloss', newGloss);
                     }}>
                     <TbTrash size={18} />
                   </IconButton>
@@ -445,6 +470,15 @@ function Affix({
             ))}
           </tr>
         </table>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+        <IconButton onClick={deleteAffix}>
+          <TbTrash size={20} />
+        </IconButton>
       </div>
     </li>
   );
