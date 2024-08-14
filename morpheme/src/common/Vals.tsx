@@ -51,9 +51,18 @@ export const conlangInit: Conlang = {
       particle: ['_'],
       adposition: ['_'],
       conjunction: ['_'],
+      interjection: ['_'],
     },
   },
   lexicon: [],
+  wordClasses: [
+    {
+      id: 'wordclass-init',
+      partOfSpeech: '',
+      gloss: '',
+      name: '~unclassed~',
+    },
+  ],
 };
 
 interface StoreState {

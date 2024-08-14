@@ -24,24 +24,38 @@ export interface Conlang {
   declensions: {
     properNounEqualsNoun: boolean;
     list: {
-      noun: Array<Declension | '_'>;
-      verb: Array<Declension | '_'>;
-      adjective: Array<Declension | '_'>;
-      adverb: Array<Declension | '_'>;
+      // PartsOfSpeech
+      noun: Array<Declension>;
+      verb: Array<Declension>;
+      adjective: Array<Declension>;
+      adverb: Array<Declension>;
       pronoun: Array<PronounTable>;
-      'proper noun': Array<Declension | '_'>;
-      particle: Array<Declension | '_'>;
-      adposition: Array<Declension | '_'>;
-      conjunction: Array<Declension | '_'>;
+      'proper noun': Array<Declension>;
+      particle: Array<Declension>;
+      adposition: Array<Declension>;
+      conjunction: Array<Declension>;
+      interjection: Array<Declension>;
     };
   };
   lexicon: Array<Word>;
+  wordClasses: Array<WordClass>;
 }
+export type WordClass = {
+  id: string;
+  partOfSpeech: PartOfSpeech;
+  gloss: string;
+  name: string;
+};
 export type PronounTable = {
   id: string;
   type: 'pronountable';
 };
 export type Declension = {
+  id: string;
+  nounClasses: Array<string>;
+  affixes: Array<Affix | '_'>;
+};
+export type Affix = {
   id: string;
   type: 'declension';
   name: string;
@@ -57,6 +71,7 @@ export type Word = {
   partOfSpeech: PartOfSpeech;
 };
 export const PartOfSpeech_Arr = [
+  // PartsOfSpeech
   'noun',
   'verb',
   'adjective',
@@ -66,6 +81,7 @@ export const PartOfSpeech_Arr = [
   'particle',
   'adposition',
   'conjunction',
+  'interjection',
   '',
 ];
 export type PartOfSpeech = (typeof PartOfSpeech_Arr)[number];

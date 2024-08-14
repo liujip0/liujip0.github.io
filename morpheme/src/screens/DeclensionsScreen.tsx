@@ -8,7 +8,7 @@ import {
 } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { Gloss } from '../common/Gloss.tsx';
-import { Declension, PartOfSpeech } from '../common/Types.tsx';
+import { Affix, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function DeclensionsScreen() {
@@ -153,7 +153,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         ];
       const draggedItem = newDeclensions[currentIndex];
       newDeclensions.splice(currentIndex, 1);
-      newDeclensions.splice(targetIndex, 0, draggedItem as Declension | '_');
+      newDeclensions.splice(targetIndex, 0, draggedItem as Affix | '_');
       changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
     }
   };
@@ -165,7 +165,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
     const index = newDeclensions.findIndex((x) =>
       x === '_' ? false : x.id === id
     );
-    const declension = newDeclensions[index] as Declension;
+    const declension = newDeclensions[index] as Affix;
     newDeclensions.splice(index, 1, { ...declension, [property]: value });
     changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
     if (partOfSpeech === 'noun' && conlang.declensions.properNounEqualsNoun) {
@@ -186,7 +186,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             conlang.declensions.list[
               partOfSpeech as keyof typeof conlang.declensions.list
             ];
-          (newDeclensions as Array<Declension | '_'>).push({
+          (newDeclensions as Array<Affix | '_'>).push({
             id: createId('declension'),
             type: 'declension',
             name: '',
@@ -224,7 +224,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             return (
               <Affix
                 key={item.id}
-                declension={item as Declension}
+                declension={item as Affix}
                 changeAffix={(property, value) => {
                   changeDeclension(item.id, property, value);
                 }}
@@ -235,7 +235,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                     ];
                   newDeclensions = newDeclensions.filter((x) =>
                     x === '_' ? true : x.id !== item.id
-                  ) as Array<Declension | '_'>;
+                  ) as Array<Affix | '_'>;
                   changeConlang(
                     ['declensions', 'list', partOfSpeech],
                     newDeclensions
@@ -264,7 +264,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
 }
 
 type AffixProps = {
-  declension: Declension;
+  declension: Affix;
   changeAffix: (property: string, value: unknown) => void;
   deleteAffix: () => void;
   handleDragStart: (

@@ -6,7 +6,7 @@ import {
   TbTriangle,
   TbTriangleInverted,
 } from 'react-icons/tb';
-import { Alert, IconButton } from '../common/Components.tsx';
+import { Alert, IconButton, Popup } from '../common/Components.tsx';
 import {
   createId,
   partOfSpeechAbbreviation,
@@ -120,6 +120,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [deleteWord, setDeleteWord] = useState(false);
+  const [manageClasses, setManageClasses] = useState(false);
   const getWord = (id: string) => {
     const index = conlang.lexicon.findIndex((value) => value.id === id);
     return conlang.lexicon[index];
@@ -165,6 +166,29 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
         flexDirection: 'column',
         padding: '0.5em',
       }}>
+      <div
+        style={{
+          backgroundColor: 'white',
+          marginBottom: '1em',
+          display: 'flex',
+        }}>
+        <button
+          style={{
+            flex: '1',
+          }}
+          onClick={() => {
+            setManageClasses(true);
+          }}>
+          Manage Classes
+        </button>
+        {manageClasses && (
+          <ManageClasses
+            onClose={() => {
+              setManageClasses(false);
+            }}
+          />
+        )}
+      </div>
       <div
         style={{
           backgroundColor: 'white',
@@ -263,6 +287,103 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+type ManageClassesProps = {
+  onClose: () => void;
+};
+function ManageClasses({ onClose }: ManageClassesProps) {
+  const conlang = useStoreState((s) => s.conlang);
+  const changeConlang = useStoreState((s) => s.changeConlang);
+  const changeWordClass = (id: string, property: string, newValue: unknown) => {
+    const newWordClasses = conlang.wordClasses;
+    const index = newWordClasses.findIndex((x) => x.id === id);
+    newWordClasses.splice(index, 1, {
+      ...conlang.wordClasses[index],
+      [property]: newValue,
+    });
+    changeConlang(['wordClasses'], newWordClasses);
+  };
+  return (
+    <Popup>
+      <div
+        style={{
+          flex: '1',
+          overflowY: 'scroll',
+        }}>
+        <h1>Manage Classes</h1>
+        <button
+          onClick={() => {
+            const newWordClasses = conlang.wordClasses;
+            newWordClasses.push({
+              id: createId('wordClass'),
+              partOfSpeech: '',
+              gloss: '',
+              name: '',
+            });
+          }}>
+          New Class
+        </button>
+        {conlang.wordClasses.map((wordClass) => (
+          <div
+            key={wordClass.id}
+            style={{
+              width: '100%',
+              border: '1px solid black',
+              marginTop: '1em',
+              display: 'flex',
+            }}>
+            <label
+              style={{
+                marginRight: '1em',
+              }}>
+              Part of Speech
+              <br />
+              <PartOfSpeechSelect
+                value={wordClass.partOfSpeech}
+                onChange={(event) =>
+                  changeWordClass(
+                    wordClass.id,
+                    'partOfSpeech',
+                    event.currentTarget.value
+                  )
+                }
+              />
+            </label>
+            <label
+              style={{
+                marginRight: '1em',
+              }}>
+              Gloss
+              <br />
+              <input
+                type="text"
+                size={8}
+                value={wordClass.gloss}
+              />
+            </label>
+            <label>
+              Name
+              <br />
+              <input
+                type="text"
+                value={wordClass.name}
+              />
+            </label>
+          </div>
+        ))}
+      </div>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '1em',
+        }}>
+        <button onClick={onClose}>Done</button>
+      </div>
+    </Popup>
   );
 }
 
