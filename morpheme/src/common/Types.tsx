@@ -52,7 +52,7 @@ export type PronounTable = {
 };
 export type Declension = {
   id: string;
-  nounClasses: Array<string>;
+  wordClasses: Array<string>;
   affixes: Array<Affix | '_'>;
 };
 export type Affix = {

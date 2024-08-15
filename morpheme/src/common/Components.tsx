@@ -18,25 +18,33 @@ export function NavBar({ sections, custom }: NavBarProps) {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      {sections.map((x) => {
-        return (
-          <button
-            key={x.id}
-            style={{
-              margin: '0.2em',
-            }}
-            onClick={() => {
-              const element = document.getElementById(x.id)!;
-              element.scrollIntoView({
-                block: 'start',
-                inline: 'nearest',
-                behavior: 'smooth',
-              });
-            }}>
-            {x.label}
-          </button>
-        );
-      })}
+      <div
+        style={{
+          overflowX: 'scroll',
+          display: 'flex',
+          flex: '1',
+        }}>
+        {sections.map((x) => {
+          return (
+            <button
+              key={x.id}
+              style={{
+                margin: '0.2em',
+                height: 'min-content',
+              }}
+              onClick={() => {
+                const element = document.getElementById(x.id)!;
+                element.scrollIntoView({
+                  block: 'start',
+                  inline: 'nearest',
+                  behavior: 'smooth',
+                });
+              }}>
+              {x.label}
+            </button>
+          );
+        })}
+      </div>
       {custom}
     </div>
   );

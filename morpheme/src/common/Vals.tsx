@@ -42,16 +42,70 @@ export const conlangInit: Conlang = {
   declensions: {
     properNounEqualsNoun: true,
     list: {
-      noun: ['_'],
-      verb: ['_'],
-      adjective: ['_'],
-      adverb: ['_'],
+      noun: [
+        {
+          id: 'NDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      verb: [
+        {
+          id: 'VDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      adjective: [
+        {
+          id: 'AdjDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      adverb: [
+        {
+          id: 'AdvDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
       pronoun: [],
-      'proper noun': ['_'],
-      particle: ['_'],
-      adposition: ['_'],
-      conjunction: ['_'],
-      interjection: ['_'],
+      'proper noun': [
+        {
+          id: 'PropNDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      particle: [
+        {
+          id: 'PtclDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      adposition: [
+        {
+          id: 'AdpDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      conjunction: [
+        {
+          id: 'ConjDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
+      interjection: [
+        {
+          id: 'InterjDeclension-init',
+          wordClasses: [],
+          affixes: ['_'],
+        },
+      ],
     },
   },
   lexicon: [],

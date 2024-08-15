@@ -130,10 +130,21 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
   );
   return (
     <>
+      <button
+        style={{
+          marginBottom: '1em',
+        }}>
+        Add Declension
+      </button>
       {conlang.declensions.list[
         partOfSpeech as keyof typeof conlang.declensions.list
       ].map((declension, declensionNumber) => (
-        <div key={declension.id}>
+        <div
+          key={declension.id}
+          style={{
+            border: '1px solid black',
+            padding: '1em',
+          }}>
           <Affixes
             partOfSpeech={partOfSpeech}
             declensionNumber={declensionNumber}
@@ -183,47 +194,58 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
       x === '_' ? x === targetItem : x.id === targetItem
     );
     if (currentIndex !== -1 && targetIndex !== -1) {
-      const newAffixes = (
-        conlang.declensions.list[
-          partOfSpeech as keyof typeof conlang.declensions.list
-        ] as Array<Declension>
-      )[declensionNumber].affixes;
+      const newDeclensions = conlang.declensions.list[
+        partOfSpeech as keyof typeof conlang.declensions.list
+      ] as Array<Declension>;
+      const newAffixes = newDeclensions[declensionNumber].affixes;
       const draggedItem = newAffixes[currentIndex];
       newAffixes.splice(currentIndex, 1);
       newAffixes.splice(targetIndex, 0, draggedItem as Affix | '_');
-      changeConlang(['declensions', 'list', partOfSpeech], newAffixes);
+      newDeclensions.splice(declensionNumber, 1, {
+        ...newDeclensions[declensionNumber],
+        affixes: newAffixes,
+      });
+      changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
     }
   };
   const changeDeclension = (id: string, property: string, value: unknown) => {
-    const newDeclensions = (
-      conlang.declensions.list[
-        partOfSpeech as keyof typeof conlang.declensions.list
-      ] as Array<Declension>
-    )[declensionNumber].affixes;
-    const index = newDeclensions.findIndex((x) =>
+    const newDeclensions = conlang.declensions.list[
+      partOfSpeech as keyof typeof conlang.declensions.list
+    ] as Array<Declension>;
+    const newAffixes = newDeclensions[declensionNumber].affixes;
+    const index = newAffixes.findIndex((x) =>
       x === '_' ? false : x.id === id
     );
-    const declension = newDeclensions[index] as Affix;
-    newDeclensions.splice(index, 1, { ...declension, [property]: value });
+    const declension = newAffixes[index] as Affix;
+    newAffixes.splice(index, 1, { ...declension, [property]: value });
+    newDeclensions.splice(declensionNumber, 1, {
+      ...newDeclensions[declensionNumber],
+      affixes: newAffixes,
+    });
     changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
     if (partOfSpeech === 'noun' && conlang.declensions.properNounEqualsNoun) {
       changeConlang(['declensions', 'list', 'proper noun'], newDeclensions);
     }
   };
+  console.log(conlang.declensions.list);
   return (
     <>
       <button
         onClick={() => {
-          const newDeclensions =
-            conlang.declensions.list[
-              partOfSpeech as keyof typeof conlang.declensions.list
-            ];
-          (newDeclensions as Array<Affix | '_'>).push({
+          const newDeclensions = conlang.declensions.list[
+            partOfSpeech as keyof typeof conlang.declensions.list
+          ] as Array<Declension>;
+          const newAffixes = newDeclensions[declensionNumber].affixes;
+          newAffixes.push({
             id: createId('declension'),
             type: 'declension',
             name: '',
             affix: [],
             gloss: [],
+          });
+          newDeclensions.splice(declensionNumber, 1, {
+            ...newDeclensions[declensionNumber],
+            affixes: newAffixes,
           });
           changeConlang(['declensions', 'list'], {
             ...conlang.declensions.list,
@@ -231,7 +253,7 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
           });
           console.log(newDeclensions);
         }}>
-        Add Declension
+        Add Affix
       </button>
       <ul
         style={{
@@ -239,10 +261,12 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
           listStylePosition: 'outside',
           padding: '0',
         }}>
-        {conlang.declensions.list[
-          partOfSpeech as keyof typeof conlang.declensions.list
-        ].map((item) => {
-          if (item === '_') {
+        {(
+          conlang.declensions.list[
+            partOfSpeech as keyof typeof conlang.declensions.list
+          ] as Array<Declension>
+        )[declensionNumber].affixes.map((affix) => {
+          if (affix === '_') {
             return (
               <RootWord
                 key={'_'}
@@ -254,20 +278,24 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
             );
           } else {
             return (
-              <Affix
-                key={item.id}
-                declension={item as Affix}
+              <AffixLi
+                key={affix.id}
+                declension={affix as Affix}
                 changeAffix={(property, value) => {
-                  changeDeclension(item.id, property, value);
+                  changeDeclension(affix.id, property, value);
                 }}
                 deleteAffix={() => {
-                  let newDeclensions =
-                    conlang.declensions.list[
-                      partOfSpeech as keyof typeof conlang.declensions.list
-                    ];
-                  newDeclensions = newDeclensions.filter((x) =>
-                    x === '_' ? true : x.id !== item.id
+                  const newDeclensions = conlang.declensions.list[
+                    partOfSpeech as keyof typeof conlang.declensions.list
+                  ] as Array<Declension>;
+                  let newAffixes = newDeclensions[declensionNumber].affixes;
+                  newAffixes = newAffixes.filter((x) =>
+                    x === '_' ? true : x.id !== affix.id
                   ) as Array<Affix | '_'>;
+                  newDeclensions.splice(declensionNumber, 1, {
+                    ...newDeclensions[declensionNumber],
+                    affixes: newAffixes,
+                  });
                   changeConlang(
                     ['declensions', 'list', partOfSpeech],
                     newDeclensions
@@ -295,7 +323,7 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
   );
 }
 
-type AffixProps = {
+type AffixLiProps = {
   declension: Affix;
   changeAffix: (property: string, value: unknown) => void;
   deleteAffix: () => void;
@@ -307,7 +335,7 @@ type AffixProps = {
   handleDragOver: (event: React.DragEvent<HTMLLIElement>) => void;
   handleDrop: (targetItem: string) => void;
 };
-function Affix({
+function AffixLi({
   declension,
   changeAffix,
   deleteAffix,
@@ -315,7 +343,7 @@ function Affix({
   handleDragEnd,
   handleDragOver,
   handleDrop,
-}: AffixProps) {
+}: AffixLiProps) {
   return (
     <li
       onDragStart={(event) => {
