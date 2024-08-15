@@ -8,7 +8,7 @@ import {
 } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { Gloss } from '../common/Gloss.tsx';
-import { Affix, PartOfSpeech } from '../common/Types.tsx';
+import { Affix, Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function DeclensionsScreen() {
@@ -122,6 +122,34 @@ type DeclensionsProps = {
 };
 function Declensions({ partOfSpeech }: DeclensionsProps) {
   const conlang = useStoreState((s) => s.conlang);
+  console.log(partOfSpeech);
+  console.log(
+    conlang.declensions.list[
+      partOfSpeech as keyof typeof conlang.declensions.list
+    ]
+  );
+  return (
+    <>
+      {conlang.declensions.list[
+        partOfSpeech as keyof typeof conlang.declensions.list
+      ].map((declension, declensionNumber) => (
+        <div key={declension.id}>
+          <Affixes
+            partOfSpeech={partOfSpeech}
+            declensionNumber={declensionNumber}
+          />
+        </div>
+      ))}
+    </>
+  );
+}
+
+type AffixesProps = {
+  partOfSpeech: PartOfSpeech;
+  declensionNumber: number;
+};
+function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
+  const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [dragging, setDragging] = useState<string | null>(null);
   const handleDragStart = (
@@ -140,28 +168,38 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
   };
   const handleDrop = (targetItem: string) => {
     if (!dragging) return;
-    const currentIndex = conlang.declensions.list[
-      partOfSpeech as keyof typeof conlang.declensions.list
-    ].findIndex((x) => (x === '_' ? x === dragging : x.id === dragging));
-    const targetIndex = conlang.declensions.list[
-      partOfSpeech as keyof typeof conlang.declensions.list
-    ].findIndex((x) => (x === '_' ? x === targetItem : x.id === targetItem));
+    const currentIndex = (
+      conlang.declensions.list[
+        partOfSpeech as keyof typeof conlang.declensions.list
+      ] as Array<Declension>
+    )[declensionNumber].affixes.findIndex((x) =>
+      x === '_' ? x === dragging : x.id === dragging
+    );
+    const targetIndex = (
+      conlang.declensions.list[
+        partOfSpeech as keyof typeof conlang.declensions.list
+      ] as Array<Declension>
+    )[declensionNumber].affixes.findIndex((x) =>
+      x === '_' ? x === targetItem : x.id === targetItem
+    );
     if (currentIndex !== -1 && targetIndex !== -1) {
-      const newDeclensions =
+      const newAffixes = (
         conlang.declensions.list[
           partOfSpeech as keyof typeof conlang.declensions.list
-        ];
-      const draggedItem = newDeclensions[currentIndex];
-      newDeclensions.splice(currentIndex, 1);
-      newDeclensions.splice(targetIndex, 0, draggedItem as Affix | '_');
-      changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
+        ] as Array<Declension>
+      )[declensionNumber].affixes;
+      const draggedItem = newAffixes[currentIndex];
+      newAffixes.splice(currentIndex, 1);
+      newAffixes.splice(targetIndex, 0, draggedItem as Affix | '_');
+      changeConlang(['declensions', 'list', partOfSpeech], newAffixes);
     }
   };
   const changeDeclension = (id: string, property: string, value: unknown) => {
-    const newDeclensions =
+    const newDeclensions = (
       conlang.declensions.list[
         partOfSpeech as keyof typeof conlang.declensions.list
-      ];
+      ] as Array<Declension>
+    )[declensionNumber].affixes;
     const index = newDeclensions.findIndex((x) =>
       x === '_' ? false : x.id === id
     );
@@ -172,12 +210,6 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
       changeConlang(['declensions', 'list', 'proper noun'], newDeclensions);
     }
   };
-  console.log(partOfSpeech);
-  console.log(
-    conlang.declensions.list[
-      partOfSpeech as keyof typeof conlang.declensions.list
-    ]
-  );
   return (
     <>
       <button
