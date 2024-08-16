@@ -245,7 +245,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Trill</th>
+            <th>{StringRes.mannerofarticulation.trill}</th>
             <Phono
               mannerOfArticulation="trill"
               placeOfArticulation="bilabial">
@@ -314,7 +314,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Tap or Flap</th>
+            <th>{StringRes.mannerofarticulation.taporflap}</th>
             <Phono
               mannerOfArticulation="tapflap"
               placeOfArticulation="bilabial">
@@ -401,7 +401,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Lateral Flap</th>
+            <th>{StringRes.mannerofarticulation.lateralflap}</th>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -452,7 +452,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Fricative</th>
+            <th>{StringRes.mannerofarticulation.fricative}</th>
             <Phono
               mannerOfArticulation="fricative"
               placeOfArticulation="bilabial">
@@ -606,7 +606,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Lateral fricative</th>
+            <th>{StringRes.mannerofarticulation.lateralfricative}</th>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -684,7 +684,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Approximant</th>
+            <th>{StringRes.mannerofarticulation.approximant}</th>
             <Phono
               mannerOfArticulation="approximant"
               placeOfArticulation="bilabial">
@@ -807,7 +807,7 @@ function ConsonantsTable() {
             </Phono>
           </tr>
           <tr>
-            <th>Lateral approximant</th>
+            <th>{StringRes.mannerofarticulation.lateralapproximant}</th>
             <PhonoX />
             <PhonoX />
             <PhonoX />
@@ -903,7 +903,7 @@ function ConsonantsTable() {
             </Phono>
           </tr>
           <tr>
-            <th>Click</th>
+            <th>{StringRes.mannerofarticulation.click}</th>
             <Phono
               colSpan={2}
               mannerOfArticulation="click"
@@ -956,7 +956,7 @@ function ConsonantsTable() {
             <PhonoX colSpan={2} />
           </tr>
           <tr>
-            <th>Implosive</th>
+            <th>{StringRes.mannerofarticulation.implosive}</th>
             <Phono
               mannerOfArticulation="implosive"
               placeOfArticulation="bilabial">
@@ -1053,16 +1053,16 @@ function VowelsTable() {
         <thead>
           <tr>
             <td></td>
-            <th colSpan={2}>Front</th>
+            <th colSpan={2}>{StringRes.backness.front}</th>
             <th colSpan={2}></th>
-            <th colSpan={2}>Central</th>
+            <th colSpan={2}>{StringRes.backness.central}</th>
             <th colSpan={2}></th>
-            <th colSpan={2}>Back</th>
+            <th colSpan={2}>{StringRes.backness.back}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>Close</th>
+            <th>{StringRes.height.close}</th>
             <Phono
               vowel
               height="close"
@@ -1138,7 +1138,7 @@ function VowelsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Close-mid</th>
+            <th>{StringRes.height.closemid}</th>
             <Phono
               vowel
               height="closemid"
@@ -1202,7 +1202,7 @@ function VowelsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Open-mid</th>
+            <th>{StringRes.height.openmid}</th>
             <Phono
               vowel
               height="openmid"
@@ -1271,7 +1271,7 @@ function VowelsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Open</th>
+            <th>{StringRes.height.open}</th>
             <Phono
               vowel
               height="open"

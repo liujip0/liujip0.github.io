@@ -8,6 +8,7 @@ import {
 } from '../common/Components.tsx';
 import { createId, partOfSpeechAbbreviation } from '../common/Funcs.tsx';
 import { Gloss } from '../common/Gloss.tsx';
+import { StringRes } from '../common/Resources.tsx';
 import { Affix, Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
@@ -20,15 +21,36 @@ export default function DeclensionsScreen() {
     <>
       <NavBar
         sections={[
-          { id: 'NDeclensions', label: 'Nouns' },
-          { id: 'VDeclensions', label: 'Verbs' },
-          { id: 'AdjDeclensions', label: 'Adjectives' },
-          { id: 'AdvDeclensions', label: 'Adverbs' },
-          { id: 'PronDeclensions', label: 'Pronouns' },
-          { id: 'PropNDeclensions', label: 'Proper Nouns' },
-          { id: 'PtclDeclensions', label: 'Particles' },
-          { id: 'AdpDeclensions', label: 'Adpositions' },
-          { id: 'ConjDeclensions', label: 'Conjugations' },
+          { id: 'NDeclensions', label: StringRes.partOfSpeech.plural.nouns },
+          { id: 'VDeclensions', label: StringRes.partOfSpeech.plural.verbs },
+          {
+            id: 'AdjDeclensions',
+            label: StringRes.partOfSpeech.plural.adjectives,
+          },
+          {
+            id: 'AdvDeclensions',
+            label: StringRes.partOfSpeech.plural.adverbs,
+          },
+          {
+            id: 'PronDeclensions',
+            label: StringRes.partOfSpeech.plural.pronouns,
+          },
+          {
+            id: 'PropNDeclensions',
+            label: StringRes.partOfSpeech.plural['proper nouns'],
+          },
+          {
+            id: 'PtclDeclensions',
+            label: StringRes.partOfSpeech.plural.particles,
+          },
+          {
+            id: 'AdpDeclensions',
+            label: StringRes.partOfSpeech.plural.adpositions,
+          },
+          {
+            id: 'ConjDeclensions',
+            label: StringRes.partOfSpeech.plural.conjunctions,
+          },
         ]}
         custom={
           <button
@@ -39,7 +61,7 @@ export default function DeclensionsScreen() {
             onClick={() => {
               setGlossingAbbreviations(true);
             }}>
-            Glossing Abbreviations
+            {StringRes.glossingabbreviations}
           </button>
         }
       />
@@ -50,17 +72,29 @@ export default function DeclensionsScreen() {
           }}
         />
       )}
-      <NavSection id="NDeclensions">Nouns</NavSection>
+      <NavSection id="NDeclensions">
+        {StringRes.partOfSpeech.plural.nouns}
+      </NavSection>
       <Declensions partOfSpeech="noun" />
-      <NavSection id="VDeclensions">Verbs</NavSection>
+      <NavSection id="VDeclensions">
+        {StringRes.partOfSpeech.plural.verbs}
+      </NavSection>
       <Declensions partOfSpeech="verb" />
-      <NavSection id="AdjDeclensions">Adjectives</NavSection>
+      <NavSection id="AdjDeclensions">
+        {StringRes.partOfSpeech.plural.adjectives}
+      </NavSection>
       <Declensions partOfSpeech="adjective" />
-      <NavSection id="AdvDeclensions">Adverbs</NavSection>
+      <NavSection id="AdvDeclensions">
+        {StringRes.partOfSpeech.plural.adverbs}
+      </NavSection>
       <Declensions partOfSpeech="adverb" />
-      <NavSection id="PronDeclensions">Pronouns</NavSection>
+      <NavSection id="PronDeclensions">
+        {StringRes.partOfSpeech.plural.pronouns}
+      </NavSection>
       <Pronouns />
-      <NavSection id="PropNDeclensions">Proper Nouns</NavSection>
+      <NavSection id="PropNDeclensions">
+        {StringRes.partOfSpeech.plural['proper nouns']}
+      </NavSection>
       {!propNConf ?
         <label>
           <input
@@ -77,10 +111,10 @@ export default function DeclensionsScreen() {
               }
             }}
           />
-          Use the same declensions as nouns
+          {StringRes.sameasnoun}
         </label>
       : <div>
-          Are you sure? You will lose your currently saved declensions.
+          {StringRes.losedeclensions}
           <button
             onClick={() => {
               changeConlang(['declensions', 'properNounEqualsNoun'], true);
@@ -89,9 +123,9 @@ export default function DeclensionsScreen() {
                 conlang.declensions.list.noun
               );
             }}>
-            Yes
+            {StringRes.yes}
           </button>
-          <button>Cancel</button>
+          <button>{StringRes.cancel}</button>
         </div>
       }
       <br />
@@ -99,11 +133,17 @@ export default function DeclensionsScreen() {
       {!conlang.declensions.properNounEqualsNoun ?
         <Declensions partOfSpeech="proper noun" />
       : <></>}
-      <NavSection id="PtclDeclensions">Particles</NavSection>
+      <NavSection id="PtclDeclensions">
+        {StringRes.partOfSpeech.plural.particles}
+      </NavSection>
       <Declensions partOfSpeech="particle" />
-      <NavSection id="AdpDeclensions">Adpositions</NavSection>
+      <NavSection id="AdpDeclensions">
+        {StringRes.partOfSpeech.plural.adpositions}
+      </NavSection>
       <Declensions partOfSpeech="adposition" />
-      <NavSection id="ConjDeclensions">Conjunctions</NavSection>
+      <NavSection id="ConjDeclensions">
+        {StringRes.partOfSpeech.plural.conjunctions}
+      </NavSection>
       <Declensions partOfSpeech="conjunction" />
     </>
   );
@@ -112,7 +152,7 @@ export default function DeclensionsScreen() {
 function Pronouns() {
   return (
     <>
-      <button>Add Table</button>
+      <button>{StringRes.addtable}</button>
     </>
   );
 }
@@ -135,7 +175,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         style={{
           marginBottom: '1em',
         }}>
-        Add Declension
+        {StringRes.adddeclension}
       </button>
       {(
         conlang.declensions.list[
@@ -152,7 +192,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             style={{
               marginBottom: '1em',
             }}>
-            Noun Classes:&nbsp;
+            {StringRes.nounclasses}&nbsp;
             {(
               conlang.declensions.list[
                 partOfSpeech as keyof typeof conlang.declensions.list

@@ -1,4 +1,5 @@
 import { NavBar, NavSection } from '../../common/Components.tsx';
+import { StringRes } from '../../common/Resources.tsx';
 import Phonemes from './Phonemes.tsx';
 import PhoneticInventory from './PhoneticInventory.tsx';
 
@@ -7,17 +8,17 @@ export default function PhonologyScreen() {
     <>
       <NavBar
         sections={[
-          { id: 'inventory', label: 'Phonetic Inventory' },
-          { id: 'phonemes', label: 'Phonemes & Romanization' },
-          { id: 'orthography', label: 'Orthography' },
-          { id: 'phonotactics', label: 'Phonotactics' },
+          { id: 'inventory', label: StringRes.phoneticinventory },
+          { id: 'phonemes', label: StringRes.phonemesromanization },
+          { id: 'orthography', label: StringRes.orthography },
+          { id: 'phonotactics', label: StringRes.phonotactics },
         ]}
       />
       <PhoneticInventory />
       <Phonemes />
 
-      <NavSection id="orthography">Orthography</NavSection>
-      <NavSection id="phonotactics">Phonotactics</NavSection>
+      <NavSection id="orthography">{StringRes.orthography}</NavSection>
+      <NavSection id="phonotactics">{StringRes.phonotactics}</NavSection>
     </>
   );
 }
