@@ -113,7 +113,10 @@ type PdfPopupProps = {
 function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
   const conlang = useStoreState((s) => s.conlang);
   return (
-    <Popup>
+    <Popup
+      onClose={() => {
+        setPdfPopup(false);
+      }}>
       <h1
         style={{
           textAlign: 'left',

@@ -10,6 +10,7 @@ import {
 } from 'react-icons/tb';
 import { Alert, IconButton } from '../../common/Components.tsx';
 import { createId, findArticleChildren } from '../../common/Funcs.tsx';
+import { StringRes } from '../../common/Resources.tsx';
 import { Article, Folder } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 import Wysiwyg from './Wysiwyg.tsx';
@@ -120,7 +121,7 @@ function Articles({
             ) {
               const id = addArticle({
                 type: 'article',
-                name: 'Untitled',
+                name: StringRes.untitled,
                 contents: convertToRaw(
                   EditorState.createEmpty().getCurrentContent()
                 ),
@@ -144,7 +145,7 @@ function Articles({
             ) {
               const id = addArticle({
                 type: 'folder',
-                name: 'Untitled',
+                name: StringRes.untitled,
                 contents: [],
                 id: '',
                 path: [...getArticle(currentArticle).path, currentArticle],
@@ -186,12 +187,11 @@ function Articles({
         </IconButton>
         {deleteArticle && (
           <Alert
-            title="Confirmation"
-            description={
-              'Are you sure you want to delete ' +
-              getArticle(currentArticle).name +
-              ' and its contents? This cannot be undone.'
-            }
+            title={StringRes.confirmation}
+            description={StringRes.deletearticle.replace(
+              '$1',
+              getArticle(currentArticle).name
+            )}
             onDecline={() => {
               setDeleteArticle(false);
             }}
@@ -338,7 +338,7 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
           padding: '1em',
         }}>
         <label>
-          Name:{' '}
+          {StringRes.name}&nbsp;
           <input
             type="text"
             size={30}

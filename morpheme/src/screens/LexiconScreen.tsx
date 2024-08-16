@@ -210,6 +210,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
               ipaOverride: false,
               definitions: [''],
               partOfSpeech: '',
+              wordClass: '',
             });
           }}>
           <TbPlus size={20} />
@@ -311,7 +312,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
     changeConlang(['wordClasses'], newWordClasses);
   };
   return (
-    <Popup>
+    <Popup onClose={onClose}>
       <div
         style={{
           flex: '1',
@@ -356,7 +357,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                     event.currentTarget.value
                   )
                 }
-                disabled={wordClass.id === 'wordclass-init'}
+                disabled={wordClass.id === ''}
               />
             </label>
             <label
@@ -369,7 +370,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                 type="text"
                 size={8}
                 value={wordClass.gloss}
-                disabled={wordClass.id === 'wordclass-init'}
+                disabled={wordClass.id === ''}
               />
             </label>
             <label
@@ -381,12 +382,12 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               <input
                 type="text"
                 value={wordClass.name}
-                disabled={wordClass.id === 'wordclass-init'}
+                disabled={wordClass.id === ''}
               />
             </label>
             <IconButton
               onClick={() => {
-                if (wordClass.id !== 'wordclass-init') {
+                if (wordClass.id !== '') {
                   let newWordClasses = conlang.wordClasses;
                   newWordClasses = newWordClasses.filter(
                     (x) => x.id !== wordClass.id
@@ -397,7 +398,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               <TbTrash
                 size={20}
                 style={{
-                  color: wordClass.id === 'wordclass-init' ? 'gray' : 'black',
+                  color: wordClass.id === '' ? 'gray' : 'black',
                 }}
               />
             </IconButton>
@@ -527,6 +528,26 @@ function WordEditor({
                   changeWord('partOfSpeech', event.currentTarget.value);
                 }}
               />
+            </label>
+          </div>
+          <div
+            style={{
+              marginBottom: '1em',
+            }}>
+            <label>
+              Class:&nbsp;
+              <select
+                value={word.wordClass}
+                onChange={(event) => {
+                  changeWord('wordClass', event.currentTarget.value);
+                }}>
+                {conlang.wordClasses.map((wordClass) => (
+                  <option value={wordClass.id}>
+                    [{partOfSpeechAbbreviation(wordClass.partOfSpeech)}]&nbsp;
+                    {wordClass.name}
+                  </option>
+                ))}
+              </select>
             </label>
           </div>
           <div

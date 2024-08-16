@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react';
 import { Gloss } from './Gloss.tsx';
+import { StringRes } from './Resources.tsx';
 import { PartOfSpeech } from './Types.tsx';
 
 type NavBarProps = {
@@ -74,9 +75,10 @@ export function NavSection({ id, children }: NavSectionProps) {
 }
 
 type PopupProps = {
+  onClose: () => void;
   children: React.ReactNode;
 };
-export function Popup({ children }: PopupProps) {
+export function Popup({ onClose, children }: PopupProps) {
   return (
     <div
       style={{
@@ -87,7 +89,8 @@ export function Popup({ children }: PopupProps) {
         width: '100vw',
         height: '100vh',
         zIndex: '99',
-      }}>
+      }}
+      onClick={onClose}>
       <div
         style={{
           position: 'fixed',
@@ -100,6 +103,9 @@ export function Popup({ children }: PopupProps) {
           border: '3px solid darkgray',
           padding: '1em',
           maxHeight: '80vh',
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
         }}>
         {children}
       </div>
@@ -110,12 +116,12 @@ export function Popup({ children }: PopupProps) {
 type AlertProps = {
   title: string;
   description: string;
-  onAccept?: () => void;
-  onDecline?: () => void;
+  onAccept: () => void;
+  onDecline: () => void;
 };
 export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
   return (
-    <Popup>
+    <Popup onClose={onDecline}>
       <h1
         style={{
           textAlign: 'left',
@@ -136,8 +142,8 @@ export function Alert({ title, description, onAccept, onDecline }: AlertProps) {
           display: 'flex',
           justifyContent: 'flex-end',
         }}>
-        <button onClick={onDecline}>Go Back</button>&nbsp;
-        <button onClick={onAccept}>Continue</button>
+        <button onClick={onDecline}>{StringRes.goback}</button>&nbsp;
+        <button onClick={onAccept}>{StringRes.continue}</button>
       </div>
     </Popup>
   );
@@ -169,14 +175,14 @@ export function GlossingAbbreviations({ onClose }: GlossingAbbreviationsProps) {
   const [searchAbbr, setSearchAbbr] = useState('');
   const [searchDef, setSearchDef] = useState('');
   return (
-    <Popup>
+    <Popup onClose={onClose}>
       <h1
         style={{
           textAlign: 'left',
           margin: '0',
           fontSize: '1.6em',
         }}>
-        Glossing Abbreviations
+        {StringRes.glossingabbreviations}
       </h1>
       <div
         style={{
@@ -228,7 +234,7 @@ export function GlossingAbbreviations({ onClose }: GlossingAbbreviationsProps) {
           display: 'flex',
           justifyContent: 'flex-end',
         }}>
-        <button onClick={onClose}>Done</button>
+        <button onClick={onClose}>{StringRes.done}</button>
       </div>
     </Popup>
   );
@@ -252,16 +258,22 @@ export function PartOfSpeechSelect({
       onChange={onChange}
       style={style}
       disabled={disabled}>
+      {/* PartsOfSpeech */}
       <option value="">-</option>
-      <option value="noun">Noun</option>
-      <option value="verb">Verb</option>
-      <option value="adjective">Adjective</option>
-      <option value="adverb">Adverb</option>
-      <option value="pronoun">Pronoun</option>
-      <option value="proper noun">Proper Noun</option>
-      <option value="particle">Particle</option>
-      <option value="adposition">Adposition</option>
-      <option value="conjunction">Conjunction</option>
+      <option value="noun">{StringRes.partOfSpeech.noun}</option>
+      <option value="verb">{StringRes.partOfSpeech.verb}</option>
+      <option value="adjective">{StringRes.partOfSpeech.adjective}</option>
+      <option value="adverb">{StringRes.partOfSpeech.adverb}</option>
+      <option value="pronoun">{StringRes.partOfSpeech.pronoun}</option>
+      <option value="proper noun">
+        {StringRes.partOfSpeech['proper noun']}
+      </option>
+      <option value="particle">{StringRes.partOfSpeech.particle}</option>
+      <option value="adposition">{StringRes.partOfSpeech.adposition}</option>
+      <option value="conjunction">{StringRes.partOfSpeech.conjunction}</option>
+      <option value="interjection">
+        {StringRes.partOfSpeech.interjection}
+      </option>
     </select>
   );
 }

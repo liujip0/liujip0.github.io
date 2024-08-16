@@ -12,6 +12,7 @@ import {
   sortConsonantsDiacritics,
   sortVowelDiacritics,
 } from '../../common/Funcs.tsx';
+import { StringRes } from '../../common/Resources.tsx';
 import {
   Consonant,
   IpaConsonantDiacritic,
@@ -23,11 +24,8 @@ import { useStoreState } from '../../common/Vals.tsx';
 export default function Phonemes() {
   return (
     <>
-      <NavSection id="phonemes">Phonemes &amp; Romanization</NavSection>
-      <p>
-        Manage phonemes, allophones, etc. and their romanizations. Your
-        orthography can be managed in the next section.
-      </p>
+      <NavSection id="phonemes">{StringRes.phonemesromanization}</NavSection>
+      <p>{StringRes.managephonemes}</p>
       <PhonemesTable />
     </>
   );
@@ -100,28 +98,23 @@ function PhonemesTable() {
         }}>
         <thead>
           <tr>
-            <th>IPA</th>
-            <th>Type</th>
-            <th>Diacritics</th>
-            <th>Allophone of</th>
+            <th>{StringRes.ipa}</th>
+            <th>{StringRes.type}</th>
+            <th>{StringRes.diacritics}</th>
+            <th>{StringRes.allophoneof}</th>
             <th>
-              Romanization
+              {StringRes.romanization}
               <br />
               <button
                 onClick={() => {
                   setCopyIpa(true);
                 }}>
-                Copy IPA
+                {StringRes.copyipa}
               </button>
               {copyIpa && (
                 <Alert
-                  title="Confirmation"
-                  description={
-                    'Are you sure you want to set ' +
-                    'the romanizations of all phonemes ' +
-                    'to their IPA values? This cannot be ' +
-                    'undone.'
-                  }
+                  title={StringRes.confirmation}
+                  description={StringRes.romanizationToIpa}
                   onDecline={() => {
                     setCopyIpa(false);
                   }}
@@ -139,7 +132,7 @@ function PhonemesTable() {
                 />
               )}
             </th>
-            <th>Actions</th>
+            <th>{StringRes.actions}</th>
           </tr>
         </thead>
         <tbody>
@@ -302,7 +295,7 @@ function PhonemeTr({
             }
           }}
           value={allophoneOf}>
-          <option value={''}>-</option>
+          <option value="">-</option>
           {conlang.phonology.inventory.map((x) => {
             if (x.id !== item.id) {
               return (
@@ -377,51 +370,99 @@ function DiacriticSelect({ type, value, onChange }: DiacriticSelectProps) {
           event.currentTarget.value as IpaConsonantDiacritic | IpaVowelDiacritic
         );
       }}>
-      <option value={''}>-</option>
+      <option value="">-</option>
       {type === 'consonant' ?
         <>
-          <option value={'voiceless'}>Voiceless</option>
-          <option value={'voiced'}>Voiced</option>
-          <option value={'aspirated'}>Aspirated</option>
-          <option value={'syllabic'}>Syllabic</option>
-          <option value={'breathy'}>Breathy</option>
-          <option value={'creaky'}>Creaky</option>
-          <option value={'linguolabial'}>Linguolabial</option>
-          <option value={'labialized'}>Labialized</option>
-          <option value={'palatalized'}>Palatalized</option>
-          <option value={'velarized'}>Velarized</option>
-          <option value={'pharyngealized'}>Pharyngealized</option>
-          <option value={'velarized/pharyngealized'}>
-            Velarized or Pharyngealized (~)
+          <option value="voiceless">
+            {StringRes.diacritic.consonant.voiceless}
           </option>
-          <option value={'raised'}>Raised</option>
-          <option value={'lowered'}>Lowered</option>
-          <option value={'dental'}>Dental</option>
-          <option value={'apical'}>Apical</option>
-          <option value={'laminal'}>Laminal</option>
-          <option value={'nasal release'}>Nasal Release</option>
-          <option value={'dental release'}>Dental Release</option>
-          <option value={'no audible release'}>No Audible Release</option>
+          <option value="voiced">{StringRes.diacritic.consonant.voiced}</option>
+          <option value="aspirated">
+            {StringRes.diacritic.consonant.aspirated}
+          </option>
+          <option value="syllabic">
+            {StringRes.diacritic.consonant.syllabic}
+          </option>
+          <option value="breathy">
+            {StringRes.diacritic.consonant.breathy}
+          </option>
+          <option value="creaky">{StringRes.diacritic.consonant.creaky}</option>
+          <option value="linguolabial">
+            {StringRes.diacritic.consonant.linguolabial}
+          </option>
+          <option value="labialized">
+            {StringRes.diacritic.consonant.labialized}
+          </option>
+          <option value="palatalized">
+            {StringRes.diacritic.consonant.palatalized}
+          </option>
+          <option value="velarized">
+            {StringRes.diacritic.consonant.velarized}
+          </option>
+          <option value="pharyngealized">
+            {StringRes.diacritic.consonant.pharyngealized}
+          </option>
+          <option value="velarized/pharyngealized">
+            {StringRes.diacritic.consonant['velarized/pharyngealized']}
+          </option>
+          <option value="raised">{StringRes.diacritic.consonant.raised}</option>
+          <option value="lowered">
+            {StringRes.diacritic.consonant.lowered}
+          </option>
+          <option value="dental">{StringRes.diacritic.consonant.dental}</option>
+          <option value="apical">{StringRes.diacritic.consonant.apical}</option>
+          <option value="laminal">
+            {StringRes.diacritic.consonant.laminal}
+          </option>
+          <option value="nasal release">
+            {StringRes.diacritic.consonant['nasal release']}
+          </option>
+          <option value="dental release">
+            {StringRes.diacritic.consonant['dental release']}
+          </option>
+          <option value="no audible release">
+            {StringRes.diacritic.consonant['no audible release']}
+          </option>
         </>
       : <>
-          <option value={'more rounded'}>More Rounded</option>
-          <option value={'less rounded'}>Less Rounded</option>
-          <option value={'advanced'}>Advanced</option>
-          <option value={'retracted'}>Retracted</option>
-          <option value={'centralized'}>Centralized</option>
-          <option value={'mid-centralized'}>Mid-Centralized</option>
-          <option value={'raised'}>Raised</option>
-          <option value={'lowered'}>Lowered</option>
-          <option value={'+ATR'}>Advanced Tongue Root (+ATR)</option>
-          <option value={'-ATR'}>Retracted Tongue Root (-ATR)</option>
-          <option value={'nonsyllabic'}>Nonsyllabic</option>
-          <option value={'rhoticized'}>Rhoticized</option>
-          <option value={'creaky'}>Creaky</option>
-          <option value={'breathy'}>Breathy</option>
-          <option value={'nasalized'}>Nasalized</option>
-          <option value={'long'}>Long</option>
-          <option value={'half-long'}>Half-Long</option>
-          <option value={'extra-short'}>Extra-Short</option>
+          <option value="more rounded">
+            {StringRes.diacritic.vowel['more rounded']}
+          </option>
+          <option value="less rounded">
+            {StringRes.diacritic.vowel['less rounded']}
+          </option>
+          <option value="advanced">{StringRes.diacritic.vowel.advanced}</option>
+          <option value="retracted">
+            {StringRes.diacritic.vowel.retracted}
+          </option>
+          <option value="centralized">
+            {StringRes.diacritic.vowel.centralized}
+          </option>
+          <option value="mid-centralized">
+            {StringRes.diacritic.vowel['mid-centralized']}
+          </option>
+          <option value="raised">{StringRes.diacritic.vowel.raised}</option>
+          <option value="lowered">{StringRes.diacritic.vowel.lowered}</option>
+          <option value="+ATR">{StringRes.diacritic.vowel['+ATR']}</option>
+          <option value="-ATR">{StringRes.diacritic.vowel['-ATR']}</option>
+          <option value="nonsyllabic">
+            {StringRes.diacritic.vowel.nonsyllabic}
+          </option>
+          <option value="rhoticized">
+            {StringRes.diacritic.vowel.rhoticized}
+          </option>
+          <option value="creaky">{StringRes.diacritic.vowel.creaky}</option>
+          <option value="breathy">{StringRes.diacritic.vowel.breathy}</option>
+          <option value="nasalized">
+            {StringRes.diacritic.vowel.nasalized}
+          </option>
+          <option value="long">{StringRes.diacritic.vowel.long}</option>
+          <option value="half-long">
+            {StringRes.diacritic.vowel['half-long']}
+          </option>
+          <option value="extra-short">
+            {StringRes.diacritic.vowel['extra-short']}
+          </option>
         </>
       }
     </select>

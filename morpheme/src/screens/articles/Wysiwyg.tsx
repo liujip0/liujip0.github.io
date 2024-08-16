@@ -41,6 +41,7 @@ import {
   TbSuperscript,
   TbUnderline,
 } from 'react-icons/tb';
+import { StringRes } from '../../common/Resources.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 import { CodeBlock, HorizontalRule, TextAlign } from './WysiwygComponents.tsx';
 
@@ -444,7 +445,7 @@ function WysiwygMenu({ editorState, handleEditorChange }: WysiwygMenuProps) {
                   document.getElementById('imageSrcButton')?.click();
                 }
               }}
-              placeholder="Image URL"
+              placeholder={StringRes.imageurl}
               type="url"
             />
             <WysiwygIcon

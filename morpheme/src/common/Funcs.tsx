@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { CXStoIPA, IPAtoCXS } from './ConlangXSampa.tsx';
+import { StringRes } from './Resources.tsx';
 import {
   Article,
   Folder,
@@ -283,24 +284,27 @@ export function createId(type: string): string {
 
 export function partOfSpeechAbbreviation(partOfSpeech: PartOfSpeech) {
   switch (partOfSpeech) {
+    // PartsOfSpeech
     case 'noun':
-      return 'N';
+      return StringRes.partOfSpeech.abbr.noun;
     case 'verb':
-      return 'V';
+      return StringRes.partOfSpeech.abbr.verb;
     case 'adjective':
-      return 'Adj';
+      return StringRes.partOfSpeech.abbr.adjective;
     case 'adverb':
-      return 'Adv';
+      return StringRes.partOfSpeech.abbr.adverb;
     case 'pronoun':
-      return 'Pron';
+      return StringRes.partOfSpeech.abbr.pronoun;
     case 'proper noun':
-      return 'PropN';
+      return StringRes.partOfSpeech.abbr['proper noun'];
     case 'particle':
-      return 'Ptcl';
+      return StringRes.partOfSpeech.abbr.particle;
     case 'adposition':
-      return 'Adp';
+      return StringRes.partOfSpeech.abbr.adposition;
     case 'conjunction':
-      return 'Conj';
+      return StringRes.partOfSpeech.abbr.conjunction;
+    case 'interjection':
+      return StringRes.partOfSpeech.abbr.interjection;
     case '':
       return '';
   }

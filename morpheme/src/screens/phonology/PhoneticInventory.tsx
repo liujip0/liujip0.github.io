@@ -1,4 +1,5 @@
 import { NavSection } from '../../common/Components.tsx';
+import { StringRes } from '../../common/Resources.tsx';
 import { Consonant, Vowel } from '../../common/Types.tsx';
 import { useStoreState } from '../../common/Vals.tsx';
 
@@ -7,14 +8,11 @@ export default function PhoneticInventory() {
   console.log(conlang.phonology.inventory);
   return (
     <>
-      <NavSection id="inventory">Phonetic Inventory</NavSection>
-      <p>
-        Select sounds to add to {conlang.name}&apos;s inventory. Use the next
-        section to add diacritics and set romanizations.
-      </p>
-      <h2>Consonants</h2>
+      <NavSection id="inventory">{StringRes.phoneticinventory}</NavSection>
+      <p>{StringRes.selectsounds.replace('$1', conlang.name)}</p>
+      <h2>{StringRes.consonants}</h2>
       <ConsonantsTable />
-      <h2>Vowels</h2>
+      <h2>{StringRes.vowels}</h2>
       <VowelsTable />
     </>
   );
@@ -33,26 +31,26 @@ function ConsonantsTable() {
         <thead>
           <tr>
             <td></td>
-            <th colSpan={2}>Bilabial</th>
-            <th colSpan={2}>Labiodental</th>
-            <th colSpan={2}>Dental</th>
-            <th colSpan={2}>Alveolar</th>
-            <th colSpan={2}>Postalveolar</th>
-            <th colSpan={2}>Retroflex</th>
-            <th colSpan={2}>Alveolopalatal</th>
-            <th colSpan={2}>Palatal</th>
-            <th colSpan={2}>Labiovelar</th>
-            <th colSpan={2}>Velar</th>
-            <th colSpan={2}>Uvular</th>
-            <th colSpan={2}>Pharyngeal</th>
-            <th colSpan={2}>Epiglottal</th>
-            <th colSpan={2}>Glottal</th>
-            <th colSpan={2}>Other</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.bilabial}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.labiodental}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.dental}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.alveolar}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.postalveolar}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.retroflex}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.alveolopalatal}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.palatal}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.labiovelar}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.velar}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.uvular}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.pharyngeal}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.epiglottal}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.glottal}</th>
+            <th colSpan={2}>{StringRes.placeofarticulation.other}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>Plosive</th>
+            <th>{StringRes.mannerofarticulation.plosive}</th>
             <Phono
               mannerOfArticulation="plosive"
               placeOfArticulation="bilabial">
@@ -174,7 +172,7 @@ function ConsonantsTable() {
             <PhonoX />
           </tr>
           <tr>
-            <th>Nasal</th>
+            <th>{StringRes.mannerofarticulation.nasal}</th>
             <PhonoX />
             <Phono
               mannerOfArticulation="nasal"

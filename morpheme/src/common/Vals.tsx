@@ -111,10 +111,10 @@ export const conlangInit: Conlang = {
   lexicon: [],
   wordClasses: [
     {
-      id: 'wordclass-init',
+      id: '',
       partOfSpeech: '',
       gloss: '',
-      name: '~unclassed~',
+      name: '(unclassed)',
     },
   ],
 };

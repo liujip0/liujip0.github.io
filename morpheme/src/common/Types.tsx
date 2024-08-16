@@ -69,6 +69,7 @@ export type Word = {
   ipaOverride: boolean;
   definitions: Array<string>;
   partOfSpeech: PartOfSpeech;
+  wordClass: string;
 };
 export const PartOfSpeech_Arr = [
   // PartsOfSpeech

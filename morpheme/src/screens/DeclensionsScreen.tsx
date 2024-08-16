@@ -6,7 +6,7 @@ import {
   NavBar,
   NavSection,
 } from '../common/Components.tsx';
-import { createId } from '../common/Funcs.tsx';
+import { createId, partOfSpeechAbbreviation } from '../common/Funcs.tsx';
 import { Gloss } from '../common/Gloss.tsx';
 import { Affix, Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
@@ -189,9 +189,12 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                     );
                   }}>
                   {conlang.wordClasses.map((item) => (
-                    <option value={item.id}>{item.name}</option>
+                    <option value={item.id}>
+                      [{partOfSpeechAbbreviation(item.partOfSpeech)}]&nbsp;
+                      {item.name}
+                    </option>
                   ))}
-                  <option value="DELETE">[Delete]</option>
+                  <option value="DELETE">---Delete---</option>
                 </select>
               )
             )}
