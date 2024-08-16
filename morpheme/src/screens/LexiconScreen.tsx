@@ -1,4 +1,4 @@
-import { ChangeEventHandler, CSSProperties, useState } from 'react';
+import { useState } from 'react';
 import {
   TbCopy,
   TbPlus,
@@ -6,13 +6,18 @@ import {
   TbTriangle,
   TbTriangleInverted,
 } from 'react-icons/tb';
-import { Alert, IconButton, Popup } from '../common/Components.tsx';
+import {
+  Alert,
+  IconButton,
+  PartOfSpeechSelect,
+  Popup,
+} from '../common/Components.tsx';
 import {
   createId,
   partOfSpeechAbbreviation,
   romanizationToIpa,
 } from '../common/Funcs.tsx';
-import { Consonant, PartOfSpeech, Vowel, Word } from '../common/Types.tsx';
+import { Consonant, Vowel, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function LexiconScreen() {
@@ -322,6 +327,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               gloss: '',
               name: '',
             });
+            changeConlang(['wordClasses'], newWordClasses);
           }}>
           New Class
         </button>
@@ -333,6 +339,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               border: '1px solid black',
               marginTop: '1em',
               display: 'flex',
+              padding: '1em',
             }}>
             <label
               style={{
@@ -349,6 +356,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                     event.currentTarget.value
                   )
                 }
+                disabled={wordClass.id === 'wordclass-init'}
               />
             </label>
             <label
@@ -361,16 +369,38 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                 type="text"
                 size={8}
                 value={wordClass.gloss}
+                disabled={wordClass.id === 'wordclass-init'}
               />
             </label>
-            <label>
+            <label
+              style={{
+                marginRight: '1em',
+              }}>
               Name
               <br />
               <input
                 type="text"
                 value={wordClass.name}
+                disabled={wordClass.id === 'wordclass-init'}
               />
             </label>
+            <IconButton
+              onClick={() => {
+                if (wordClass.id !== 'wordclass-init') {
+                  let newWordClasses = conlang.wordClasses;
+                  newWordClasses = newWordClasses.filter(
+                    (x) => x.id !== wordClass.id
+                  );
+                  changeConlang(['wordClasses'], newWordClasses);
+                }
+              }}>
+              <TbTrash
+                size={20}
+                style={{
+                  color: wordClass.id === 'wordclass-init' ? 'gray' : 'black',
+                }}
+              />
+            </IconButton>
           </div>
         ))}
       </div>
@@ -631,34 +661,5 @@ function WordEditor({
         </>
       )}
     </div>
-  );
-}
-
-type PartOfSpeechSelectProps = {
-  value: PartOfSpeech;
-  onChange: ChangeEventHandler<HTMLSelectElement>;
-  style?: CSSProperties;
-};
-export function PartOfSpeechSelect({
-  value,
-  onChange,
-  style,
-}: PartOfSpeechSelectProps) {
-  return (
-    <select
-      value={value}
-      onChange={onChange}
-      style={style}>
-      <option value="">-</option>
-      <option value="noun">Noun</option>
-      <option value="verb">Verb</option>
-      <option value="adjective">Adjective</option>
-      <option value="adverb">Adverb</option>
-      <option value="pronoun">Pronoun</option>
-      <option value="proper noun">Proper Noun</option>
-      <option value="particle">Particle</option>
-      <option value="adposition">Adposition</option>
-      <option value="conjunction">Conjunction</option>
-    </select>
   );
 }

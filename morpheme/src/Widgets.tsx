@@ -6,10 +6,10 @@ import {
   TbFilter,
   TbFilterX,
 } from 'react-icons/tb';
+import { PartOfSpeechSelect } from './common/Components.tsx';
 import { parseCxs, unparseCxs } from './common/Funcs.tsx';
 import { PartOfSpeech, PartOfSpeech_Arr } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
-import { PartOfSpeechSelect } from './screens/LexiconScreen.tsx';
 
 export default function Widgets() {
   const conlang = useStoreState((s) => s.conlang);

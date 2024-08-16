@@ -1,5 +1,11 @@
-import { MouseEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  CSSProperties,
+  MouseEventHandler,
+  useState,
+} from 'react';
 import { Gloss } from './Gloss.tsx';
+import { PartOfSpeech } from './Types.tsx';
 
 type NavBarProps = {
   sections: Array<{
@@ -225,5 +231,37 @@ export function GlossingAbbreviations({ onClose }: GlossingAbbreviationsProps) {
         <button onClick={onClose}>Done</button>
       </div>
     </Popup>
+  );
+}
+
+type PartOfSpeechSelectProps = {
+  value: PartOfSpeech;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  style?: CSSProperties;
+  disabled?: boolean;
+};
+export function PartOfSpeechSelect({
+  value,
+  onChange,
+  style,
+  disabled,
+}: PartOfSpeechSelectProps) {
+  return (
+    <select
+      value={value}
+      onChange={onChange}
+      style={style}
+      disabled={disabled}>
+      <option value="">-</option>
+      <option value="noun">Noun</option>
+      <option value="verb">Verb</option>
+      <option value="adjective">Adjective</option>
+      <option value="adverb">Adverb</option>
+      <option value="pronoun">Pronoun</option>
+      <option value="proper noun">Proper Noun</option>
+      <option value="particle">Particle</option>
+      <option value="adposition">Adposition</option>
+      <option value="conjunction">Conjunction</option>
+    </select>
   );
 }

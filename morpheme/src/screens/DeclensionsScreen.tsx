@@ -122,6 +122,7 @@ type DeclensionsProps = {
 };
 function Declensions({ partOfSpeech }: DeclensionsProps) {
   const conlang = useStoreState((s) => s.conlang);
+  const changeConlang = useStoreState((s) => s.changeConlang);
   console.log(partOfSpeech);
   console.log(
     conlang.declensions.list[
@@ -136,15 +137,84 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         }}>
         Add Declension
       </button>
-      {conlang.declensions.list[
-        partOfSpeech as keyof typeof conlang.declensions.list
-      ].map((declension, declensionNumber) => (
+      {(
+        conlang.declensions.list[
+          partOfSpeech as keyof typeof conlang.declensions.list
+        ] as Array<Declension>
+      ).map((declension, declensionNumber) => (
         <div
           key={declension.id}
           style={{
-            border: '1px solid black',
+            border: '1px solid gray',
             padding: '1em',
           }}>
+          <div
+            style={{
+              marginBottom: '1em',
+            }}>
+            Noun Classes:&nbsp;
+            {(
+              conlang.declensions.list[
+                partOfSpeech as keyof typeof conlang.declensions.list
+              ] as Array<Declension>
+            )[declensionNumber].wordClasses.map(
+              (wordClass, wordClassNumber) => (
+                <select
+                  style={{
+                    marginRight: '0.5em',
+                  }}
+                  value={wordClass}
+                  onChange={(event) => {
+                    const newDeclensions = conlang.declensions.list[
+                      partOfSpeech as keyof typeof conlang.declensions.list
+                    ] as Array<Declension>;
+                    const newWordClasses =
+                      newDeclensions[declensionNumber].wordClasses;
+                    if (event.currentTarget.value === 'DELETE') {
+                      newWordClasses.splice(wordClassNumber, 1);
+                    } else {
+                      newWordClasses.splice(
+                        wordClassNumber,
+                        1,
+                        event.currentTarget.value
+                      );
+                    }
+                    newDeclensions.splice(declensionNumber, 1, {
+                      ...newDeclensions[declensionNumber],
+                      wordClasses: newWordClasses,
+                    });
+                    changeConlang(
+                      ['declensions', 'list', partOfSpeech],
+                      newDeclensions
+                    );
+                  }}>
+                  {conlang.wordClasses.map((item) => (
+                    <option value={item.id}>{item.name}</option>
+                  ))}
+                  <option value="DELETE">[Delete]</option>
+                </select>
+              )
+            )}
+            <button
+              onClick={() => {
+                const newDeclensions = conlang.declensions.list[
+                  partOfSpeech as keyof typeof conlang.declensions.list
+                ] as Array<Declension>;
+                const newWordClasses =
+                  newDeclensions[declensionNumber].wordClasses;
+                newWordClasses.push(conlang.wordClasses[0].id);
+                newDeclensions.splice(declensionNumber, 1, {
+                  ...newDeclensions[declensionNumber],
+                  wordClasses: newWordClasses,
+                });
+                changeConlang(
+                  ['declensions', 'list', partOfSpeech],
+                  newDeclensions
+                );
+              }}>
+              <TbPlus size={16} />
+            </button>
+          </div>
           <Affixes
             partOfSpeech={partOfSpeech}
             declensionNumber={declensionNumber}
