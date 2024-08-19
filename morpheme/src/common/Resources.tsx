@@ -169,4 +169,6 @@ export const StringRes = {
   addtable: 'Add Table',
   adddeclension: 'Add Declension',
   nounclasses: 'Noun Classes:',
+  delete: '---DELETE---',
+  addaffix: 'Add Affix'
 };

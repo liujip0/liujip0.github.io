@@ -234,7 +234,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
                       {item.name}
                     </option>
                   ))}
-                  <option value="DELETE">---Delete---</option>
+                  <option value="DELETE">{StringRes.delete}</option>
                 </select>
               )
             )}
@@ -366,7 +366,7 @@ function Affixes({ partOfSpeech, declensionNumber }: AffixesProps) {
           });
           console.log(newDeclensions);
         }}>
-        Add Affix
+        {StringRes.addaffix}
       </button>
       <ul
         style={{
