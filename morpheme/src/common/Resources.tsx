@@ -12,7 +12,11 @@ export const StringRes = {
   continue: 'Continue',
   glossingabbreviations: 'Glossing Abbreviations',
   done: 'Done',
-  partOfSpeech: {
+  partofspeech: {
+    _: {
+      a: 'Part of Speech',
+      b: 'Part of Speech:',
+    },
     noun: 'Noun',
     verb: 'Verb',
     adjective: 'Adjective',
@@ -52,17 +56,26 @@ export const StringRes = {
   deletearticle:
     `Are you sure you want to delete $1 and its contents? This ` +
     `cannot be undone.`,
-  name: 'Name:',
+  name: {
+    a: 'Name',
+    b: 'Name:',
+  },
   imageurl: 'Image URL',
   managephonemes:
     'Manage phonemes, allophones, etc. and their romanizations. Your ' +
     'orthography can be managed in the next section.',
   phonemesromanization: 'Phonemes & Romanization',
-  ipa: 'IPA',
+  ipa: {
+    a: 'IPA',
+    b: 'IPA:',
+  },
   type: 'Type',
   diacritics: 'Diacritics',
   allophoneof: 'Allophone of',
-  romanization: 'Romanization',
+  romanization: {
+    a: 'Romanization',
+    b: 'Romanization:',
+  },
   copyipa: 'Copy IPA',
   romanizationToIpa:
     'Are you sure you want to set the romanizations of all ' +
@@ -170,5 +183,27 @@ export const StringRes = {
   adddeclension: 'Add Declension',
   nounclasses: 'Noun Classes:',
   delete: '---DELETE---',
-  addaffix: 'Add Affix'
+  addaffix: 'Add Affix',
+  addgloss: 'Add Gloss',
+  rootword: 'Root Word',
+  manageclasses: 'Manage Classes',
+  deleteword: 'Are you sure you want to delete $1 [$2]? This cannot be undone.',
+  wordtitle: '$1 | $2 [$3]',
+  newclass: 'New Class',
+  gloss: 'Gloss',
+  overrideautogeneration: 'Override autogeneration',
+  class: 'Class:',
+  definitions: 'Definitions:',
+  newdefinition: 'New Definition',
+  deletedefinition:
+    'Are you sure you want to delete the definition "$1"? This ' +
+    'cannot be undone.',
+  start: 'Start',
+  phonology: 'Phonology',
+  articles: 'Articles',
+  inflections: 'Inflections',
+  lexicon: 'Lexicon',
+  settings: 'Settings',
+  close: 'Close',
+  general: 'General',
 };

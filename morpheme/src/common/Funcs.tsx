@@ -282,30 +282,30 @@ export function createId(type: string): string {
   );
 }
 
-export function partOfSpeechAbbreviation(partOfSpeech: PartOfSpeech) {
+export function partOfSpeechAbbreviation(partOfSpeech: PartOfSpeech): string {
   switch (partOfSpeech) {
     // PartsOfSpeech
     case 'noun':
-      return StringRes.partOfSpeech.abbr.noun;
+      return StringRes.partofspeech.abbr.noun;
     case 'verb':
-      return StringRes.partOfSpeech.abbr.verb;
+      return StringRes.partofspeech.abbr.verb;
     case 'adjective':
-      return StringRes.partOfSpeech.abbr.adjective;
+      return StringRes.partofspeech.abbr.adjective;
     case 'adverb':
-      return StringRes.partOfSpeech.abbr.adverb;
+      return StringRes.partofspeech.abbr.adverb;
     case 'pronoun':
-      return StringRes.partOfSpeech.abbr.pronoun;
+      return StringRes.partofspeech.abbr.pronoun;
     case 'proper noun':
-      return StringRes.partOfSpeech.abbr['proper noun'];
+      return StringRes.partofspeech.abbr['proper noun'];
     case 'particle':
-      return StringRes.partOfSpeech.abbr.particle;
+      return StringRes.partofspeech.abbr.particle;
     case 'adposition':
-      return StringRes.partOfSpeech.abbr.adposition;
+      return StringRes.partofspeech.abbr.adposition;
     case 'conjunction':
-      return StringRes.partOfSpeech.abbr.conjunction;
+      return StringRes.partofspeech.abbr.conjunction;
     case 'interjection':
-      return StringRes.partOfSpeech.abbr.interjection;
-    case '':
+      return StringRes.partofspeech.abbr.interjection;
+    default:
       return '';
   }
 }

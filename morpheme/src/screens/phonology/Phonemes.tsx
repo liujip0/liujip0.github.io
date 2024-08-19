@@ -98,12 +98,12 @@ function PhonemesTable() {
         }}>
         <thead>
           <tr>
-            <th>{StringRes.ipa}</th>
+            <th>{StringRes.ipa.a}</th>
             <th>{StringRes.type}</th>
             <th>{StringRes.diacritics}</th>
             <th>{StringRes.allophoneof}</th>
             <th>
-              {StringRes.romanization}
+              {StringRes.romanization.a}
               <br />
               <button
                 onClick={() => {

@@ -1,5 +1,6 @@
 import { TbSquareAsterisk, TbSquareOff, TbSquarePlus } from 'react-icons/tb';
 import { IconButton } from '../common/Components.tsx';
+import { StringRes } from '../common/Resources.tsx';
 import { screenPosition, screenStr } from '../common/Types';
 import { useStoreState } from '../common/Vals';
 
@@ -160,7 +161,7 @@ function Submenu({ position }: SubmenuProps) {
       <SubmenuButton
         position={position}
         screen={'start'}>
-        Start
+        {StringRes.start}
       </SubmenuButton>
       <SubmenuButton
         position={position}
@@ -170,34 +171,34 @@ function Submenu({ position }: SubmenuProps) {
       <SubmenuButton
         position={position}
         screen={'phonology'}>
-        Phonology
+        {StringRes.phonology}
       </SubmenuButton>
       <SubmenuButton
         position={position}
         screen={'articles'}>
-        Articles
+        {StringRes.articles}
       </SubmenuButton>
       <SubmenuButton
         position={position}
         screen={'declensions'}>
-        Declensions (Conjugations)
+        {StringRes.inflections}
       </SubmenuButton>
       <SubmenuButton
         position={position}
         screen={'lexicon'}>
-        Lexicon
+        {StringRes.lexicon}
       </SubmenuButton>
       <SubmenuButton
         position={position}
         screen={'settings'}>
-        Settings
+        {StringRes.settings}
       </SubmenuButton>
       <button
         style={{}}
         onClick={() => {
           replaceSubmenus(position, '');
         }}>
-        Close
+        {StringRes.close}
       </button>
     </div>
   );

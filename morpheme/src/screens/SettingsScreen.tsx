@@ -1,6 +1,6 @@
 import { createRef, useRef, useState } from 'react';
 import { createId, writeFile } from '../common/Funcs.tsx';
-import { DimenRes } from '../common/Resources';
+import { DimenRes, StringRes } from '../common/Resources';
 import { useStoreState } from '../common/Vals';
 
 export default function SettingsScreen() {
@@ -8,8 +8,8 @@ export default function SettingsScreen() {
   const changeConlang = useStoreState((s) => s.changeConlang);
   return (
     <>
-      <h1>Settings</h1>
-      <h2>General</h2>
+      <h1>{StringRes.settings}</h1>
+      <h2>{StringRes.general}</h2>
       <TextInput
         id="settingsconlangname"
         label="Conlang Name"

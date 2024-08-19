@@ -21,35 +21,35 @@ export default function DeclensionsScreen() {
     <>
       <NavBar
         sections={[
-          { id: 'NDeclensions', label: StringRes.partOfSpeech.plural.nouns },
-          { id: 'VDeclensions', label: StringRes.partOfSpeech.plural.verbs },
+          { id: 'NDeclensions', label: StringRes.partofspeech.plural.nouns },
+          { id: 'VDeclensions', label: StringRes.partofspeech.plural.verbs },
           {
             id: 'AdjDeclensions',
-            label: StringRes.partOfSpeech.plural.adjectives,
+            label: StringRes.partofspeech.plural.adjectives,
           },
           {
             id: 'AdvDeclensions',
-            label: StringRes.partOfSpeech.plural.adverbs,
+            label: StringRes.partofspeech.plural.adverbs,
           },
           {
             id: 'PronDeclensions',
-            label: StringRes.partOfSpeech.plural.pronouns,
+            label: StringRes.partofspeech.plural.pronouns,
           },
           {
             id: 'PropNDeclensions',
-            label: StringRes.partOfSpeech.plural['proper nouns'],
+            label: StringRes.partofspeech.plural['proper nouns'],
           },
           {
             id: 'PtclDeclensions',
-            label: StringRes.partOfSpeech.plural.particles,
+            label: StringRes.partofspeech.plural.particles,
           },
           {
             id: 'AdpDeclensions',
-            label: StringRes.partOfSpeech.plural.adpositions,
+            label: StringRes.partofspeech.plural.adpositions,
           },
           {
             id: 'ConjDeclensions',
-            label: StringRes.partOfSpeech.plural.conjunctions,
+            label: StringRes.partofspeech.plural.conjunctions,
           },
         ]}
         custom={
@@ -73,27 +73,27 @@ export default function DeclensionsScreen() {
         />
       )}
       <NavSection id="NDeclensions">
-        {StringRes.partOfSpeech.plural.nouns}
+        {StringRes.partofspeech.plural.nouns}
       </NavSection>
       <Declensions partOfSpeech="noun" />
       <NavSection id="VDeclensions">
-        {StringRes.partOfSpeech.plural.verbs}
+        {StringRes.partofspeech.plural.verbs}
       </NavSection>
       <Declensions partOfSpeech="verb" />
       <NavSection id="AdjDeclensions">
-        {StringRes.partOfSpeech.plural.adjectives}
+        {StringRes.partofspeech.plural.adjectives}
       </NavSection>
       <Declensions partOfSpeech="adjective" />
       <NavSection id="AdvDeclensions">
-        {StringRes.partOfSpeech.plural.adverbs}
+        {StringRes.partofspeech.plural.adverbs}
       </NavSection>
       <Declensions partOfSpeech="adverb" />
       <NavSection id="PronDeclensions">
-        {StringRes.partOfSpeech.plural.pronouns}
+        {StringRes.partofspeech.plural.pronouns}
       </NavSection>
       <Pronouns />
       <NavSection id="PropNDeclensions">
-        {StringRes.partOfSpeech.plural['proper nouns']}
+        {StringRes.partofspeech.plural['proper nouns']}
       </NavSection>
       {!propNConf ?
         <label>
@@ -134,15 +134,15 @@ export default function DeclensionsScreen() {
         <Declensions partOfSpeech="proper noun" />
       : <></>}
       <NavSection id="PtclDeclensions">
-        {StringRes.partOfSpeech.plural.particles}
+        {StringRes.partofspeech.plural.particles}
       </NavSection>
       <Declensions partOfSpeech="particle" />
       <NavSection id="AdpDeclensions">
-        {StringRes.partOfSpeech.plural.adpositions}
+        {StringRes.partofspeech.plural.adpositions}
       </NavSection>
       <Declensions partOfSpeech="adposition" />
       <NavSection id="ConjDeclensions">
-        {StringRes.partOfSpeech.plural.conjunctions}
+        {StringRes.partofspeech.plural.conjunctions}
       </NavSection>
       <Declensions partOfSpeech="conjunction" />
     </>
@@ -507,7 +507,7 @@ function AffixLi({
               style={{
                 padding: '0.5em',
               }}>
-              Name:&nbsp;
+              {StringRes.name.b}&nbsp;
               <input
                 value={declension.name}
                 onInput={(event) => {
@@ -571,7 +571,7 @@ function AffixLi({
                     newGloss.splice(index, 1, [...gloss, '']);
                     changeAffix('gloss', newGloss);
                   }}>
-                  Add Gloss
+                  {StringRes.addgloss}
                 </button>
               </td>
             ))}
@@ -707,7 +707,7 @@ function RootWord({
           }}
         />
       </div>
-      <div>Root Word</div>
+      <div>{StringRes.rootword}</div>
     </li>
   );
 }

@@ -338,7 +338,7 @@ function ArticleEditor({ currentArticle, changeArticle }: ArticleEditorProps) {
           padding: '1em',
         }}>
         <label>
-          {StringRes.name}&nbsp;
+          {StringRes.name.b}&nbsp;
           <input
             type="text"
             size={30}

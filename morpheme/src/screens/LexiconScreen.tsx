@@ -17,6 +17,7 @@ import {
   partOfSpeechAbbreviation,
   romanizationToIpa,
 } from '../common/Funcs.tsx';
+import { StringRes } from '../common/Resources.tsx';
 import { Consonant, Vowel, Word } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
@@ -184,7 +185,7 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
           onClick={() => {
             setManageClasses(true);
           }}>
-          Manage Classes
+          {StringRes.manageclasses}
         </button>
         {manageClasses && (
           <ManageClasses
@@ -235,14 +236,10 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
         </IconButton>
         {deleteWord && (
           <Alert
-            title="Confirmation"
-            description={
-              'Are you sure you want to delete ' +
-              word.romanization +
-              ' [' +
-              partOfSpeechAbbreviation(word.partOfSpeech) +
-              ']? This cannot be undone.'
-            }
+            title={StringRes.confirmation}
+            description={StringRes.deleteword
+              .replace('$1', word.romanization)
+              .replace('$2', partOfSpeechAbbreviation(word.partOfSpeech))}
             onDecline={() => {
               setDeleteWord(false);
             }}
@@ -282,11 +279,10 @@ function Words({ currentWord, setCurrentWord, sortLexicon }: WordsProps) {
                 onClick={() => {
                   setCurrentWord(item.id);
                 }}>
-                {item.romanization}
-                &nbsp;|&nbsp;
-                {item.definitions[0]}
-                &nbsp;[
-                {partOfSpeechAbbreviation(item.partOfSpeech)}]
+                {StringRes.wordtitle
+                  .replace('$1', item.romanization)
+                  .replace('$2', item.definitions[0])
+                  .replace('$3', partOfSpeechAbbreviation(item.partOfSpeech))}
               </div>
             );
           })}
@@ -318,7 +314,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
           flex: '1',
           overflowY: 'scroll',
         }}>
-        <h1>Manage Classes</h1>
+        <h1>{StringRes.manageclasses}</h1>
         <button
           onClick={() => {
             const newWordClasses = conlang.wordClasses;
@@ -330,7 +326,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
             });
             changeConlang(['wordClasses'], newWordClasses);
           }}>
-          New Class
+          {StringRes.newclass}
         </button>
         {conlang.wordClasses.map((wordClass) => (
           <div
@@ -346,7 +342,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               style={{
                 marginRight: '1em',
               }}>
-              Part of Speech
+              {StringRes.partofspeech._.a}
               <br />
               <PartOfSpeechSelect
                 value={wordClass.partOfSpeech}
@@ -364,7 +360,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               style={{
                 marginRight: '1em',
               }}>
-              Gloss
+              {StringRes.gloss}
               <br />
               <input
                 type="text"
@@ -377,7 +373,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
               style={{
                 marginRight: '1em',
               }}>
-              Name
+              {StringRes.name.a}
               <br />
               <input
                 type="text"
@@ -412,7 +408,7 @@ function ManageClasses({ onClose }: ManageClassesProps) {
           justifyContent: 'flex-end',
           marginTop: '1em',
         }}>
-        <button onClick={onClose}>Done</button>
+        <button onClick={onClose}>{StringRes.done}</button>
       </div>
     </Popup>
   );
@@ -451,7 +447,7 @@ function WordEditor({
               marginBottom: '1em',
             }}>
             <label>
-              Romanization:&nbsp;
+              {StringRes.romanization.b}&nbsp;
               <input
                 size={40}
                 value={word.romanization}
@@ -477,7 +473,7 @@ function WordEditor({
               marginBottom: '1em',
             }}>
             <label>
-              IPA:&nbsp;
+              {StringRes.ipa.b}&nbsp;
               <input
                 size={40}
                 value={word.ipa}
@@ -512,7 +508,7 @@ function WordEditor({
                     }
                   }}
                 />
-                Override autogeneration
+                {StringRes.overrideautogeneration}
               </label>
             </div>
           </div>
@@ -521,7 +517,7 @@ function WordEditor({
               marginBottom: '1em',
             }}>
             <label>
-              Part of Speech:&nbsp;
+              {StringRes.partofspeech._.b}&nbsp;
               <PartOfSpeechSelect
                 value={word.partOfSpeech}
                 onChange={(event) => {
@@ -535,7 +531,7 @@ function WordEditor({
               marginBottom: '1em',
             }}>
             <label>
-              Class:&nbsp;
+              {StringRes.class}&nbsp;
               <select
                 value={word.wordClass}
                 onChange={(event) => {
@@ -554,7 +550,7 @@ function WordEditor({
             style={{
               marginBottom: '1em',
             }}>
-            Definitions:
+            {StringRes.definitions}
             <div
               style={{
                 display: 'flex',
@@ -578,7 +574,8 @@ function WordEditor({
                   style={{
                     height: 'min-content',
                   }}>
-                  &nbsp;New Definition
+                  {/**TODO: change nbsp to marginleft */}
+                  &nbsp;{StringRes.newdefinition}
                 </div>
               </button>
               <ol
@@ -656,12 +653,11 @@ function WordEditor({
                       </IconButton>
                       {deleteWord === index && (
                         <Alert
-                          title="Confirmation"
-                          description={
-                            'Are you sure you want to delete the definition "' +
-                            item +
-                            '"? This cannot be undone.'
-                          }
+                          title={StringRes.confirmation}
+                          description={StringRes.deletedefinition.replace(
+                            '$1',
+                            item
+                          )}
                           onDecline={() => {
                             setDeleteWord(null);
                           }}

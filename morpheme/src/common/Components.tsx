@@ -260,19 +260,19 @@ export function PartOfSpeechSelect({
       disabled={disabled}>
       {/* PartsOfSpeech */}
       <option value="">-</option>
-      <option value="noun">{StringRes.partOfSpeech.noun}</option>
-      <option value="verb">{StringRes.partOfSpeech.verb}</option>
-      <option value="adjective">{StringRes.partOfSpeech.adjective}</option>
-      <option value="adverb">{StringRes.partOfSpeech.adverb}</option>
-      <option value="pronoun">{StringRes.partOfSpeech.pronoun}</option>
+      <option value="noun">{StringRes.partofspeech.noun}</option>
+      <option value="verb">{StringRes.partofspeech.verb}</option>
+      <option value="adjective">{StringRes.partofspeech.adjective}</option>
+      <option value="adverb">{StringRes.partofspeech.adverb}</option>
+      <option value="pronoun">{StringRes.partofspeech.pronoun}</option>
       <option value="proper noun">
-        {StringRes.partOfSpeech['proper noun']}
+        {StringRes.partofspeech['proper noun']}
       </option>
-      <option value="particle">{StringRes.partOfSpeech.particle}</option>
-      <option value="adposition">{StringRes.partOfSpeech.adposition}</option>
-      <option value="conjunction">{StringRes.partOfSpeech.conjunction}</option>
+      <option value="particle">{StringRes.partofspeech.particle}</option>
+      <option value="adposition">{StringRes.partofspeech.adposition}</option>
+      <option value="conjunction">{StringRes.partofspeech.conjunction}</option>
       <option value="interjection">
-        {StringRes.partOfSpeech.interjection}
+        {StringRes.partofspeech.interjection}
       </option>
     </select>
   );
