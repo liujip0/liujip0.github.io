@@ -14,14 +14,14 @@ export default function StartScreen() {
   const time = new Date().getMilliseconds();
   return (
     <>
-      <h1>Welcome to Morpheme</h1>
-      <h2>Open Existing Conlang</h2>
+      <h1>{StringRes.welcometomorpheme}</h1>
+      <h2>{StringRes.openexistingconlang}</h2>
       <button
         onClick={() => {
           getFile({
             types: [
               {
-                description: 'JSON Files',
+                description: StringRes.jsonfiles,
                 accept: {
                   'application/json': ['.json'],
                 },
@@ -39,11 +39,11 @@ export default function StartScreen() {
             setSaved(true);
           });
         }}>
-        Choose File
+        {StringRes.choosefile}
       </button>
-      <h2>Create New Conlang</h2>
+      <h2>{StringRes.createnewconlang}</h2>
       <label>
-        Conlang name:&nbsp;
+        {StringRes.conlangname.d}&nbsp;
         <input
           type="text"
           ref={conlangNameRef}
@@ -71,7 +71,7 @@ export default function StartScreen() {
             createFile({
               types: [
                 {
-                  description: 'JSON Files',
+                  description: StringRes.jsonfiles,
                   accept: { 'application/json': ['.json'] },
                 },
               ],
@@ -90,7 +90,7 @@ export default function StartScreen() {
             });
           }
         }}>
-        Submit
+        {StringRes.submit}
       </button>
     </>
   );

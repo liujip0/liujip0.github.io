@@ -65,7 +65,7 @@ export default function ExportConlang() {
           style={{
             position: 'relative',
           }}>
-          Export
+          {StringRes.export}
           {exportMenu ?
             <TbChevronUp />
           : <TbChevronDown />}

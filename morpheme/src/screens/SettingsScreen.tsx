@@ -12,51 +12,51 @@ export default function SettingsScreen() {
       <h2>{StringRes.general}</h2>
       <TextInput
         id="settingsconlangname"
-        label="Conlang Name"
-        description="This will not change the file name."
+        label={StringRes.conlangname.a}
+        description={StringRes.nochangefilename}
         defaultValue={conlang.name}
         onSave={(value) => {
           changeConlang(['name'], value);
         }}
       />
       <RadioInput
-        label="Autosave"
+        label={StringRes.autosave}
         options={[
           {
-            label: 'Disabled',
+            label: StringRes.disabled,
             value: '0',
           },
           {
-            label: 'Every 1 minute',
+            label: StringRes.every1min,
             value: '1',
           },
           {
-            label: 'Every 5 minutes',
+            label: StringRes.every5min,
             value: '5',
           },
           {
-            label: 'Every 10 minutes',
+            label: StringRes.every10min,
             value: '10',
           },
         ]}
         customOption={{
-          label: 'Custom:',
-          description: 'Time in minutes between saves',
+          label: StringRes.custom,
+          description: StringRes.timebtwnsaves,
         }}
         defaultValue={conlang.autosave.toString()}
         onSave={(value) => changeConlang(['autosave'], parseInt(value))}
       />
 
-      <h2>Character Inserter Widget</h2>
+      <h2>{StringRes.charinsertwidget}</h2>
       <RadioInput
-        label="Enabled"
+        label={StringRes.enabled}
         options={[
           {
-            label: 'Yes',
+            label: StringRes.yes,
             value: 'true',
           },
           {
-            label: 'No',
+            label: StringRes.no,
             value: 'false',
           },
         ]}
@@ -67,8 +67,8 @@ export default function SettingsScreen() {
       />
       <TextInput
         id="settingschars"
-        label="Characters"
-        description="Enter characters or character groups separated by commas."
+        label={StringRes.characters}
+        description={StringRes.enterchars}
         defaultValue={conlang.widgets.charInsert.chars.join(',')}
         onSave={(value) => {
           changeConlang(['widgets', 'charInsert', 'chars'], value.split(','));
@@ -142,7 +142,7 @@ function TextInput({
           style={{
             fontSize: DimenRes.input.button,
           }}>
-          Save
+          {StringRes.save}
         </button>
       </div>
       {description && (
@@ -320,7 +320,7 @@ function RadioInput({
           fontSize: DimenRes.input.button,
           marginTop: '0.3em',
         }}>
-        Save
+        {StringRes.save}
       </button>
     </label>
   );
