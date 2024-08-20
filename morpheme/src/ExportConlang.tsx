@@ -8,6 +8,7 @@ import {
   TbTriangleInverted,
 } from 'react-icons/tb';
 import { IconButton, Popup } from './common/Components.tsx';
+import { StringRes } from './common/Resources.tsx';
 import {
   Backness,
   Backness_Arr,
@@ -88,7 +89,7 @@ export default function ExportConlang() {
                 style={{
                   padding: '0.2em',
                 }}>
-                Export to PDF
+                {StringRes.exporttopdf}
               </div>
             </div>
           )}
@@ -124,7 +125,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
           fontSize: '1.3em',
           marginBottom: '0.3em',
         }}>
-        Export to PDF
+        {StringRes.exporttopdf}
       </h1>
       <div
         style={{
@@ -159,7 +160,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             fontSize: '0.7em',
             marginBottom: '0.5em',
           }}>
-          <b>Paper Size:&nbsp;</b>
+          <b>{StringRes.papersize}&nbsp;</b>
           <select
             value={pdfOptions.paperSize}
             onChange={(event) => {
@@ -168,8 +169,8 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                 paperSize: event.currentTarget.value,
               } as PdfOptions);
             }}>
-            <option value="letter">Letter</option>
-            <option value="a4">A4</option>
+            <option value="letter">{StringRes.letter}</option>
+            <option value="a4">{StringRes.a4}</option>
           </select>
         </label>
         <div
@@ -179,7 +180,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             display: 'flex',
             flexDirection: 'column',
           }}>
-          <b>Sections to Include</b>
+          <b>{StringRes.sectionstoinclude}</b>
           {pdfOptions.orderedSections.map((item) => (
             <label key={item}>
               <input
@@ -242,7 +243,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             display: 'flex',
             flexDirection: 'column',
           }}>
-          <b>Other Settings</b>
+          <b>{StringRes.othersettings}</b>
           <label>
             <input
               type="checkbox"
@@ -254,7 +255,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                 });
               }}
             />
-            Page Numbers
+            {StringRes.pagenumbers}
           </label>
           <label>
             <input
@@ -267,7 +268,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                 });
               }}
             />
-            Page #s Include Title Page
+            {StringRes.pagenumsincludetitle}
           </label>
           <label>
             <input
@@ -280,7 +281,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
                 });
               }}
             />
-            Page #s Include Table of Contents
+            {StringRes.pagenumsincludetoc}
           </label>
         </div>
       </div>
@@ -294,7 +295,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
           onClick={() => {
             setPdfPopup(false);
           }}>
-          Cancel
+          {StringRes.cancel}
         </button>
         &nbsp;
         <button
@@ -302,7 +303,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
             setPdfPopup(false);
             exportToPdf(pdfOptions, conlang);
           }}>
-          Finish
+          {StringRes.finish}
         </button>
       </div>
     </Popup>
@@ -336,7 +337,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
       switch (item) {
         case 'title': {
           toc.push({
-            section: 'Title Page',
+            section: StringRes.titlepage,
             page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(25);
@@ -367,7 +368,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         }
         case 'contents': {
           toc.push({
-            section: 'Table of Contents',
+            section: StringRes.tableofcontents,
             page: doc.getCurrentPageInfo().pageNumber,
           });
           tocPage = doc.getCurrentPageInfo().pageNumber;
@@ -376,12 +377,16 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         }
         case 'phonology': {
           toc.push({
-            section: 'Phonology',
+            section: StringRes.phonology,
             page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(20);
           doc.setFont('CharisSIL', 'bold');
-          doc.text('Phonology', unit === 'in' ? 1 : 25, unit === 'in' ? 1 : 25);
+          doc.text(
+            StringRes.phonology,
+            unit === 'in' ? 1 : 25,
+            unit === 'in' ? 1 : 25
+          );
           const consonantCols: Record<PlaceOfArticulation, number> = {};
           for (let i = 0; i < PlaceOfArticulation_Arr.length; i++) {
             consonantCols[PlaceOfArticulation_Arr[i]] = 0;
@@ -541,61 +546,66 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           for (let i = 0; i < consonantColsCount.length; i++) {
             consonants[0][i + 1] = {
               content: {
-                bilabial: 'Bilabial',
-                labiodental: 'Labiodental',
-                dental: 'Dental',
-                alveolar: 'Alveolar',
-                postalveolar: 'Postalveolar',
-                retroflex: 'Retroflex',
-                alveolopalatal: 'Alveolopalatal',
-                palatal: 'Palatal',
-                labiovelar: 'Labiovelar',
-                velar: 'Velar',
-                uvular: 'Uvular',
-                pharyngeal: 'Pharyngeal',
-                epiglottal: 'Epiglottal',
-                glottal: 'Glottal',
-                other: 'Other',
+                bilabial: StringRes.placeofarticulation.bilabial,
+                labiodental: StringRes.placeofarticulation.labiodental,
+                dental: StringRes.placeofarticulation.dental,
+                alveolar: StringRes.placeofarticulation.alveolar,
+                postalveolar: StringRes.placeofarticulation.postalveolar,
+                retroflex: StringRes.placeofarticulation.retroflex,
+                alveolopalatal: StringRes.placeofarticulation.alveolopalatal,
+                palatal: StringRes.placeofarticulation.palatal,
+                labiovelar: StringRes.placeofarticulation.labiovelar,
+                velar: StringRes.placeofarticulation.velar,
+                uvular: StringRes.placeofarticulation.uvular,
+                pharyngeal: StringRes.placeofarticulation.pharyngeal,
+                epiglottal: StringRes.placeofarticulation.epiglottal,
+                glottal: StringRes.placeofarticulation.glottal,
+                other: StringRes.placeofarticulation.other,
               }[consonantColsCount[i]]!,
               colSpan: 2,
             };
           }
           for (let i = 0; i < consonantRowsCount.length; i++) {
             consonants[i + 1][0] = {
-              plosive: 'Plosive',
-              nasal: 'Nasal',
-              trill: 'Trill',
-              tapflap: 'Tap or Flap',
-              lateralflap: 'Lateral Flap',
-              fricative: 'Fricative',
-              lateralfricative: 'Lateral Fricative',
-              approximant: 'Approximant',
-              lateralapproximant: 'Lateral Approximant',
-              click: 'Click',
-              implosive: 'Implosive',
+              plosive: StringRes.mannerofarticulation.plosive,
+              nasal: StringRes.mannerofarticulation.nasal,
+              trill: StringRes.mannerofarticulation.trill,
+              tapflap: StringRes.mannerofarticulation.taporflap,
+              lateralflap: StringRes.mannerofarticulation.lateralflap,
+              fricative: StringRes.mannerofarticulation.fricative,
+              lateralfricative: StringRes.mannerofarticulation.lateralfricative,
+              approximant: StringRes.mannerofarticulation.approximant,
+              lateralapproximant:
+                StringRes.mannerofarticulation.lateralapproximant,
+              click: StringRes.mannerofarticulation.click,
+              implosive: StringRes.mannerofarticulation.implosive,
             }[consonantRowsCount[i]]!;
           }
           for (let i = 0; i < vowelColsFinal.length; i++) {
             vowels[0][i + 1] = {
               content: {
-                front: 'Front',
-                frontcentral: vowelCols.front > 0 ? '' : 'Front',
-                central: 'Central',
-                centralback: vowelCols.back > 0 ? '' : 'Back',
-                back: 'Back',
+                front: StringRes.backness.front,
+                frontcentral:
+                  vowelCols.front > 0 ? '' : StringRes.backness.front,
+                central: StringRes.backness.central,
+                centralback: vowelCols.back > 0 ? '' : StringRes.backness.back,
+                back: StringRes.backness.back,
               }[vowelColsFinal[i]]!,
               colSpan: 2,
             };
           }
           for (let i = 0; i < vowelRowsFinal.length; i++) {
             vowels[i + 1][0] = {
-              close: 'Close',
-              highclosemid: vowelRows.close > 0 ? '' : 'Close',
-              closemid: 'Close-Mid',
-              mid: vowelRows.closemid > 0 && vowelRows.openmid > 0 ? '' : 'Mid',
-              openmid: 'Open-Mid',
-              lowopenmid: vowelRows.open > 0 ? '' : 'Open',
-              open: 'Open',
+              close: StringRes.height.close,
+              highclosemid: vowelRows.close > 0 ? '' : StringRes.height.close,
+              closemid: StringRes.height.closemid,
+              mid:
+                vowelRows.closemid > 0 && vowelRows.openmid > 0 ?
+                  ''
+                : StringRes.height.mid,
+              openmid: StringRes.height.openmid,
+              lowopenmid: vowelRows.open > 0 ? '' : StringRes.height.open,
+              open: StringRes.height.open,
             }[vowelRowsFinal[i]]!;
           }
           console.log(consonants);
@@ -603,7 +613,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
           doc.setFontSize(18);
           doc.setFont('CharisSIL', 'bold');
           doc.text(
-            'Consonants',
+            StringRes.consonants,
             unit === 'in' ? 1 : 25,
             unit === 'in' ? 1.5 : 37
           );
@@ -630,7 +640,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             },
           });
           doc.text(
-            'Vowels',
+            StringRes.vowels,
             unit === 'in' ? 1 : 25,
             finalY + (unit === 'in' ? 0.5 : 12)
           );
@@ -689,7 +699,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             doc.setFontSize(10);
             doc.setFont('CharisSIL', 'normal');
             doc.text(
-              'Created with Morpheme',
+              StringRes.createdwithmorpheme,
               unit === 'in' ? 1 : 25,
               unit === 'in' ? 10.5 : 284
             );
@@ -721,12 +731,16 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
         }
         case 'articles': {
           toc.push({
-            section: 'Articles',
+            section: StringRes.articles,
             page: doc.getCurrentPageInfo().pageNumber,
           });
           doc.setFontSize(20);
           doc.setFont('CharisSIL', 'bold');
-          doc.text('Articles', unit === 'in' ? 1 : 25, unit === 'in' ? 1 : 25);
+          doc.text(
+            StringRes.articles,
+            unit === 'in' ? 1 : 25,
+            unit === 'in' ? 1 : 25
+          );
           doc.addPage(pdfOptions.paperSize);
           break;
         }
@@ -738,7 +752,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
     doc.setFontSize(20);
     doc.setFont('CharisSIL', 'bold');
     doc.text(
-      'Table of Contents',
+      StringRes.tableofcontents,
       unit === 'in' ? 1 : 25,
       unit === 'in' ? 1 : 25
     );
@@ -791,7 +805,7 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
       doc.setFontSize(10);
       doc.setFont('CharisSIL', 'normal');
       doc.text(
-        'Created with Morpheme',
+        StringRes.createdwithmorpheme,
         unit === 'in' ? 1 : 25,
         unit === 'in' ? 10.5 : 284
       );

@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { createFile, getFile, writeFile } from '../common/Funcs.tsx';
+import { StringRes } from '../common/Resources.tsx';
 import { Conlang } from '../common/Types.tsx';
 import { conlangInit, useStoreState } from '../common/Vals.tsx';
 
