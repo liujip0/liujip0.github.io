@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { create } from 'zustand';
 import { createId, deepUpdate } from './Funcs';
+import { StringRes } from './Resources.tsx';
 import {
   Conlang,
   screenPosition,
@@ -11,7 +12,7 @@ import {
 } from './Types';
 
 export const conlangInit: Conlang = {
-  name: 'none',
+  name: StringRes.untitled,
   autosave: 0,
   widgets: {
     charInsert: {
@@ -114,7 +115,7 @@ export const conlangInit: Conlang = {
       id: '',
       partOfSpeech: '',
       gloss: '',
-      name: '(unclassed)',
+      name: StringRes.unclassed,
     },
   ],
 };

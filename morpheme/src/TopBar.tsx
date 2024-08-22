@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { writeFile } from './common/Funcs';
+import { StringRes } from './common/Resources.tsx';
 import { useStoreState } from './common/Vals';
 import ExportConlang from './ExportConlang.tsx';
 
@@ -35,7 +36,7 @@ export default function TopBar() {
           fontSize: '1.5em',
           margin: '0.4em 0.5em 0.4em 0.5em',
         }}>
-        Morpheme
+        {StringRes.morpheme}
       </div>
 
       <div
@@ -46,7 +47,7 @@ export default function TopBar() {
           onClick={() => {
             swapAllWindows(['0-start', '0-start', '0-start', '0-start']);
           }}>
-          Currently Editing:&nbsp;
+          {StringRes.currentlyediting}&nbsp;
           <span className="monospace">
             {conlang.name ? conlang.name : 'none'}
           </span>
@@ -59,9 +60,9 @@ export default function TopBar() {
               writeFile(fileHandle, JSON.stringify(conlang));
             }
           }}>
-          Save
+          {StringRes.save}
         </MenuItem>
-        <MenuItem>Import</MenuItem>
+        <MenuItem>{StringRes.import}</MenuItem>
         <ExportConlang />
       </div>
     </div>

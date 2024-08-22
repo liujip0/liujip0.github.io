@@ -11,7 +11,7 @@ import {
 
 export async function getFile(options: object) {
   if (!window.showOpenFilePicker) {
-    throw Error('File System Access API not supported');
+    throw Error(StringRes.nofilesystemapi);
   }
   const fileHandles = await window.showOpenFilePicker(options);
   const fileHandle = fileHandles[0] as FileSystemFileHandle;
@@ -35,7 +35,7 @@ export async function writeFile(
 
 export async function createFile(options: object) {
   if (!window.showSaveFilePicker) {
-    throw Error('File System Access API not supported');
+    throw Error(StringRes.nofilesystemapi);
   }
   const fileHandle = (await window.showSaveFilePicker(
     options

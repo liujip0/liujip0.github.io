@@ -8,6 +8,7 @@ import {
 } from 'react-icons/tb';
 import { PartOfSpeechSelect } from './common/Components.tsx';
 import { parseCxs, unparseCxs } from './common/Funcs.tsx';
+import { StringRes } from './common/Resources.tsx';
 import { PartOfSpeech, PartOfSpeech_Arr } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
 
@@ -79,7 +80,7 @@ function DictSearchWidget() {
             setLastInput('dictsearch');
           }}
           className="charis"
-          placeholder="Lexicon Search"
+          placeholder={StringRes.lexiconsearch}
           style={{
             marginRight: '0.5em',
           }}
@@ -128,7 +129,7 @@ function DictSearchWidget() {
           flexWrap: 'wrap',
         }}>
         <input
-          placeholder="Romanization"
+          placeholder={StringRes.romanization.a}
           value={dictFilter.romanization}
           onInput={(event) => {
             setDictFilter({
@@ -142,7 +143,7 @@ function DictSearchWidget() {
           }}
         />
         <input
-          placeholder="IPA"
+          placeholder={StringRes.ipa.a}
           value={dictFilter.ipa}
           onInput={(event) => {
             setDictFilter({
@@ -169,7 +170,7 @@ function DictSearchWidget() {
         />
         <input
           type="number"
-          placeholder="Def. Ct."
+          placeholder={StringRes.definitioncount}
           style={{
             marginRight: '0.5em',
             width: '5em',
@@ -183,7 +184,7 @@ function DictSearchWidget() {
           }}
         />
         <input
-          placeholder="Definitions"
+          placeholder={StringRes.definitions}
           value={dictFilter.definitions}
           onInput={(event) => {
             setDictFilter({
@@ -284,9 +285,9 @@ function DictSearchWidget() {
                     </tr>
                   ))}
                 </table>
-              : <i>No words match your search</i>;
+              : <i>{StringRes.nowordsmatchyoursearch}</i>;
           } else {
-            return <i>Start typing to search</i>;
+            return <i>{StringRes.starttypingtosearch}</i>;
           }
         })()}
       </div>
@@ -320,7 +321,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
             setCxsExpanded(true);
             setLastInput('cxsin');
           }}
-          placeholder="Conlang X-SAMPA"
+          placeholder={StringRes.conlangxsampa}
           onInput={() => {
             if (cxsoutRef.current && cxsinRef.current) {
               cxsoutRef.current.value = parseCxs(cxsinRef.current.value);
@@ -373,7 +374,7 @@ function CxsWidget({ cxsinRef, cxsoutRef }: CxsWidgetProps) {
           onFocus={() => {
             setLastInput('cxsout');
           }}
-          placeholder="IPA"
+          placeholder={StringRes.ipa.a}
           onInput={() => {
             if (cxsinRef.current && cxsoutRef.current) {
               cxsinRef.current.value = unparseCxs(cxsoutRef.current.value);

@@ -135,7 +135,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
         }}>
         <TextInput
           id="pdftitle"
-          label="Conlang Title"
+          label={StringRes.conlangtitle}
           value={pdfOptions.title}
           onInput={(event) => {
             setPdfOptions({
@@ -146,7 +146,7 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
         />
         <TextInput
           id="pdfauthor"
-          label="Conlang Author"
+          label={StringRes.conlangauthor}
           value={pdfOptions.author}
           onInput={(event) => {
             setPdfOptions({
@@ -198,9 +198,9 @@ function PdfPopup({ pdfOptions, setPdfOptions, setPdfPopup }: PdfPopupProps) {
               />
               {
                 {
-                  title: 'Title Page',
-                  contents: 'Table of Contents',
-                  phonology: 'Phonology',
+                  title: StringRes.titlepage,
+                  contents: StringRes.tableofcontents,
+                  phonology: StringRes.phonology,
                 }[item]
               }
               <IconButton
@@ -705,11 +705,11 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
             );
             doc.setTextColor(0, 0, 255);
             doc.textWithLink(
-              'https://liujip0.github.io/morpheme/',
+              StringRes.url,
               unit === 'in' ? 4.2 : 105,
               unit === 'in' ? 10.5 : 284,
               {
-                url: 'https://liujip0.github.io/morpheme/',
+                url: StringRes.url,
                 align: 'center',
               }
             );
@@ -811,11 +811,11 @@ function exportToPdf(pdfOptions: PdfOptions, conlang: Conlang) {
       );
       doc.setTextColor(0, 0, 255);
       doc.textWithLink(
-        'https://liujip0.github.io/morpheme/',
+        StringRes.url,
         unit === 'in' ? 4.2 : 105,
         unit === 'in' ? 10.5 : 284,
         {
-          url: 'https://liujip0.github.io/morpheme/',
+          url: StringRes.url,
           align: 'center',
         }
       );
