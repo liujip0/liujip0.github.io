@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { registerSW } from 'virtual:pwa-register';
 import AppLayout from './AppLayout.tsx';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const updateSW = registerSW({
   onNeedRefresh() {},
   onOfflineReady() {},
