@@ -1,8 +1,8 @@
 import { TbSquareAsterisk, TbSquareOff, TbSquarePlus } from 'react-icons/tb';
-import { IconButton } from '../common/Components.tsx';
-import { StringRes } from '../common/Resources.tsx';
-import { screenPosition, screenStr } from '../common/Types';
-import { useStoreState } from '../common/Vals';
+import { IconButton } from './common/Components.tsx';
+import { StringRes } from './common/Resources.tsx';
+import { screenPosition, screenStr } from './common/Types.tsx';
+import { useStoreState } from './common/Vals.tsx';
 
 export default function ScreensMenus() {
   return (
@@ -165,8 +165,8 @@ function Submenu({ position }: SubmenuProps) {
       </SubmenuButton>
       <SubmenuButton
         position={position}
-        screen={'home'}>
-        Home
+        screen={'tutorial'}>
+        {StringRes.tutorial}
       </SubmenuButton>
       <SubmenuButton
         position={position}

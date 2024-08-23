@@ -175,7 +175,9 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
         style={{
           marginBottom: '1em',
         }}>
-        {StringRes.adddeclension}
+        {partOfSpeech === 'verb' ?
+          StringRes.addconjugation
+        : StringRes.adddeclension}
       </button>
       {(
         conlang.declensions.list[
@@ -192,7 +194,7 @@ function Declensions({ partOfSpeech }: DeclensionsProps) {
             style={{
               marginBottom: '1em',
             }}>
-            {StringRes.nounclasses}&nbsp;
+            {StringRes.wordclasses}&nbsp;
             {(
               conlang.declensions.list[
                 partOfSpeech as keyof typeof conlang.declensions.list

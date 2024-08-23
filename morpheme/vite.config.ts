@@ -12,7 +12,7 @@ export default defineConfig({
         enabled: false,
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf,woff,woff2}'],
       },
       includeAssets: ['./vite.svg'],
       manifest: {

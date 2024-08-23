@@ -1,4 +1,4 @@
-export default function HomeScreen() {
+export default function TutorialScreen() {
   return (
     <>
       <h1>This is a Long Heading Full of Words</h1>

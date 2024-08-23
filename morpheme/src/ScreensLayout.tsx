@@ -1,13 +1,13 @@
-import { screenPosition } from '../common/Types.tsx';
-import { useStoreState } from '../common/Vals.tsx';
-import DeclensionsScreen from './DeclensionsScreen.tsx';
-import HomeScreen from './HomeScreen.tsx';
-import LexiconScreen from './LexiconScreen.tsx';
-import ScreensMenus from './ScreensMenus';
-import SettingsScreen from './SettingsScreen.tsx';
-import StartScreen from './StartScreen.tsx';
-import { ArticlesScreen } from './articles/ArticlesScreen.tsx';
-import PhonologyScreen from './phonology/PhonologyScreen.tsx';
+import ScreensMenus from './ScreensMenus.tsx';
+import { screenPosition } from './common/Types.tsx';
+import { useStoreState } from './common/Vals.tsx';
+import DeclensionsScreen from './screens/DeclensionsScreen.tsx';
+import LexiconScreen from './screens/LexiconScreen.tsx';
+import SettingsScreen from './screens/SettingsScreen.tsx';
+import StartScreen from './screens/StartScreen.tsx';
+import TutorialScreen from './screens/TutorialScreen.tsx';
+import { ArticlesScreen } from './screens/articles/ArticlesScreen.tsx';
+import PhonologyScreen from './screens/phonology/PhonologyScreen.tsx';
 
 export default function ScreensLayout() {
   const windows = useStoreState((s) => s.windows);
@@ -82,8 +82,8 @@ function Screen({ location, position }: ScreenProps) {
         switch (windows[position].split('-')[0]) {
           case 'start':
             return <StartScreen />;
-          case 'home':
-            return <HomeScreen />;
+          case 'tutorial':
+            return <TutorialScreen />;
           case 'phonology':
             return <PhonologyScreen />;
           case 'articles':

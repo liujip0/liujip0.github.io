@@ -1,4 +1,4 @@
-import ScreensLayout from './screens/ScreensLayout.tsx';
+import ScreensLayout from './ScreensLayout.tsx';
 import TopBar from './TopBar';
 import Widgets from './Widgets';
 

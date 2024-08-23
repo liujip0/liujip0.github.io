@@ -182,7 +182,7 @@ export const StringRes = {
   cancel: 'Cancel',
   addtable: 'Add Table',
   adddeclension: 'Add Declension',
-  nounclasses: 'Noun Classes:',
+  wordclasses: 'Applicable Word Classes:',
   delete: '---DELETE---',
   addaffix: 'Add Affix',
   addgloss: 'Add Gloss',
@@ -261,4 +261,5 @@ export const StringRes = {
   newversionavailable:
     'New version available. Reload? You may lose unsaved work.',
   finishedcaching: 'Morpheme has finished caching and will now work offline.',
+  addconjugation: 'Add Conjugation',
 };

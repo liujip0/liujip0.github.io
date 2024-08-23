@@ -222,7 +222,7 @@ export type PlaceOfArticulation = (typeof PlaceOfArticulation_Arr)[number];
 export type screenPosition = 0 | 1 | 2 | 3;
 export type screenStr =
   | 'start'
-  | 'home'
+  | 'tutorial'
   | 'phonology'
   | 'articles'
   | 'declensions'
