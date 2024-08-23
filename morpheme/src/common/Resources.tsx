@@ -258,4 +258,7 @@ export const StringRes = {
   conlangxsampa: 'Conlang X-SAMPA',
   nofilesystemapi: 'File System Access API not supported',
   unclassed: '(unclassed)',
+  newversionavailable:
+    'New version available. Reload? You may lose unsaved work.',
+  finishedcaching: 'Morpheme has finished caching and will now work offline.',
 };

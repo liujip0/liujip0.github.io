@@ -2,11 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { registerSW } from 'virtual:pwa-register';
 import AppLayout from './AppLayout.tsx';
+import { StringRes } from './common/Resources.tsx';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const updateSW = registerSW({
-  onNeedRefresh() {},
-  onOfflineReady() {},
+  onNeedRefresh() {
+    if (confirm(StringRes.newversionavailable)) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    alert(StringRes.finishedcaching);
+  },
 });
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
