@@ -7,6 +7,10 @@ import {
   TbTriangle,
   TbTriangleInverted,
 } from 'react-icons/tb';
+import { charisBold } from '../public/fonts/charis/CharisSIL-Bold-bold.ts';
+import { charisBoldItalic } from '../public/fonts/charis/CharisSIL-BoldItalic-bolditalic.ts';
+import { charisItalic } from '../public/fonts/charis/CharisSIL-Italic.ts';
+import { charisRegular } from '../public/fonts/charis/CharisSIL-Regular.ts';
 import { IconButton, Popup } from './common/Components.tsx';
 import { StringRes } from './common/Resources.tsx';
 import {
@@ -21,10 +25,6 @@ import {
   PlaceOfArticulation_Arr,
 } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
-import { charisBold } from './fonts/charis/CharisSIL-Bold-bold.ts';
-import { charisBoldItalic } from './fonts/charis/CharisSIL-BoldItalic-bolditalic.ts';
-import { charisItalic } from './fonts/charis/CharisSIL-Italic.ts';
-import { charisRegular } from './fonts/charis/CharisSIL-Regular.ts';
 import { MenuItem } from './TopBar.tsx';
 
 type PdfOptions = {

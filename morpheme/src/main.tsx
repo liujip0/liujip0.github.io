@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { registerSW } from 'virtual:pwa-register';
 import AppLayout from './AppLayout.tsx';
+
+const updateSW = registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {},
+});
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById('root')!).render(
