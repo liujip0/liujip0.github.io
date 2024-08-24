@@ -39,7 +39,20 @@ export interface Conlang {
   };
   lexicon: Array<Word>;
   wordClasses: Array<WordClass>;
+  translations: Array<Translation>;
 }
+export type Translation = {
+  id: string;
+  name: string;
+  english: string;
+  translation: string;
+  gloss: {
+    conlang: string;
+    gloss: string;
+  };
+  notes: string;
+  wip: boolean;
+};
 export type WordClass = {
   id: string;
   partOfSpeech: PartOfSpeech;
