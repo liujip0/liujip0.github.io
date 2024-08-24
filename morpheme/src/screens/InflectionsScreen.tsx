@@ -12,7 +12,7 @@ import { StringRes } from '../common/Resources.tsx';
 import { Affix, Declension, PartOfSpeech } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
-export default function DeclensionsScreen() {
+export default function InflectionsScreen() {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const [glossingAbbreviations, setGlossingAbbreviations] = useState(false);
@@ -75,19 +75,19 @@ export default function DeclensionsScreen() {
       <NavSection id="NDeclensions">
         {StringRes.partofspeech.plural.nouns}
       </NavSection>
-      <Declensions partOfSpeech="noun" />
+      <PoSInflections partOfSpeech="noun" />
       <NavSection id="VDeclensions">
         {StringRes.partofspeech.plural.verbs}
       </NavSection>
-      <Declensions partOfSpeech="verb" />
+      <PoSInflections partOfSpeech="verb" />
       <NavSection id="AdjDeclensions">
         {StringRes.partofspeech.plural.adjectives}
       </NavSection>
-      <Declensions partOfSpeech="adjective" />
+      <PoSInflections partOfSpeech="adjective" />
       <NavSection id="AdvDeclensions">
         {StringRes.partofspeech.plural.adverbs}
       </NavSection>
-      <Declensions partOfSpeech="adverb" />
+      <PoSInflections partOfSpeech="adverb" />
       <NavSection id="PronDeclensions">
         {StringRes.partofspeech.plural.pronouns}
       </NavSection>
@@ -131,20 +131,20 @@ export default function DeclensionsScreen() {
       <br />
       <br />
       {!conlang.declensions.properNounEqualsNoun ?
-        <Declensions partOfSpeech="proper noun" />
+        <PoSInflections partOfSpeech="proper noun" />
       : <></>}
       <NavSection id="PtclDeclensions">
         {StringRes.partofspeech.plural.particles}
       </NavSection>
-      <Declensions partOfSpeech="particle" />
+      <PoSInflections partOfSpeech="particle" />
       <NavSection id="AdpDeclensions">
         {StringRes.partofspeech.plural.adpositions}
       </NavSection>
-      <Declensions partOfSpeech="adposition" />
+      <PoSInflections partOfSpeech="adposition" />
       <NavSection id="ConjDeclensions">
         {StringRes.partofspeech.plural.conjunctions}
       </NavSection>
-      <Declensions partOfSpeech="conjunction" />
+      <PoSInflections partOfSpeech="conjunction" />
     </>
   );
 }
@@ -157,10 +157,10 @@ function Pronouns() {
   );
 }
 
-type DeclensionsProps = {
+type PoSInflectionsProps = {
   partOfSpeech: PartOfSpeech;
 };
-function Declensions({ partOfSpeech }: DeclensionsProps) {
+function PoSInflections({ partOfSpeech }: PoSInflectionsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   console.log(partOfSpeech);

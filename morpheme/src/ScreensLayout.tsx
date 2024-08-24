@@ -1,7 +1,7 @@
 import ScreensMenus from './ScreensMenus.tsx';
 import { screenPosition } from './common/Types.tsx';
 import { useStoreState } from './common/Vals.tsx';
-import DeclensionsScreen from './screens/DeclensionsScreen.tsx';
+import InflectionsScreen from './screens/InflectionsScreen.tsx';
 import LexiconScreen from './screens/LexiconScreen.tsx';
 import SettingsScreen from './screens/SettingsScreen.tsx';
 import StartScreen from './screens/StartScreen.tsx';
@@ -89,7 +89,7 @@ function Screen({ location, position }: ScreenProps) {
           case 'articles':
             return <ArticlesScreen />;
           case 'declensions':
-            return <DeclensionsScreen />;
+            return <InflectionsScreen />;
           case 'lexicon':
             return <LexiconScreen />;
           case 'settings':
