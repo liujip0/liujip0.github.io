@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { TbPlus } from 'react-icons/tb';
+import {
+  TbCopy,
+  TbPlus,
+  TbTrash,
+  TbTriangle,
+  TbTriangleInverted,
+} from 'react-icons/tb';
 import { IconButton } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { StringRes } from '../common/Resources.tsx';
@@ -7,8 +13,12 @@ import { Translation } from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function TranslationsScreen() {
+  const conlang = useStoreState((s) => s.conlang);
   const [currentTranslation, setCurrentTranslation] =
     useState('translation-init');
+  const getTranslation = (id: string) => {
+    return conlang.translations.find((x) => x.id === id)!;
+  };
   return (
     <div
       style={{
@@ -18,8 +28,12 @@ export default function TranslationsScreen() {
       <Translations
         currentTranslation={currentTranslation}
         setCurrentTranslation={setCurrentTranslation}
+        getTranslation={getTranslation}
       />
-      <TranslationEditor currentTranslation={currentTranslation} />
+      <TranslationEditor
+        currentTranslation={currentTranslation}
+        getTranslation={getTranslation}
+      />
     </div>
   );
 }
@@ -27,10 +41,12 @@ export default function TranslationsScreen() {
 type TranslationsProps = {
   currentTranslation: string;
   setCurrentTranslation: (value: string) => void;
+  getTranslation: (id: string) => Translation;
 };
 function Translations({
   currentTranslation,
   setCurrentTranslation,
+  getTranslation,
 }: TranslationsProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
@@ -41,6 +57,36 @@ function Translations({
       ...translation,
       id: id,
     });
+    changeConlang(['translations'], newTranslations);
+  };
+  const moveUpTranslation = (id: string) => {
+    const index = conlang.translations.findIndex((x) => x.id === id);
+    if (index > 0) {
+      const translation = conlang.translations[index];
+      const newTranslations = conlang.translations;
+      newTranslations.splice(index, 1);
+      newTranslations.splice(index - 1, 0, translation);
+      changeConlang(['translations'], newTranslations);
+    }
+  };
+  const moveDownTranslation = (id: string) => {
+    const index = conlang.translations.findIndex((x) => x.id === id);
+    if (index < conlang.translations.length - 1) {
+      const translation = conlang.translations[index];
+      const newTranslations = conlang.translations;
+      newTranslations.splice(index, 1);
+      newTranslations.splice(index + 1, 0, translation);
+      changeConlang(['translations'], newTranslations);
+    }
+  };
+  const copyTranslation = (id: string) => {
+    const newTranslations = conlang.translations;
+    newTranslations.push(getTranslation(id));
+    changeConlang(['translations'], newTranslations);
+  };
+  const deleteTranslation = (id: string) => {
+    let newTranslations = conlang.translations;
+    newTranslations = newTranslations.filter((x) => x.id !== id);
     changeConlang(['translations'], newTranslations);
   };
   return (
@@ -76,6 +122,30 @@ function Translations({
             });
           }}>
           <TbPlus />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            moveUpTranslation(currentTranslation);
+          }}>
+          <TbTriangle />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            moveDownTranslation(currentTranslation);
+          }}>
+          <TbTriangleInverted />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            copyTranslation(currentTranslation);
+          }}>
+          <TbCopy />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            deleteTranslation(currentTranslation);
+          }}>
+          <TbTrash />
         </IconButton>
       </div>
       <div
@@ -115,14 +185,15 @@ function Translations({
 
 type TranslationEditorProps = {
   currentTranslation: string;
+  getTranslation: (id: string) => Translation;
 };
-function TranslationEditor({ currentTranslation }: TranslationEditorProps) {
+function TranslationEditor({
+  currentTranslation,
+  getTranslation,
+}: TranslationEditorProps) {
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const setLastInput = useStoreState((s) => s.setLastInput);
-  const getTranslation = (id: string) => {
-    return conlang.translations.find((x) => x.id === id)!;
-  };
   const changeTranslation = (id: string, property: string, value: unknown) => {
     const newTranslations = conlang.translations;
     const index = conlang.translations.findIndex((x) => x.id === id);

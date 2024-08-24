@@ -240,6 +240,7 @@ export type screenStr =
   | 'articles'
   | 'declensions'
   | 'lexicon'
+  | 'translations'
   | 'settings';
 export type windowsArr = Array<string>;
 

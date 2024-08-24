@@ -190,6 +190,11 @@ function Submenu({ position }: SubmenuProps) {
       </SubmenuButton>
       <SubmenuButton
         position={position}
+        screen={'translations'}>
+        {StringRes.translations}
+      </SubmenuButton>
+      <SubmenuButton
+        position={position}
         screen={'settings'}>
         {StringRes.settings}
       </SubmenuButton>
