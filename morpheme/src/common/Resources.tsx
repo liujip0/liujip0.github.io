@@ -262,4 +262,6 @@ export const StringRes = {
     'New version available. Reload? You may lose unsaved work.',
   finishedcaching: 'Morpheme has finished caching and will now work offline.',
   addconjugation: 'Add Conjugation',
+  tutorial: 'Tutorial',
+  navigation: 'Navigation',
 };
