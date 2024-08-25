@@ -114,7 +114,7 @@ function Translations({
               english: '',
               translation: '',
               gloss: {
-                conlang: '',
+                conlang: [''],
                 gloss: '',
               },
               wip: false,
@@ -247,7 +247,66 @@ function TranslationEditor({
           display: 'flex',
           flexDirection: 'column',
           overflowY: 'scroll',
-        }}></div>
+        }}>
+        <label
+          style={{
+            marginBottom: '1em',
+          }}>
+          English
+          <br />
+          <textarea
+            style={{
+              width: '100%',
+            }}
+            onInput={(event) => {
+              changeTranslation(
+                currentTranslation,
+                'english',
+                event.currentTarget.value
+              );
+            }}
+          />
+        </label>
+        <label
+          style={{
+            marginBottom: '1em',
+          }}>
+          Translation
+          <br />
+          <textarea
+            style={{
+              width: '100%',
+            }}
+            onInput={(event) => {
+              changeTranslation(
+                currentTranslation,
+                'translation',
+                event.currentTarget.value
+              );
+            }}
+          />
+        </label>
+        <div>
+          Gloss
+          <div>
+            {getTranslation(currentTranslation).gloss.conlang.map((chars) => {
+              if ('.-'.includes(chars)) {
+                return (
+                  <div
+                    style={{
+                      color: 'blue',
+                      display: 'inline',
+                    }}>
+                    {chars}
+                  </div>
+                );
+              } else {
+                return <span>{chars}</span>;
+              }
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

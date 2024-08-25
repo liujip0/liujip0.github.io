@@ -47,7 +47,7 @@ export type Translation = {
   english: string;
   translation: string;
   gloss: {
-    conlang: string;
+    conlang: Array<'-' | '.' | string>;
     gloss: string;
   };
   notes: string;
