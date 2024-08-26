@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   TbCopy,
   TbPlus,
@@ -112,11 +112,8 @@ function Translations({
               id: '',
               name: StringRes.untitled,
               english: '',
-              translation: '',
-              gloss: {
-                conlang: [''],
-                gloss: '',
-              },
+              translation: [''],
+              gloss: '',
               wip: false,
               notes: '',
             });
@@ -194,6 +191,7 @@ function TranslationEditor({
   const conlang = useStoreState((s) => s.conlang);
   const changeConlang = useStoreState((s) => s.changeConlang);
   const setLastInput = useStoreState((s) => s.setLastInput);
+  const translationRef = useRef<HTMLTextAreaElement>(null);
   const changeTranslation = (id: string, property: string, value: unknown) => {
     const newTranslations = conlang.translations;
     const index = conlang.translations.findIndex((x) => x.id === id);
@@ -277,19 +275,85 @@ function TranslationEditor({
             style={{
               width: '100%',
             }}
-            onInput={(event) => {
-              changeTranslation(
-                currentTranslation,
-                'translation',
-                event.currentTarget.value
-              );
+            ref={translationRef}
+            value={getTranslation(currentTranslation)
+              .translation.filter((x) => !'.-=|'.includes(x))
+              .join('')}
+            onKeyDown={(event) => {
+              switch (event.key) {
+                case 'Backspace': {
+                  if (translationRef.current) {
+                    const index = translationRef.current.selectionEnd;
+                    const newTranslation =
+                      getTranslation(currentTranslation).translation;
+                    let x = 0;
+                    for (let i = 0; i < newTranslation.length; i++) {
+                      if ('.-=|'.includes(newTranslation[i])) {
+                        continue;
+                      }
+                      if (x > index) {
+                        break;
+                      }
+                      for (let j = 0; j < newTranslation[i].length; j++) {
+                        if (x < index) {
+                          x++;
+                          continue;
+                        }
+                        newTranslation[i] =
+                          newTranslation[i].slice(0, j - 1) +
+                          newTranslation[i].slice(j, -1);
+                        break;
+                      }
+                    }
+                    changeTranslation(
+                      currentTranslation,
+                      'translation',
+                      newTranslation
+                    );
+                  }
+                  break;
+                }
+                default: {
+                  if (translationRef.current) {
+                    const index = translationRef.current.selectionEnd;
+                    const newTranslation =
+                      getTranslation(currentTranslation).translation;
+                    let x = 0;
+                    for (let i = 0; i < newTranslation.length; i++) {
+                      if ('.-=|'.includes(newTranslation[i])) {
+                        continue;
+                      }
+                      if (x > index) {
+                        break;
+                      }
+                      for (let j = 0; j < newTranslation[i].length; j++) {
+                        if (x < index) {
+                          x++;
+                          continue;
+                        }
+                        newTranslation[i] =
+                          newTranslation[i].slice(0, j) +
+                          event.key +
+                          newTranslation[i].slice(j, -1);
+                        break;
+                      }
+                    }
+                    changeTranslation(
+                      currentTranslation,
+                      'translation',
+                      newTranslation
+                    );
+                  }
+                  break;
+                }
+              }
             }}
           />
         </label>
         <div>
           Gloss
           <div>
-            {getTranslation(currentTranslation).gloss.conlang.map((chars) => {
+            {getTranslation(currentTranslation).translation.map((chars) => {
               if ('.-'.includes(chars)) {
                 return (
                   <div

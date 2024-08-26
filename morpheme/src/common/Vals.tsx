@@ -124,11 +124,8 @@ export const conlangInit: Conlang = {
       name: 'Test',
       wip: false,
       english: 'The person sees the tree.',
-      translation: '',
-      gloss: {
-        conlang: [''],
-        gloss: '',
-      },
+      translation: [''],
+      gloss: '',
       notes: '',
     },
   ],

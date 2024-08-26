@@ -45,11 +45,8 @@ export type Translation = {
   id: string;
   name: string;
   english: string;
-  translation: string;
-  gloss: {
-    conlang: Array<'-' | '.' | string>;
-    gloss: string;
-  };
+  translation: Array<'-' | '.' | string>;
+  gloss: string;
   notes: string;
   wip: boolean;
 };
