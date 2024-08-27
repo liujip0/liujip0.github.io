@@ -276,10 +276,11 @@ function TranslationEditor({
               width: '100%',
             }}
             ref={translationRef}
-            value={getTranslation(currentTranslation)
-              .translation.filter((x) => !'.-=|'.includes(x))
-              .join('')}
+            // defaultValue={getTranslation(currentTranslation)
+            //   .translation.filter((x) => !'.-=|'.includes(x))
+            //   .join('')}
             onKeyDown={(event) => {
+              console.log(event.key);
               switch (event.key) {
                 case 'Backspace': {
                   if (translationRef.current) {
@@ -287,21 +288,31 @@ function TranslationEditor({
                     const newTranslation =
                       getTranslation(currentTranslation).translation;
                     let x = 0;
+                    console.log(index);
                     for (let i = 0; i < newTranslation.length; i++) {
+                      console.log('i:' + i);
                       if ('.-=|'.includes(newTranslation[i])) {
                         continue;
                       }
                       if (x > index) {
+                        console.log('break');
                         break;
                       }
-                      for (let j = 0; j < newTranslation[i].length; j++) {
+                      for (let j = 0; j < newTranslation[i].length + 1; j++) {
+                        console.log('j:' + j);
                         if (x < index) {
+                          console.log('continue');
                           x++;
                           continue;
                         }
+                        console.log(j);
+                        console.log(newTranslation[i].slice(0, j - 1));
+                        console.log(
+                          newTranslation[i].slice(j, newTranslation[i].length)
+                        );
                         newTranslation[i] =
                           newTranslation[i].slice(0, j - 1) +
-                          newTranslation[i].slice(j, -1);
+                          newTranslation[i].slice(j, newTranslation[i].length);
                         break;
                       }
                     }
@@ -314,19 +325,28 @@ function TranslationEditor({
                   break;
                 }
                 default: {
-                  if (translationRef.current) {
+                  if (
+                    translationRef.current &&
+                    event.key.length === 1 &&
+                    !event.metaKey &&
+                    !event.altKey &&
+                    !event.ctrlKey
+                  ) {
                     const index = translationRef.current.selectionEnd;
                     const newTranslation =
                       getTranslation(currentTranslation).translation;
                     let x = 0;
                     for (let i = 0; i < newTranslation.length; i++) {
-                      if ('.-=|'.includes(newTranslation[i])) {
+                      if (
+                        '.-=|'.includes(newTranslation[i]) &&
+                        newTranslation[i] !== ''
+                      ) {
                         continue;
                       }
                       if (x > index) {
                         break;
                       }
-                      for (let j = 0; j < newTranslation[i].length; j++) {
+                      for (let j = 0; j < newTranslation[i].length + 1; j++) {
                         if (x < index) {
                           x++;
                           continue;
@@ -347,27 +367,82 @@ function TranslationEditor({
                   break;
                 }
               }
+              console.log(getTranslation(currentTranslation).translation);
             }}
           />
         </label>
         <div>
           Gloss
           <div>
-            {getTranslation(currentTranslation).translation.map((chars) => {
-              if ('.-'.includes(chars)) {
-                return (
-                  <div
-                    style={{
-                      color: 'blue',
-                      display: 'inline',
-                    }}>
-                    {chars}
-                  </div>
-                );
-              } else {
-                return <span>{chars}</span>;
+            {getTranslation(currentTranslation).translation.map(
+              (chars, index) => {
+                if ('.-'.includes(chars)) {
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        color: 'blue',
+                        display: 'inline',
+                      }}>
+                      {chars}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <span key={index}>
+                      {chars.split('').map((char, charIndex) => (
+                        <span
+                          key={charIndex}
+                          onClick={() => {
+                            const newTranslation =
+                              getTranslation(currentTranslation).translation;
+                            let x = 0;
+                            for (let i = 0; i < newTranslation.length; i++) {
+                              if (
+                                '.-=|'.includes(newTranslation[i]) &&
+                                newTranslation[i] !== ''
+                              ) {
+                                continue;
+                              }
+                              if (x > index) {
+                                break;
+                              }
+                              for (
+                                let j = 0;
+                                j < newTranslation[i].length + 1;
+                                j++
+                              ) {
+                                if (x < index) {
+                                  x++;
+                                  continue;
+                                }
+                                newTranslation.splice(
+                                  i,
+                                  1,
+                                  newTranslation[i].slice(0, j),
+                                  '',
+                                  newTranslation[i].slice(j, -1)
+                                );
+                                newTranslation[i] =
+                                  newTranslation[i].slice(0, j) +
+                                  newTranslation[i].slice(j, -1);
+                                break;
+                              }
+                            }
+                            changeTranslation(
+                              currentTranslation,
+                              'translation',
+                              newTranslation
+                            );
+                          }}>
+                          {char}
+                        </span>
+                      ))}
+                    </span>
+                  );
+                }
               }
-            })}
+            )}
           </div>
         </div>
       </div>
