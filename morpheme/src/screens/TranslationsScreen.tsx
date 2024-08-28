@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import {
+  TbCircleX,
   TbCopy,
   TbPlus,
   TbTrash,
@@ -423,49 +424,86 @@ function GlossChar({
   changeTranslation,
   index,
 }: GlossCharProps) {
+  const [menu, setMenu] = useState(false);
   return (
     <>
       {chars.split('').map((char, charIndex) => (
         <div
           key={charIndex}
           onClick={() => {
-            const newTranslation = translation.translation;
-            let x = 0;
-            for (let i = 0; i < newTranslation.length; i++) {
-              if (GlossPunctuation_Arr.includes(newTranslation[i])) {
-                continue;
-              }
-              if (x > index) {
-                break;
-              }
-              for (let j = 0; j < newTranslation[i].length + 1; j++) {
-                if (x < index) {
-                  x++;
-                  continue;
-                }
-                newTranslation.splice(
-                  i,
-                  1,
-                  newTranslation[i].slice(0, j),
-                  '',
-                  newTranslation[i].slice(j, -1)
-                );
-                newTranslation[i] =
-                  newTranslation[i].slice(0, j) +
-                  newTranslation[i].slice(j, -1);
-                break;
-              }
-            }
-            changeTranslation('translation', newTranslation);
+            setMenu(true);
           }}
           style={{
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
           }}>
           <div>{char}</div>
-          <div>
-            <TbTrash />
-          </div>
+          {menu && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '-1.4em',
+                border: '1px solid black',
+                padding: '0.05em',
+                backgroundColor: 'white',
+                display: 'flex',
+                zIndex: '10',
+              }}>
+              {GlossPunctuation_Arr.map((punc) => (
+                <div
+                  key={punc}
+                  style={{
+                    padding: '0 0.1em 0 0.1em',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    const newTranslation = translation.translation;
+                    let x = 0;
+                    for (let i = 0; i < newTranslation.length; i++) {
+                      if (GlossPunctuation_Arr.includes(newTranslation[i])) {
+                        continue;
+                      }
+                      if (x > index) {
+                        break;
+                      }
+                      for (let j = 0; j < newTranslation[i].length + 1; j++) {
+                        if (x < index) {
+                          x++;
+                          continue;
+                        }
+                        newTranslation.splice(
+                          i,
+                          1,
+                          newTranslation[i].slice(0, j),
+                          punc,
+                          newTranslation[i].slice(j, -1)
+                        );
+                        newTranslation[i] =
+                          newTranslation[i].slice(0, j) +
+                          newTranslation[i].slice(j, -1);
+                        break;
+                      }
+                    }
+                    changeTranslation('translation', newTranslation);
+                  }}>
+                  {punc}
+                </div>
+              ))}
+              <div
+                style={{
+                  padding: '0 0.1em 0 0.1em',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  console.log('click');
+                  setMenu(false);
+                }}>
+                <TbCircleX />
+              </div>
+            </div>
+          )}
         </div>
       ))}
     </>
@@ -482,9 +520,19 @@ function GlossPuncChar({ char }: GlossPuncCharProps) {
         color: 'blue',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative',
       }}>
       <div>{char}</div>
-      <div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '-1.4em',
+          border: '1px solid black',
+          padding: '0.05em',
+          backgroundColor: 'white',
+          zIndex: '10',
+        }}>
         <TbTrash />
       </div>
     </div>
