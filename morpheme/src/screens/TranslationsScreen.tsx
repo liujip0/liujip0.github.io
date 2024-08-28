@@ -9,7 +9,11 @@ import {
 import { IconButton } from '../common/Components.tsx';
 import { createId } from '../common/Funcs.tsx';
 import { StringRes } from '../common/Resources.tsx';
-import { Translation } from '../common/Types.tsx';
+import {
+  GlossPunctuation,
+  GlossPunctuation_Arr,
+  Translation,
+} from '../common/Types.tsx';
 import { useStoreState } from '../common/Vals.tsx';
 
 export default function TranslationsScreen() {
@@ -276,9 +280,10 @@ function TranslationEditor({
               width: '100%',
             }}
             ref={translationRef}
-            // defaultValue={getTranslation(currentTranslation)
-            //   .translation.filter((x) => !'.-=|'.includes(x))
-            //   .join('')}
+            value={getTranslation(currentTranslation)
+              .translation.filter((x) => !'.-=|'.includes(x))
+              .join('')}
+            onChange={() => {}}
             onKeyDown={(event) => {
               console.log(event.key);
               switch (event.key) {
@@ -291,7 +296,7 @@ function TranslationEditor({
                     console.log(index);
                     for (let i = 0; i < newTranslation.length; i++) {
                       console.log('i:' + i);
-                      if ('.-=|'.includes(newTranslation[i])) {
+                      if (GlossPunctuation_Arr.includes(newTranslation[i])) {
                         continue;
                       }
                       if (x > index) {
@@ -337,10 +342,7 @@ function TranslationEditor({
                       getTranslation(currentTranslation).translation;
                     let x = 0;
                     for (let i = 0; i < newTranslation.length; i++) {
-                      if (
-                        '.-=|'.includes(newTranslation[i]) &&
-                        newTranslation[i] !== ''
-                      ) {
+                      if (GlossPunctuation_Arr.includes(newTranslation[i])) {
                         continue;
                       }
                       if (x > index) {
@@ -373,78 +375,117 @@ function TranslationEditor({
         </label>
         <div>
           Gloss
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}>
             {getTranslation(currentTranslation).translation.map(
               (chars, index) => {
-                if ('.-'.includes(chars)) {
+                if (GlossPunctuation_Arr.includes(chars)) {
                   return (
-                    <div
+                    <GlossPuncChar
                       key={index}
-                      style={{
-                        color: 'blue',
-                        display: 'inline',
-                      }}>
-                      {chars}
-                    </div>
+                      char={chars}
+                    />
                   );
                 } else {
                   return (
-                    <span key={index}>
-                      {chars.split('').map((char, charIndex) => (
-                        <span
-                          key={charIndex}
-                          onClick={() => {
-                            const newTranslation =
-                              getTranslation(currentTranslation).translation;
-                            let x = 0;
-                            for (let i = 0; i < newTranslation.length; i++) {
-                              if (
-                                '.-=|'.includes(newTranslation[i]) &&
-                                newTranslation[i] !== ''
-                              ) {
-                                continue;
-                              }
-                              if (x > index) {
-                                break;
-                              }
-                              for (
-                                let j = 0;
-                                j < newTranslation[i].length + 1;
-                                j++
-                              ) {
-                                if (x < index) {
-                                  x++;
-                                  continue;
-                                }
-                                newTranslation.splice(
-                                  i,
-                                  1,
-                                  newTranslation[i].slice(0, j),
-                                  '',
-                                  newTranslation[i].slice(j, -1)
-                                );
-                                newTranslation[i] =
-                                  newTranslation[i].slice(0, j) +
-                                  newTranslation[i].slice(j, -1);
-                                break;
-                              }
-                            }
-                            changeTranslation(
-                              currentTranslation,
-                              'translation',
-                              newTranslation
-                            );
-                          }}>
-                          {char}
-                        </span>
-                      ))}
-                    </span>
+                    <GlossChar
+                      key={index}
+                      chars={chars}
+                      translation={getTranslation(currentTranslation)}
+                      changeTranslation={(property, value) => {
+                        changeTranslation(currentTranslation, property, value);
+                      }}
+                      index={index}
+                    />
                   );
                 }
               }
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+type GlossCharProps = {
+  chars: string;
+  translation: Translation;
+  changeTranslation: (property: string, value: unknown) => void;
+  index: number;
+};
+function GlossChar({
+  chars,
+  translation,
+  changeTranslation,
+  index,
+}: GlossCharProps) {
+  return (
+    <>
+      {chars.split('').map((char, charIndex) => (
+        <div
+          key={charIndex}
+          onClick={() => {
+            const newTranslation = translation.translation;
+            let x = 0;
+            for (let i = 0; i < newTranslation.length; i++) {
+              if (GlossPunctuation_Arr.includes(newTranslation[i])) {
+                continue;
+              }
+              if (x > index) {
+                break;
+              }
+              for (let j = 0; j < newTranslation[i].length + 1; j++) {
+                if (x < index) {
+                  x++;
+                  continue;
+                }
+                newTranslation.splice(
+                  i,
+                  1,
+                  newTranslation[i].slice(0, j),
+                  '',
+                  newTranslation[i].slice(j, -1)
+                );
+                newTranslation[i] =
+                  newTranslation[i].slice(0, j) +
+                  newTranslation[i].slice(j, -1);
+                break;
+              }
+            }
+            changeTranslation('translation', newTranslation);
+          }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+          <div>{char}</div>
+          <div>
+            <TbTrash />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
+type GlossPuncCharProps = {
+  char: GlossPunctuation;
+};
+function GlossPuncChar({ char }: GlossPuncCharProps) {
+  return (
+    <div
+      style={{
+        color: 'blue',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+      <div>{char}</div>
+      <div>
+        <TbTrash />
       </div>
     </div>
   );
