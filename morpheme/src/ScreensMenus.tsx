@@ -82,14 +82,13 @@ function MenuButtons({ position }: MenuButtonsProps) {
       }}>
       <IconButton
         onClick={() => {
-          removeWindows(position);
+          if (submenus[position] !== 'add') {
+            replaceSubmenus(position, 'add');
+          } else {
+            replaceSubmenus(position, '');
+          }
         }}>
-        <TbSquareOff
-          size={17}
-          style={{
-            transform: 'scaleX(-1)',
-          }}
-        />
+        <TbSquarePlus size={17} />
       </IconButton>
       <IconButton
         onClick={() => {
@@ -103,13 +102,14 @@ function MenuButtons({ position }: MenuButtonsProps) {
       </IconButton>
       <IconButton
         onClick={() => {
-          if (submenus[position] !== 'add') {
-            replaceSubmenus(position, 'add');
-          } else {
-            replaceSubmenus(position, '');
-          }
+          removeWindows(position);
         }}>
-        <TbSquarePlus size={17} />
+        <TbSquareOff
+          size={17}
+          style={{
+            transform: 'scaleX(-1)',
+          }}
+        />
       </IconButton>
     </div>
   );

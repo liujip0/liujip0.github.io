@@ -208,6 +208,7 @@ function TranslationEditor({
   };
   const translation = getTranslation(currentTranslation);
   const id = createId('translationName');
+  const [menu, setMenu] = useState(-1);
   return (
     <div
       style={{
@@ -281,8 +282,8 @@ function TranslationEditor({
               width: '100%',
             }}
             ref={translationRef}
-            value={getTranslation(currentTranslation)
-              .translation.filter((x) => !'.-=|'.includes(x))
+            value={translation.translation
+              .filter((x) => !'.-=|'.includes(x))
               .join('')}
             onChange={() => {}}
             onKeyDown={(event) => {
@@ -291,8 +292,7 @@ function TranslationEditor({
                 case 'Backspace': {
                   if (translationRef.current) {
                     const index = translationRef.current.selectionEnd;
-                    const newTranslation =
-                      getTranslation(currentTranslation).translation;
+                    const newTranslation = translation.translation;
                     let x = 0;
                     console.log(index);
                     for (let i = 0; i < newTranslation.length; i++) {
@@ -339,8 +339,7 @@ function TranslationEditor({
                     !event.ctrlKey
                   ) {
                     const index = translationRef.current.selectionEnd;
-                    const newTranslation =
-                      getTranslation(currentTranslation).translation;
+                    const newTranslation = translation.translation;
                     let x = 0;
                     for (let i = 0; i < newTranslation.length; i++) {
                       if (GlossPunctuation_Arr.includes(newTranslation[i])) {
@@ -370,7 +369,7 @@ function TranslationEditor({
                   break;
                 }
               }
-              console.log(getTranslation(currentTranslation).translation);
+              console.log(translation.translation);
             }}
           />
         </label>
@@ -381,30 +380,33 @@ function TranslationEditor({
               display: 'flex',
               flexWrap: 'wrap',
             }}>
-            {getTranslation(currentTranslation).translation.map(
-              (chars, index) => {
-                if (GlossPunctuation_Arr.includes(chars)) {
-                  return (
-                    <GlossPuncChar
-                      key={index}
-                      char={chars}
-                    />
-                  );
-                } else {
-                  return (
-                    <GlossChar
-                      key={index}
-                      chars={chars}
-                      translation={getTranslation(currentTranslation)}
-                      changeTranslation={(property, value) => {
-                        changeTranslation(currentTranslation, property, value);
-                      }}
-                      index={index}
-                    />
-                  );
-                }
+            {translation.translation.map((chars, index) => {
+              if (GlossPunctuation_Arr.includes(chars)) {
+                return (
+                  <GlossPuncChar
+                    key={index}
+                    char={chars}
+                    index={index}
+                    menu={menu}
+                    setMenu={setMenu}
+                  />
+                );
+              } else {
+                return (
+                  <GlossChar
+                    key={index}
+                    chars={chars}
+                    translation={translation}
+                    changeTranslation={(property, value) => {
+                      changeTranslation(currentTranslation, property, value);
+                    }}
+                    index={index}
+                    menu={menu}
+                    setMenu={setMenu}
+                  />
+                );
               }
-            )}
+            })}
           </div>
         </div>
       </div>
@@ -417,21 +419,26 @@ type GlossCharProps = {
   translation: Translation;
   changeTranslation: (property: string, value: unknown) => void;
   index: number;
+  menu: number;
+  setMenu: (value: number) => void;
 };
 function GlossChar({
   chars,
   translation,
   changeTranslation,
   index,
+  menu,
+  setMenu,
 }: GlossCharProps) {
-  const [menu, setMenu] = useState(false);
+  const [submenu, setSubmenu] = useState(-1);
   return (
     <>
       {chars.split('').map((char, charIndex) => (
         <div
           key={charIndex}
           onClick={() => {
-            setMenu(true);
+            setMenu(index);
+            setSubmenu(charIndex);
           }}
           style={{
             display: 'flex',
@@ -440,7 +447,7 @@ function GlossChar({
             position: 'relative',
           }}>
           <div>{char}</div>
-          {menu && (
+          {menu === index && submenu === charIndex && (
             <div
               style={{
                 position: 'absolute',
@@ -458,7 +465,8 @@ function GlossChar({
                     padding: '0 0.1em 0 0.1em',
                     cursor: 'pointer',
                   }}
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     const newTranslation = translation.translation;
                     let x = 0;
                     for (let i = 0; i < newTranslation.length; i++) {
@@ -495,10 +503,14 @@ function GlossChar({
                 style={{
                   padding: '0 0.1em 0 0.1em',
                   cursor: 'pointer',
+                  border: '1px solid red',
                 }}
                 onClick={() => {
-                  console.log('click');
-                  setMenu(false);
+                  console.log('char', char, menu, submenu, index, charIndex);
+                  setMenu(-1);
+                  setSubmenu(-1);
+                  console.log(menu);
+                  console.log(submenu)
                 }}>
                 <TbCircleX />
               </div>
@@ -512,8 +524,11 @@ function GlossChar({
 
 type GlossPuncCharProps = {
   char: GlossPunctuation;
+  index: number;
+  menu: number;
+  setMenu: (value: number) => void;
 };
-function GlossPuncChar({ char }: GlossPuncCharProps) {
+function GlossPuncChar({ char, index, menu, setMenu }: GlossPuncCharProps) {
   return (
     <div
       style={{
@@ -523,18 +538,25 @@ function GlossPuncChar({ char }: GlossPuncCharProps) {
         alignItems: 'center',
         position: 'relative',
       }}>
-      <div>{char}</div>
       <div
-        style={{
-          position: 'absolute',
-          bottom: '-1.4em',
-          border: '1px solid black',
-          padding: '0.05em',
-          backgroundColor: 'white',
-          zIndex: '10',
+        onClick={() => {
+          setMenu(index);
         }}>
-        <TbTrash />
+        {char}
       </div>
+      {index === menu && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-1.4em',
+            border: '1px solid black',
+            padding: '0.05em',
+            backgroundColor: 'white',
+            zIndex: '10',
+          }}>
+          <TbTrash />
+        </div>
+      )}
     </div>
   );
 }
