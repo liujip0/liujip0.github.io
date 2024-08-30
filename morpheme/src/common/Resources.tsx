@@ -264,4 +264,5 @@ export const StringRes = {
   addconjugation: 'Add Conjugation',
   tutorial: 'Tutorial',
   navigation: 'Navigation',
+  translations: 'Translations',
 };

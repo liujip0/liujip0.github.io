@@ -39,7 +39,19 @@ export interface Conlang {
   };
   lexicon: Array<Word>;
   wordClasses: Array<WordClass>;
+  translations: Array<Translation>;
 }
+export type Translation = {
+  id: string;
+  name: string;
+  english: string;
+  translation: Array<GlossPunctuation | string>;
+  gloss: string;
+  notes: string;
+  wip: boolean;
+};
+export const GlossPunctuation_Arr = ['.', '-', '=', '|'];
+export type GlossPunctuation = (typeof GlossPunctuation_Arr)[number];
 export type WordClass = {
   id: string;
   partOfSpeech: PartOfSpeech;
@@ -227,6 +239,7 @@ export type screenStr =
   | 'articles'
   | 'declensions'
   | 'lexicon'
+  | 'translations'
   | 'settings';
 export type windowsArr = Array<string>;
 

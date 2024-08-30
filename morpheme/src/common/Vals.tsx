@@ -118,6 +118,17 @@ export const conlangInit: Conlang = {
       name: StringRes.unclassed,
     },
   ],
+  translations: [
+    {
+      id: 'translation-init',
+      name: 'Test',
+      wip: false,
+      english: 'The person sees the tree.',
+      translation: [''],
+      gloss: '',
+      notes: '',
+    },
+  ],
 };
 
 interface StoreState {

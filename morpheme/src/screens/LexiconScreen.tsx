@@ -367,6 +367,13 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                 size={8}
                 value={wordClass.gloss}
                 disabled={wordClass.id === ''}
+                onInput={(event) => {
+                  changeWordClass(
+                    wordClass.id,
+                    'gloss',
+                    event.currentTarget.value
+                  );
+                }}
               />
             </label>
             <label
@@ -379,6 +386,13 @@ function ManageClasses({ onClose }: ManageClassesProps) {
                 type="text"
                 value={wordClass.name}
                 disabled={wordClass.id === ''}
+                onInput={(event) => {
+                  changeWordClass(
+                    wordClass.id,
+                    'name',
+                    event.currentTarget.value
+                  );
+                }}
               />
             </label>
             <IconButton

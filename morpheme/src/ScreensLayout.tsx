@@ -5,6 +5,7 @@ import InflectionsScreen from './screens/InflectionsScreen.tsx';
 import LexiconScreen from './screens/LexiconScreen.tsx';
 import SettingsScreen from './screens/SettingsScreen.tsx';
 import StartScreen from './screens/StartScreen.tsx';
+import TranslationsScreen from './screens/TranslationsScreen.tsx';
 import TutorialScreen from './screens/TutorialScreen.tsx';
 import { ArticlesScreen } from './screens/articles/ArticlesScreen.tsx';
 import PhonologyScreen from './screens/phonology/PhonologyScreen.tsx';
@@ -92,6 +93,8 @@ function Screen({ location, position }: ScreenProps) {
             return <InflectionsScreen />;
           case 'lexicon':
             return <LexiconScreen />;
+          case 'translations':
+            return <TranslationsScreen />;
           case 'settings':
             return <SettingsScreen />;
         }

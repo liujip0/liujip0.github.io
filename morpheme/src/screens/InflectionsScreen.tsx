@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { TbCopy, TbGripVertical, TbPlus, TbTrash } from 'react-icons/tb';
+import {
+  TbCopy,
+  TbGripVertical,
+  TbPlus,
+  TbTrash,
+  TbTriangle,
+  TbTriangleInverted,
+} from 'react-icons/tb';
 import {
   GlossingAbbreviations,
   IconButton,
@@ -174,6 +181,17 @@ function PoSInflections({ partOfSpeech }: PoSInflectionsProps) {
       <button
         style={{
           marginBottom: '1em',
+        }}
+        onClick={() => {
+          const newDeclensions = conlang.declensions.list[
+            partOfSpeech as keyof typeof conlang.declensions.list
+          ] as Array<Declension>;
+          newDeclensions.push({
+            id: createId('declension'),
+            wordClasses: [],
+            affixes: ['_'],
+          });
+          changeConlang(['declensions', 'list', partOfSpeech], newDeclensions);
         }}>
         {partOfSpeech === 'verb' ?
           StringRes.addconjugation
@@ -189,7 +207,63 @@ function PoSInflections({ partOfSpeech }: PoSInflectionsProps) {
           style={{
             border: '1px solid gray',
             padding: '1em',
+            display: 'flex',
+            alignItems: 'center',
           }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginRight: '1em',
+            }}>
+            <IconButton
+              onClick={() => {
+                const newDeclensions = conlang.declensions.list[
+                  partOfSpeech as keyof typeof conlang.declensions.list
+                ] as Array<Declension>;
+                if (declensionNumber > 0) {
+                  const newDeclension = declension;
+                  newDeclensions.splice(declensionNumber, 1);
+                  newDeclensions.splice(declensionNumber - 1, 0, newDeclension);
+                  changeConlang(
+                    ['declensions', 'list', partOfSpeech],
+                    newDeclensions
+                  );
+                }
+              }}>
+              <TbTriangle size={20} />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                const newDeclensions = conlang.declensions.list[
+                  partOfSpeech as keyof typeof conlang.declensions.list
+                ] as Array<Declension>;
+                if (declensionNumber < newDeclensions.length - 1) {
+                  const newDeclension = declension;
+                  newDeclensions.splice(declensionNumber, 1);
+                  newDeclensions.splice(declensionNumber + 1, 0, newDeclension);
+                  changeConlang(
+                    ['declensions', 'list', partOfSpeech],
+                    newDeclensions
+                  );
+                }
+              }}>
+              <TbTriangleInverted size={20} />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                const newDeclensions = conlang.declensions.list[
+                  partOfSpeech as keyof typeof conlang.declensions.list
+                ] as Array<Declension>;
+                newDeclensions.splice(declensionNumber, 1);
+                changeConlang(
+                  ['declensions', 'list', partOfSpeech],
+                  newDeclensions
+                );
+              }}>
+              <TbTrash size={20} />
+            </IconButton>
+          </div>
           <div
             style={{
               marginBottom: '1em',
@@ -259,11 +333,11 @@ function PoSInflections({ partOfSpeech }: PoSInflectionsProps) {
               }}>
               <TbPlus size={16} />
             </button>
+            <Affixes
+              partOfSpeech={partOfSpeech}
+              declensionNumber={declensionNumber}
+            />
           </div>
-          <Affixes
-            partOfSpeech={partOfSpeech}
-            declensionNumber={declensionNumber}
-          />
         </div>
       ))}
     </>
