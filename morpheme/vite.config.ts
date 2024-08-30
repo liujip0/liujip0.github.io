@@ -13,6 +13,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf,woff,woff2}'],
+        maximumFileSizeToCacheInBytes: 10 * 1024 ** 2,
       },
       includeAssets: ['./vite.svg'],
       manifest: {
