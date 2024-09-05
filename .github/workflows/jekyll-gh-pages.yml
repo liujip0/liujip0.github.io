@@ -86,6 +86,7 @@ jobs:
         with:
           # Upload dist folder
           path: "./morpheme/dist"
+          name: "Vite Artifact"
       - name: Vite- Deploy to GitHub Pages
         id: deployment
         uses: JamesIves/github-pages-deploy-action@v4
